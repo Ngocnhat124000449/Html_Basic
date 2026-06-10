@@ -1,0 +1,79 @@
+generator client {
+  provider = "prisma-client"
+  output   = "../src/generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+model User {
+  id           String            @id @default(cuid())
+  email        String            @unique
+  passwordHash String
+  name         String
+  createdAt    DateTime          @default(now())
+  progress     UserTagProgress[]
+  attempts     Attempt[]
+}
+
+model Tag {
+  id          String            @id @default(cuid())
+  name        String            @unique
+  topic       String
+  description String
+  order       Int
+  questions   Question[]
+  progress    UserTagProgress[]
+}
+
+enum QuestionType {
+  MCQ
+  FILL_BLANK
+  WRITE_TAG
+  FIX_BUG
+  WRITE_STRUCTURE
+}
+
+model Question {
+  id           String       @id @default(cuid())
+  tagId        String
+  tag          Tag          @relation(fields: [tagId], references: [id], onDelete: Cascade)
+  tier         Int
+  type         QuestionType
+  prompt       String
+  options      Json?
+  correctIndex Int?
+  requirements Json?
+  starterCode  String?
+  answer       String?
+  attempts     Attempt[]
+}
+
+model UserTagProgress {
+  id           String   @id @default(cuid())
+  userId       String
+  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  tagId        String
+  tag          Tag      @relation(fields: [tagId], references: [id], onDelete: Cascade)
+  ease         Float    @default(2.5)
+  intervalDays Int      @default(0)
+  dueAt        DateTime @default(now())
+  lapses       Int      @default(0)
+  mastered     Boolean  @default(false)
+  createdAt    DateTime @default(now())
+
+  @@unique([userId, tagId])
+}
+
+model Attempt {
+  id         String   @id @default(cuid())
+  userId     String
+  user       User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  questionId String
+  question   Question @relation(fields: [questionId], references: [id], onDelete: Cascade)
+  answerText String
+  isCorrect  Boolean
+  detail     Json?
+  createdAt  DateTime @default(now())
+}
