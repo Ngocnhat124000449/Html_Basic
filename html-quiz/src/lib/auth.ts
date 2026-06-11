@@ -3,9 +3,25 @@ import Credentials from "next-auth/providers/credentials";
 import bcrypt from "bcryptjs";
 import { prisma } from "@/lib/prisma";
 
+const useSecureCookies = process.env.NODE_ENV === "production";
+
 export const { handlers, auth, signIn, signOut } = NextAuth({
   session: { strategy: "jwt" },
   pages: { signIn: "/login" },
+  cookies: {
+    // Tên cookie riêng cho app: cookie localhost dùng chung giữa các project Next.js,
+    // tên mặc định "authjs.session-token" dễ đụng cookie mã hóa bằng secret khác
+    // → lỗi "no matching decryption secret"
+    sessionToken: {
+      name: `${useSecureCookies ? "__Secure-" : ""}html-quiz.session-token`,
+      options: {
+        httpOnly: true,
+        sameSite: "lax",
+        path: "/",
+        secure: useSecureCookies,
+      },
+    },
+  },
   providers: [
     Credentials({
       credentials: { email: {}, password: {} },

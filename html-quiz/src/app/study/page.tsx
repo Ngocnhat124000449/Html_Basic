@@ -1,13 +1,13 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import type { AnswerResult, SessionTag } from "@/lib/study-types";
 
-const TIER_LABEL: Record<number, string> = {
-  1: "Bậc 1 — Nhận biết",
-  2: "Bậc 2 — Hiểu",
-  3: "Bậc 3 — Viết được",
+const TIER_INFO: Record<number, { label: string; cls: string }> = {
+  1: { label: "Bậc 1 · Nhận biết", cls: "bg-sky-100 text-sky-700" },
+  2: { label: "Bậc 2 · Hiểu", cls: "bg-violet-100 text-violet-700" },
+  3: { label: "Bậc 3 · Viết được", cls: "bg-flame-100 text-flame-700" },
 };
 
 const MAX_WRONG = 3;
@@ -23,6 +23,8 @@ export default function StudyPage() {
   const [tagFailed, setTagFailed] = useState(false);
   const [summary, setSummary] = useState<{ name: string; passed: boolean }[]>([]);
   const [submitting, setSubmitting] = useState(false);
+  const inputRef = useRef<HTMLInputElement | null>(null);
+  const textareaRef = useRef<HTMLTextAreaElement | null>(null);
 
   useEffect(() => {
     fetch("/api/study/session")
@@ -30,13 +32,34 @@ export default function StudyPage() {
       .then((d) => setTags(d.tags ?? []));
   }, []);
 
-  if (tags === null) return <p className="py-10 text-center">Đang tải phiên học...</p>;
+  // Tự focus ô nhập khi sang câu mới
+  useEffect(() => {
+    if (!feedback) {
+      inputRef.current?.focus();
+      textareaRef.current?.focus();
+    }
+  }, [feedback, qIdx, tagIdx]);
+
+  if (tags === null) {
+    return (
+      <div className="space-y-4 py-10">
+        <div className="h-4 w-48 animate-pulse rounded-full bg-ink/10" />
+        <div className="h-64 animate-pulse rounded-2xl bg-ink/10" />
+        <p className="text-center text-sm text-ink/50">Đang chuẩn bị phiên học...</p>
+      </div>
+    );
+  }
 
   if (tags.length === 0) {
     return (
-      <div className="py-16 text-center">
-        <p className="text-lg">Không có thẻ nào đến hạn hôm nay 🎉</p>
-        <Link href="/" className="mt-4 inline-block text-blue-600 hover:underline">
+      <div className="animate-rise py-20 text-center">
+        <p className="text-4xl">🎉</p>
+        <h1 className="mt-3 font-display text-2xl font-bold">Không có thẻ nào đến hạn</h1>
+        <p className="mt-2 text-ink/60">Bạn đã hoàn thành mục tiêu hôm nay. Hẹn gặp lại ngày mai!</p>
+        <Link
+          href="/"
+          className="mt-6 inline-block rounded-full bg-flame-500 px-6 py-2.5 font-medium text-white transition-colors hover:bg-flame-600"
+        >
           ← Về trang chủ
         </Link>
       </div>
@@ -44,24 +67,41 @@ export default function StudyPage() {
   }
 
   if (tagIdx >= tags.length) {
+    const passedCount = summary.filter((s) => s.passed).length;
     return (
-      <div className="space-y-4 py-10">
-        <h1 className="text-center text-2xl font-bold">Kết thúc phiên học 🏁</h1>
+      <div className="animate-rise space-y-6 py-12">
+        <div className="text-center">
+          <p className="text-4xl">🏁</p>
+          <h1 className="mt-3 font-display text-3xl font-bold">Kết thúc phiên học</h1>
+          <p className="mt-2 text-ink/60">
+            Vượt qua <strong className="text-flame-600">{passedCount}</strong>/{summary.length} thẻ
+          </p>
+        </div>
         <ul className="mx-auto max-w-sm space-y-2">
-          {summary.map((s) => (
+          {summary.map((s, i) => (
             <li
               key={s.name}
-              className={`flex justify-between rounded-lg border p-3 ${
-                s.passed ? "bg-green-50" : "bg-red-50"
+              className={`animate-rise flex items-center justify-between rounded-xl border p-3.5 ${
+                s.passed
+                  ? "border-emerald-200 bg-emerald-50"
+                  : "border-amber-200 bg-amber-50"
               }`}
+              style={{ animationDelay: `${i * 0.06}s` }}
             >
-              <code className="font-bold">&lt;{s.name}&gt;</code>
-              <span>{s.passed ? "✓ Vượt qua" : "✗ Học lại hôm nay"}</span>
+              <code className="font-mono font-bold text-ink">&lt;{s.name}&gt;</code>
+              <span
+                className={`text-sm font-medium ${s.passed ? "text-emerald-700" : "text-amber-700"}`}
+              >
+                {s.passed ? "✓ Vượt qua" : "↻ Học lại hôm nay"}
+              </span>
             </li>
           ))}
         </ul>
         <p className="text-center">
-          <Link href="/" className="text-blue-600 hover:underline">
+          <Link
+            href="/"
+            className="inline-block rounded-full bg-flame-500 px-6 py-2.5 font-medium text-white transition-colors hover:bg-flame-600"
+          >
             ← Về trang chủ
           </Link>
         </p>
@@ -73,6 +113,7 @@ export default function StudyPage() {
   const q = tag.questions[qIdx];
   const isCode = q.type !== "MCQ";
   const isMultiline = q.type === "WRITE_STRUCTURE";
+  const tier = TIER_INFO[q.tier] ?? TIER_INFO[1];
 
   async function completeTag(passed: boolean) {
     await fetch("/api/study/complete-tag", {
@@ -139,43 +180,101 @@ export default function StudyPage() {
     }
   }
 
+  const sessionPct = ((tagIdx + qIdx / tag.questions.length) / tags.length) * 100;
+
   return (
-    <div className="space-y-4 py-6">
-      <div className="flex items-center justify-between text-sm text-slate-500">
-        <span>
-          Thẻ {tagIdx + 1}/{tags.length} —{" "}
-          <code className="font-bold text-blue-700">&lt;{tag.name}&gt;</code>
-          {tag.isNew && (
-            <span className="ml-2 rounded-full bg-blue-100 px-2 py-0.5 text-xs text-blue-700">
-              Mới
-            </span>
-          )}
-        </span>
-        <span>{TIER_LABEL[q.tier]}</span>
+    <div className="space-y-4 py-8">
+      {/* Thanh tiến độ phiên học */}
+      <div className="space-y-2">
+        <div className="flex items-center justify-between text-sm">
+          <span className="font-medium text-ink/60">
+            Thẻ {tagIdx + 1}/{tags.length}
+          </span>
+          <span className={`rounded-full px-2.5 py-1 text-xs font-semibold ${tier.cls}`}>
+            {tier.label}
+          </span>
+        </div>
+        <div className="h-2 overflow-hidden rounded-full bg-ink/10">
+          <div
+            className="h-full rounded-full bg-gradient-to-r from-flame-400 to-flame-600 transition-all duration-500"
+            style={{ width: `${sessionPct}%` }}
+          />
+        </div>
       </div>
 
-      <div className="rounded-xl border bg-white p-5 shadow-sm">
-        <p className="font-medium">{q.prompt}</p>
+      {/* Thông tin thẻ đang học */}
+      <div className="flex items-center justify-between">
+        <div className="flex items-center gap-2">
+          <code className="rounded-lg bg-ink px-2.5 py-1 font-mono text-sm font-bold text-flame-300">
+            &lt;{tag.name}&gt;
+          </code>
+          {tag.isNew && (
+            <span className="rounded-full bg-flame-100 px-2.5 py-0.5 text-xs font-semibold text-flame-700">
+              ✦ Mới
+            </span>
+          )}
+          <span className="hidden text-xs text-ink/50 sm:inline">{tag.description}</span>
+        </div>
+        {/* Lượt sai còn lại */}
+        <div className="flex gap-1" title={`Còn ${MAX_WRONG - wrongCount} lượt sai`}>
+          {Array.from({ length: MAX_WRONG }).map((_, i) => (
+            <span
+              key={i}
+              className={`text-sm ${i < MAX_WRONG - wrongCount ? "" : "opacity-25 grayscale"}`}
+            >
+              ❤️
+            </span>
+          ))}
+        </div>
+      </div>
+
+      {/* Chấm tiến độ 3 câu trong thẻ */}
+      <div className="flex gap-1.5">
+        {tag.questions.map((_, i) => (
+          <span
+            key={i}
+            className={`h-1.5 flex-1 rounded-full transition-colors ${
+              i < qIdx ? "bg-emerald-400" : i === qIdx ? "bg-flame-500" : "bg-ink/10"
+            }`}
+          />
+        ))}
+      </div>
+
+      <div
+        key={`${tagIdx}-${qIdx}`}
+        className="animate-pop rounded-2xl border border-ink/10 bg-surface p-6 shadow-sm"
+      >
+        <p className="text-lg font-medium leading-relaxed">{q.prompt}</p>
 
         {q.starterCode && (
-          <pre className="mt-3 rounded-lg bg-slate-900 p-3 text-sm text-slate-100">
+          <pre className="mt-4 overflow-x-auto rounded-xl bg-ink p-4 font-mono text-sm leading-relaxed text-flame-100">
             {q.starterCode}
           </pre>
         )}
 
         {q.type === "MCQ" && q.options && (
-          <div className="mt-4 space-y-2">
+          <div className="mt-5 space-y-2.5">
             {q.options.map((opt, i) => (
               <button
                 key={i}
                 onClick={() => !feedback && setSelected(i)}
                 disabled={!!feedback}
-                className={`block w-full rounded-lg border px-4 py-2 text-left transition ${
-                  selected === i ? "border-blue-600 bg-blue-50" : "hover:bg-slate-50"
+                className={`group flex w-full items-center gap-3 rounded-xl border-2 px-4 py-3 text-left transition-all ${
+                  selected === i
+                    ? "border-flame-500 bg-flame-50 shadow-sm"
+                    : "border-ink/10 hover:border-flame-200 hover:bg-flame-50/50"
                 } disabled:cursor-not-allowed`}
               >
-                <span className="mr-2 font-semibold">{String.fromCharCode(65 + i)}.</span>
-                {opt}
+                <span
+                  className={`flex h-7 w-7 shrink-0 items-center justify-center rounded-lg font-mono text-sm font-bold transition-colors ${
+                    selected === i
+                      ? "bg-flame-500 text-white"
+                      : "bg-ink/5 text-ink/60 group-hover:bg-flame-100 group-hover:text-flame-700"
+                  }`}
+                >
+                  {String.fromCharCode(65 + i)}
+                </span>
+                <span>{opt}</span>
               </button>
             ))}
           </div>
@@ -184,22 +283,24 @@ export default function StudyPage() {
         {isCode &&
           (isMultiline ? (
             <textarea
+              ref={textareaRef}
               value={answer}
               onChange={(e) => setAnswer(e.target.value)}
               disabled={!!feedback}
               rows={5}
               spellCheck={false}
               placeholder="Gõ code của bạn (nhiều dòng)..."
-              className="mt-4 w-full rounded-lg border p-3 font-mono text-sm"
+              className="mt-5 w-full rounded-xl border-2 border-ink/10 bg-paper p-4 font-mono text-sm transition-colors focus:border-flame-400 focus:outline-none disabled:opacity-60"
             />
           ) : (
             <input
+              ref={inputRef}
               value={answer}
               onChange={(e) => setAnswer(e.target.value)}
               disabled={!!feedback}
               spellCheck={false}
-              placeholder="Gõ câu trả lời..."
-              className="mt-4 w-full rounded-lg border p-3 font-mono text-sm"
+              placeholder="Gõ câu trả lời rồi nhấn Enter..."
+              className="mt-5 w-full rounded-xl border-2 border-ink/10 bg-paper p-4 font-mono text-sm transition-colors focus:border-flame-400 focus:outline-none disabled:opacity-60"
               onKeyDown={(e) => e.key === "Enter" && !feedback && submit()}
             />
           ))}
@@ -208,7 +309,7 @@ export default function StudyPage() {
           <button
             onClick={submit}
             disabled={submitting || (q.type === "MCQ" ? selected === null : answer.trim() === "")}
-            className="mt-4 rounded-lg bg-blue-600 px-6 py-2 font-medium text-white hover:bg-blue-700 disabled:opacity-50"
+            className="mt-5 w-full rounded-xl bg-flame-500 px-6 py-3 font-semibold text-white shadow-sm transition-all hover:bg-flame-600 hover:shadow-md disabled:opacity-40 disabled:shadow-none sm:w-auto"
           >
             {submitting ? "Đang chấm..." : "Trả lời"}
           </button>
@@ -217,23 +318,35 @@ export default function StudyPage() {
 
       {feedback && (
         <div
-          className={`rounded-xl border p-5 shadow-sm ${
-            feedback.correct ? "border-green-300 bg-green-50" : "border-red-300 bg-red-50"
+          className={`rounded-2xl border-2 p-5 ${
+            feedback.correct
+              ? "animate-pop border-emerald-300 bg-emerald-50"
+              : "animate-shake border-red-300 bg-red-50"
           }`}
         >
           <p className="font-semibold">
-            {feedback.correct
-              ? "✓ Chính xác!"
-              : tagFailed
-                ? `✗ Sai ${MAX_WRONG} lần — thẻ này sẽ quay lại hàng đợi hôm nay`
-                : `✗ Chưa đúng (lần ${wrongCount}/${MAX_WRONG}) — thử lại nhé`}
+            {feedback.correct ? (
+              <span className="text-emerald-800">✓ Chính xác!</span>
+            ) : tagFailed ? (
+              <span className="text-red-800">
+                ✗ Sai {MAX_WRONG} lần — thẻ này sẽ quay lại hàng đợi hôm nay
+              </span>
+            ) : (
+              <span className="text-red-800">
+                ✗ Chưa đúng (lần {wrongCount}/{MAX_WRONG}) — thử lại nhé
+              </span>
+            )}
           </p>
 
           {feedback.results && (
-            <ul className="mt-3 space-y-1 text-sm">
+            <ul className="mt-3 space-y-1.5 text-sm">
               {feedback.results.map((r, i) => (
-                <li key={i} className={r.passed ? "text-green-700" : "text-red-700"}>
-                  {r.passed ? "✓" : "✗"} {r.message}
+                <li
+                  key={i}
+                  className={`flex gap-2 ${r.passed ? "text-emerald-700" : "text-red-700"}`}
+                >
+                  <span className="shrink-0">{r.passed ? "✓" : "✗"}</span>
+                  <span>{r.message}</span>
                 </li>
               ))}
             </ul>
@@ -241,7 +354,12 @@ export default function StudyPage() {
 
           <button
             onClick={next}
-            className="mt-4 rounded-lg bg-slate-800 px-6 py-2 font-medium text-white hover:bg-slate-900"
+            autoFocus
+            className={`mt-4 rounded-xl px-6 py-2.5 font-semibold text-white transition-colors ${
+              feedback.correct
+                ? "bg-emerald-600 hover:bg-emerald-700"
+                : "bg-ink hover:bg-ink/80"
+            }`}
           >
             {tagFailed
               ? "Thẻ tiếp theo →"
@@ -249,8 +367,9 @@ export default function StudyPage() {
                 ? qIdx + 1 < tag.questions.length
                   ? "Câu tiếp theo →"
                   : "Hoàn thành thẻ ✓"
-                : "Làm lại"}
+                : "Làm lại ↻"}
           </button>
+          <span className="ml-3 text-xs text-ink/40">hoặc nhấn Enter</span>
         </div>
       )}
     </div>
