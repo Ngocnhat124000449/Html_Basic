@@ -1,3 +1,4 @@
+import Link from "next/link";
 import { redirect } from "next/navigation";
 import { auth } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
@@ -104,12 +105,13 @@ export default async function TagsPage() {
               {topicTags.map((tag) => {
                 const st = STATUS_LABEL[statuses.get(tag.id)!];
                 return (
-                  <div
+                  <Link
                     key={tag.id}
-                    className={`rounded-xl border p-3.5 transition-shadow hover:shadow-md ${st.card}`}
+                    href={`/tags/${tag.name}`}
+                    className={`group rounded-xl border p-3.5 transition-all hover:-translate-y-0.5 hover:shadow-md ${st.card}`}
                   >
                     <div className="flex items-center justify-between gap-2">
-                      <code className="font-mono text-sm font-bold text-flame-600">
+                      <code className="font-mono text-sm font-bold text-flame-600 group-hover:underline">
                         &lt;{tag.name}&gt;
                       </code>
                       <span
@@ -119,7 +121,7 @@ export default async function TagsPage() {
                       </span>
                     </div>
                     <p className="mt-1.5 text-xs leading-relaxed text-ink/60">{tag.description}</p>
-                  </div>
+                  </Link>
                 );
               })}
             </div>
