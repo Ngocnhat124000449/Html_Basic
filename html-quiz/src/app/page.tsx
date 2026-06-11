@@ -25,6 +25,11 @@ export default async function DashboardPage() {
 
   const mastered = progress.filter((p) => p.mastered).length;
   const due = progress.filter((p) => p.dueAt <= now).length;
+  const started = progress.length;
+  // Lịch ôn gần nhất sắp tới — hiện khi hôm nay chưa có thẻ đến hạn
+  const nextDue = progress
+    .filter((p) => p.dueAt > now)
+    .reduce<Date | null>((min, p) => (!min || p.dueAt < min ? p.dueAt : min), null);
 
   // Thẻ đã học hôm nay (từ lịch sử trả lời) kèm lịch ôn lại từ SRS
   const progressByTagId = new Map(progress.map((p) => [p.tagId, p]));
@@ -45,6 +50,7 @@ export default async function DashboardPage() {
   const newAvailable = Math.min(Math.max(0, 5 - newToday), unseen);
   const todayCount = due + newAvailable;
   const masteredPct = totalTags > 0 ? Math.round((mastered / totalTags) * 100) : 0;
+  const startedPct = totalTags > 0 ? Math.round((started / totalTags) * 100) : 0;
 
   const today = new Intl.DateTimeFormat("vi-VN", {
     weekday: "long",
@@ -65,12 +71,20 @@ export default async function DashboardPage() {
         <div className="animate-rise stagger-1 rounded-2xl border border-amber-200 bg-amber-50 p-4 text-center sm:p-5">
           <p className="font-display text-3xl font-bold text-amber-600 sm:text-4xl">{due}</p>
           <p className="mt-1 text-xs font-medium text-amber-800/70 sm:text-sm">Thẻ đến hạn ôn</p>
+          {due === 0 && nextDue && (
+            <p className="mt-0.5 text-[11px] text-amber-700/60">
+              sớm nhất {shortDate.format(nextDue)}
+            </p>
+          )}
         </div>
         <div className="animate-rise stagger-2 rounded-2xl border border-flame-200 bg-flame-50 p-4 text-center sm:p-5">
-          <p className="font-display text-3xl font-bold text-flame-600 sm:text-4xl">
-            {newAvailable}
+          <p className="font-display text-3xl font-bold text-flame-600 sm:text-4xl">{newToday}</p>
+          <p className="mt-1 text-xs font-medium text-flame-800/70 sm:text-sm">
+            Thẻ mới học hôm nay
           </p>
-          <p className="mt-1 text-xs font-medium text-flame-800/70 sm:text-sm">Thẻ mới hôm nay</p>
+          <p className="mt-0.5 text-[11px] text-flame-700/60">
+            {newAvailable > 0 ? `còn ${newAvailable} trong mục tiêu 5/ngày` : "đạt mục tiêu 5/ngày 🎯"}
+          </p>
         </div>
         <div className="animate-rise stagger-3 rounded-2xl border border-emerald-200 bg-emerald-50 p-4 text-center sm:p-5">
           <p className="font-display text-3xl font-bold text-emerald-600 sm:text-4xl">
@@ -78,17 +92,25 @@ export default async function DashboardPage() {
             <span className="text-lg text-emerald-600/50">/{totalTags}</span>
           </p>
           <p className="mt-1 text-xs font-medium text-emerald-800/70 sm:text-sm">Đã nắm vững</p>
+          <p className="mt-0.5 text-[11px] text-emerald-700/60">ôn đạt liên tục ~3 tuần</p>
         </div>
       </div>
 
       <div className="animate-rise stagger-3 space-y-2">
         <div className="flex justify-between text-xs font-medium text-ink/50">
-          <span>Tiến độ tổng</span>
-          <span>{masteredPct}%</span>
+          <span>
+            Đã học {started}/{totalTags} thẻ · Nắm vững {mastered}
+          </span>
+          <span>{startedPct}%</span>
         </div>
-        <div className="h-2.5 overflow-hidden rounded-full bg-ink/10">
+        {/* Thanh 2 lớp: nhạt = đã bắt đầu học, đậm = đã nắm vững */}
+        <div className="relative h-2.5 overflow-hidden rounded-full bg-ink/10">
           <div
-            className="h-full rounded-full bg-gradient-to-r from-flame-400 to-flame-600 transition-all duration-700"
+            className="absolute inset-y-0 left-0 rounded-full bg-flame-300 transition-all duration-700"
+            style={{ width: `${startedPct}%` }}
+          />
+          <div
+            className="absolute inset-y-0 left-0 rounded-full bg-gradient-to-r from-emerald-400 to-emerald-600 transition-all duration-700"
             style={{ width: `${masteredPct}%` }}
           />
         </div>
