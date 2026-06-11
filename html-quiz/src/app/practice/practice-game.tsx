@@ -3,6 +3,7 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import { REFLEX_QUESTIONS } from "@/lib/reflex-data";
+import { ATTRIBUTE_REFLEX_QUESTIONS } from "@/lib/attribute-reflex-data";
 
 const TIME_FAST = 45; // giây — trắc nghiệm, điền thẻ, phản xạ
 const TIME_CODE = 90; // giây — viết thẻ, sửa bug, viết cấu trúc
@@ -20,19 +21,29 @@ type Item =
       tagName: string;
       tagDescription: string;
     }
-  | { kind: "reflex"; tag: string; prompt: string; explain: string };
+  | { kind: "reflex"; tag: string; prompt: string; explain: string }
+  | {
+      kind: "attr";
+      attr: string;
+      accept?: string[];
+      prefix?: boolean;
+      tag: string;
+      prompt: string;
+      explain: string;
+    };
 
 type Outcome = {
   correct: boolean;
   timedOut: boolean;
-  tagName: string;
+  /** Đáp án hiển thị trong feedback/tổng kết: "<video>" hoặc "required" */
+  answerLabel: string;
   explain: string;
   correctIndex?: number | null;
   correctAnswer?: string | null;
   results?: { passed: boolean; message: string }[];
 };
 
-type WrongEntry = { prompt: string; tagName: string; explain: string };
+type WrongEntry = { prompt: string; answerLabel: string; explain: string };
 type Phase = "intro" | "playing" | "done";
 
 const TYPE_BADGE: Record<string, { label: string; cls: string }> = {
@@ -41,10 +52,13 @@ const TYPE_BADGE: Record<string, { label: string; cls: string }> = {
   WRITE_TAG: { label: "Viết code", cls: "bg-flame-100 text-flame-700" },
   FIX_BUG: { label: "Sửa bug", cls: "bg-rose-100 text-rose-700" },
   WRITE_STRUCTURE: { label: "Viết cấu trúc", cls: "bg-amber-100 text-amber-700" },
-  REFLEX: { label: "Phản xạ", cls: "bg-emerald-100 text-emerald-700" },
+  REFLEX: { label: "Phản xạ thẻ", cls: "bg-emerald-100 text-emerald-700" },
+  ATTR: { label: "Thuộc tính", cls: "bg-indigo-100 text-indigo-700" },
 };
 
 const norm = (s: string) => s.toLowerCase().replace(/[<>/\s]/g, "");
+// Với thuộc tính: lấy phần trước dấu =, bỏ quotes và *
+const normAttr = (s: string) => s.toLowerCase().split("=")[0].replace(/[<>"'`/\s*]/g, "");
 
 function shuffle<T>(arr: T[]): T[] {
   const a = [...arr];
@@ -88,7 +102,11 @@ export default function PracticeGame() {
           (q: Omit<Extract<Item, { kind: "db" }>, "kind">) => ({ kind: "db" as const, ...q })
         );
         const reflex: Item[] = REFLEX_QUESTIONS.map((q) => ({ kind: "reflex" as const, ...q }));
-        setPool([...db, ...reflex]);
+        const attrs: Item[] = ATTRIBUTE_REFLEX_QUESTIONS.map((q) => ({
+          kind: "attr" as const,
+          ...q,
+        }));
+        setPool([...db, ...reflex, ...attrs]);
       });
   }, []);
 
@@ -109,7 +127,7 @@ export default function PracticeGame() {
         setStreak(0);
         setWrongList((w) => [
           ...w,
-          { prompt: itemPrompt, tagName: outcome.tagName, explain: outcome.explain },
+          { prompt: itemPrompt, answerLabel: outcome.answerLabel, explain: outcome.explain },
         ]);
       }
     },
@@ -123,7 +141,21 @@ export default function PracticeGame() {
       if (item.kind === "reflex") {
         const correct = !timedOut && norm(input) !== "" && norm(input) === norm(item.tag);
         applyOutcome(
-          { correct, timedOut, tagName: item.tag, explain: item.explain },
+          { correct, timedOut, answerLabel: `<${item.tag}>`, explain: item.explain },
+          item.prompt
+        );
+        return;
+      }
+
+      if (item.kind === "attr") {
+        const ni = normAttr(input);
+        const targets = [item.attr, ...(item.accept ?? [])].map(normAttr);
+        const correct =
+          !timedOut &&
+          ni !== "" &&
+          (targets.includes(ni) || (!!item.prefix && ni.startsWith(normAttr(item.attr))));
+        applyOutcome(
+          { correct, timedOut, answerLabel: item.attr, explain: item.explain },
           item.prompt
         );
         return;
@@ -144,7 +176,7 @@ export default function PracticeGame() {
           {
             correct: !timedOut && !!data.correct,
             timedOut,
-            tagName: data.tagName ?? item.tagName,
+            answerLabel: `<${data.tagName ?? item.tagName}>`,
             explain: data.tagDescription ?? item.tagDescription,
             correctIndex: data.correctIndex,
             correctAnswer: data.correctAnswer,
@@ -220,11 +252,11 @@ export default function PracticeGame() {
         <h1 className="mt-4 font-display text-3xl font-bold tracking-tight">Luyện tổng hợp</h1>
         <p className="mt-3 leading-relaxed text-ink/70">
           Trộn ngẫu nhiên <strong>mọi dạng câu hỏi</strong> từ 60 thẻ: trắc nghiệm, điền thẻ,
-          viết code, sửa bug và tình huống phản xạ. Chơi đến khi nào bạn muốn dừng.
+          viết code, sửa bug, phản xạ thẻ và phản xạ thuộc tính. Chơi đến khi nào bạn muốn dừng.
         </p>
         <ul className="mx-auto mt-6 max-w-sm space-y-2 text-left text-sm text-ink/70">
           <li className="flex gap-2">
-            <span>♾️</span> Vô tận — hết ~300 câu sẽ tự xáo lại vòng mới
+            <span>♾️</span> Vô tận — hết ~390 câu sẽ tự xáo lại vòng mới
           </li>
           <li className="flex gap-2">
             <span>⏱️</span> {TIME_FAST}s câu nhanh · {TIME_CODE}s câu gõ code
@@ -274,7 +306,7 @@ export default function PracticeGame() {
                 <p className="text-sm text-ink/70">{w.prompt}</p>
                 <p className="mt-2 text-sm">
                   <code className="rounded bg-ink px-1.5 py-0.5 font-mono text-xs font-bold text-flame-300">
-                    &lt;{w.tagName}&gt;
+                    {w.answerLabel}
                   </code>{" "}
                   <span className="text-ink/60">— {w.explain}</span>
                 </p>
@@ -308,7 +340,8 @@ export default function PracticeGame() {
   const timePct = (timeLeft / total) * 100;
   const timerColor =
     timePct > 50 ? "bg-flame-500" : timePct > 25 ? "bg-amber-500" : "bg-red-500";
-  const badge = TYPE_BADGE[item.kind === "db" ? item.type : "REFLEX"];
+  const badge =
+    TYPE_BADGE[item.kind === "db" ? item.type : item.kind === "attr" ? "ATTR" : "REFLEX"];
   const isMcq = item.kind === "db" && item.type === "MCQ";
   const isMultiline = item.kind === "db" && item.type === "WRITE_STRUCTURE";
   const canSubmit = isMcq ? selected !== null : input.trim() !== "";
@@ -403,7 +436,9 @@ export default function PracticeGame() {
               placeholder={
                 item.kind === "reflex"
                   ? "Gõ tên thẻ rồi nhấn Enter... (vd: video)"
-                  : "Gõ câu trả lời rồi nhấn Enter..."
+                  : item.kind === "attr"
+                    ? "Gõ tên thuộc tính rồi nhấn Enter... (vd: required)"
+                    : "Gõ câu trả lời rồi nhấn Enter..."
               }
               className="mt-5 w-full rounded-xl border-2 border-ink/10 bg-paper p-4 font-mono text-sm transition-colors focus:border-flame-400 focus:outline-none disabled:opacity-60"
               onKeyDown={(e) => {
@@ -475,7 +510,7 @@ export default function PracticeGame() {
               )}
               <p className="mt-2 text-sm text-ink/70">
                 <code className="rounded bg-ink px-1.5 py-0.5 font-mono text-xs font-bold text-flame-300">
-                  &lt;{feedback.tagName}&gt;
+                  {feedback.answerLabel}
                 </code>{" "}
                 — {feedback.explain}
               </p>

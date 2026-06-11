@@ -2,33 +2,92 @@
 
 import { useCallback, useEffect, useRef, useState } from "react";
 import Link from "next/link";
-import { REFLEX_QUESTIONS, type ReflexQuestion } from "@/lib/reflex-data";
+import { REFLEX_QUESTIONS } from "@/lib/reflex-data";
+import { ATTRIBUTE_REFLEX_QUESTIONS } from "@/lib/attribute-reflex-data";
 
 const ROUND_SIZE = 10;
 const TIME_PER_QUESTION = 45; // giây
 
-// Cùng quy ước với gradeFillBlank: bỏ < > / và khoảng trắng, không phân biệt hoa thường
-const norm = (s: string) => s.toLowerCase().replace(/[<>/\s]/g, "");
+type Mode = "tag" | "attr";
 
-function buildRound(): ReflexQuestion[] {
-  const shuffled = [...REFLEX_QUESTIONS].sort(() => Math.random() - 0.5);
+// Câu hỏi đã chuẩn hóa cho cả 2 chế độ
+type RoundItem = {
+  prompt: string;
+  explain: string;
+  /** Đáp án hiển thị: "video" hoặc "required" */
+  answer: string;
+  /** Các đáp án chấp nhận (đã gồm answer) */
+  targets: string[];
+  /** Chấp nhận đáp án bắt đầu bằng answer (data-*) */
+  prefix?: boolean;
+  isAttr: boolean;
+};
+
+// Chuẩn hóa: bỏ <>, quotes, khoảng trắng, *; với thuộc tính lấy phần trước dấu =
+const norm = (s: string) => s.toLowerCase().split("=")[0].replace(/[<>"'`/\s*]/g, "");
+
+function matches(input: string, item: RoundItem): boolean {
+  const ni = norm(input);
+  if (ni === "") return false;
+  if (item.targets.includes(ni)) return true;
+  if (item.prefix && ni.startsWith(norm(item.answer))) return true;
+  return false;
+}
+
+function shuffle<T>(arr: T[]): T[] {
+  const a = [...arr];
+  for (let i = a.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [a[i], a[j]] = [a[j], a[i]];
+  }
+  return a;
+}
+
+function buildRound(mode: Mode): RoundItem[] {
+  const pool: RoundItem[] =
+    mode === "tag"
+      ? REFLEX_QUESTIONS.map((q) => ({
+          prompt: q.prompt,
+          explain: q.explain,
+          answer: q.tag,
+          targets: [norm(q.tag)],
+          isAttr: false,
+        }))
+      : ATTRIBUTE_REFLEX_QUESTIONS.map((q) => ({
+          prompt: q.prompt,
+          explain: q.explain,
+          answer: q.attr,
+          targets: [q.attr, ...(q.accept ?? [])].map(norm),
+          prefix: q.prefix,
+          isAttr: true,
+        }));
+
   const seen = new Set<string>();
-  const round: ReflexQuestion[] = [];
-  for (const q of shuffled) {
-    if (seen.has(q.tag)) continue;
-    seen.add(q.tag);
+  const round: RoundItem[] = [];
+  for (const q of shuffle(pool)) {
+    if (seen.has(q.answer)) continue;
+    seen.add(q.answer);
     round.push(q);
     if (round.length === ROUND_SIZE) break;
   }
   return round;
 }
 
-type Result = { q: ReflexQuestion; answer: string; correct: boolean; timedOut: boolean };
+type Result = { q: RoundItem; answer: string; correct: boolean; timedOut: boolean };
 type Phase = "intro" | "playing" | "done";
+
+function AnswerChip({ item }: { item: RoundItem }) {
+  return (
+    <code className="rounded bg-ink px-1.5 py-0.5 font-mono text-sm font-bold text-flame-300">
+      {item.isAttr ? item.answer : `<${item.answer}>`}
+    </code>
+  );
+}
 
 export default function ReflexGame() {
   const [phase, setPhase] = useState<Phase>("intro");
-  const [round, setRound] = useState<ReflexQuestion[]>([]);
+  const [mode, setMode] = useState<Mode>("tag");
+  const [round, setRound] = useState<RoundItem[]>([]);
   const [idx, setIdx] = useState(0);
   const [input, setInput] = useState("");
   const [results, setResults] = useState<Result[]>([]);
@@ -43,7 +102,7 @@ export default function ReflexGame() {
   const answerCurrent = useCallback(
     (answer: string, timedOut: boolean) => {
       if (!q || feedback) return;
-      const correct = !timedOut && norm(answer) !== "" && norm(answer) === norm(q.tag);
+      const correct = !timedOut && matches(answer, q);
       const result: Result = { q, answer, correct, timedOut };
       setResults((r) => [...r, result]);
       setFeedback(result);
@@ -80,8 +139,9 @@ export default function ReflexGame() {
     if (phase === "playing" && !feedback) inputRef.current?.focus();
   }, [phase, idx, feedback]);
 
-  function start() {
-    setRound(buildRound());
+  function start(m: Mode) {
+    setMode(m);
+    setRound(buildRound(m));
     setIdx(0);
     setInput("");
     setResults([]);
@@ -108,14 +168,14 @@ export default function ReflexGame() {
     return (
       <div className="animate-rise mx-auto max-w-lg py-16 text-center">
         <p className="text-5xl">⚡</p>
-        <h1 className="mt-4 font-display text-3xl font-bold tracking-tight">Luyện phản xạ thẻ</h1>
+        <h1 className="mt-4 font-display text-3xl font-bold tracking-tight">Luyện phản xạ</h1>
         <p className="mt-3 leading-relaxed text-ink/70">
-          Đọc tình huống thực tế — <strong>gõ ngay tên thẻ</strong> bạn nghĩ đến. Không có gợi ý,
-          không có đáp án để chọn. Nhìn là phải nghĩ ra!
+          Đọc tình huống thực tế — <strong>gõ ngay đáp án</strong> bạn nghĩ đến. Không có gợi ý,
+          không có lựa chọn. Nhìn là phải nghĩ ra!
         </p>
         <ul className="mx-auto mt-6 max-w-sm space-y-2 text-left text-sm text-ink/70">
           <li className="flex gap-2">
-            <span>🎲</span> {ROUND_SIZE} câu ngẫu nhiên từ 60 thẻ — mỗi vòng mỗi khác
+            <span>🎲</span> {ROUND_SIZE} câu ngẫu nhiên — mỗi vòng mỗi khác
           </li>
           <li className="flex gap-2">
             <span>⏱️</span> {TIME_PER_QUESTION} giây mỗi câu, hết giờ tính sai
@@ -127,12 +187,26 @@ export default function ReflexGame() {
             <span>🧘</span> Chế độ luyện tự do — không ảnh hưởng lịch ôn tập
           </li>
         </ul>
-        <button
-          onClick={start}
-          className="mt-8 rounded-full bg-flame-500 px-8 py-3 font-display text-lg font-bold text-white shadow-lg shadow-flame-500/30 transition-all hover:-translate-y-0.5 hover:bg-flame-600 hover:shadow-xl"
-        >
-          Bắt đầu ⚡
-        </button>
+        <div className="mt-8 grid gap-3 sm:grid-cols-2">
+          <button
+            onClick={() => start("tag")}
+            className="rounded-2xl bg-flame-500 px-6 py-4 text-white shadow-lg shadow-flame-500/30 transition-all hover:-translate-y-0.5 hover:bg-flame-600 hover:shadow-xl"
+          >
+            <span className="block font-display text-lg font-bold">⚡ Phản xạ thẻ</span>
+            <span className="mt-0.5 block text-sm text-white/80">
+              Tình huống → gõ tên thẻ (60 thẻ)
+            </span>
+          </button>
+          <button
+            onClick={() => start("attr")}
+            className="rounded-2xl bg-ink px-6 py-4 text-white shadow-lg shadow-ink/30 transition-all hover:-translate-y-0.5 hover:bg-ink/85 hover:shadow-xl"
+          >
+            <span className="block font-display text-lg font-bold">🧬 Phản xạ thuộc tính</span>
+            <span className="mt-0.5 block text-sm text-white/80">
+              Tình huống → gõ tên thuộc tính
+            </span>
+          </button>
+        </div>
       </div>
     );
   }
@@ -164,9 +238,7 @@ export default function ReflexGame() {
               >
                 <p className="text-sm text-ink/70">{r.q.prompt}</p>
                 <p className="mt-2 text-sm">
-                  <code className="rounded bg-ink px-1.5 py-0.5 font-mono text-xs font-bold text-flame-300">
-                    &lt;{r.q.tag}&gt;
-                  </code>{" "}
+                  <AnswerChip item={r.q} />{" "}
                   <span className="text-ink/60">— {r.q.explain}</span>
                 </p>
               </div>
@@ -176,10 +248,16 @@ export default function ReflexGame() {
 
         <div className="flex flex-wrap justify-center gap-3">
           <button
-            onClick={start}
+            onClick={() => start(mode)}
             className="rounded-full bg-flame-500 px-6 py-2.5 font-semibold text-white transition-colors hover:bg-flame-600"
           >
             Chơi lại ⚡
+          </button>
+          <button
+            onClick={() => setPhase("intro")}
+            className="rounded-full border border-ink/15 px-6 py-2.5 font-medium text-ink/70 transition-colors hover:border-flame-300 hover:text-flame-700"
+          >
+            Đổi chế độ
           </button>
           <Link
             href="/tags"
@@ -202,6 +280,9 @@ export default function ReflexGame() {
       <div className="flex items-center justify-between text-sm">
         <span className="font-medium text-ink/60">
           Câu {idx + 1}/{round.length}
+          <span className="ml-2 rounded-full bg-ink/5 px-2 py-0.5 text-xs">
+            {mode === "tag" ? "Thẻ" : "Thuộc tính"}
+          </span>
         </span>
         <span className="font-display font-bold text-flame-600">
           {streak > 0 && `${streak} 🔥`}
@@ -221,7 +302,7 @@ export default function ReflexGame() {
         className="animate-pop rounded-2xl border border-ink/10 bg-surface p-6 shadow-sm"
       >
         <p className="text-xs font-semibold uppercase tracking-wide text-flame-600">
-          Tình huống — thẻ nào?
+          Tình huống — {mode === "tag" ? "thẻ nào?" : "thuộc tính nào?"}
         </p>
         <p className="mt-2 text-lg font-medium leading-relaxed">{q.prompt}</p>
 
@@ -232,7 +313,11 @@ export default function ReflexGame() {
           disabled={!!feedback}
           spellCheck={false}
           autoComplete="off"
-          placeholder="Gõ tên thẻ rồi nhấn Enter... (vd: video)"
+          placeholder={
+            mode === "tag"
+              ? "Gõ tên thẻ rồi nhấn Enter... (vd: video)"
+              : "Gõ tên thuộc tính rồi nhấn Enter... (vd: required)"
+          }
           className="mt-5 w-full rounded-xl border-2 border-ink/10 bg-paper p-4 font-mono text-sm transition-colors focus:border-flame-400 focus:outline-none disabled:opacity-60"
           onKeyDown={(e) => {
             if (e.key !== "Enter" || feedback || !input.trim()) return;
@@ -268,9 +353,7 @@ export default function ReflexGame() {
             <>
               <p className="font-semibold text-red-800">
                 {feedback.timedOut ? "⏱️ Hết giờ!" : "✗ Chưa đúng"} — đáp án là{" "}
-                <code className="rounded bg-ink px-1.5 py-0.5 font-mono text-sm font-bold text-flame-300">
-                  &lt;{feedback.q.tag}&gt;
-                </code>
+                <AnswerChip item={feedback.q} />
               </p>
               <p className="mt-2 text-sm text-ink/70">{feedback.q.explain}</p>
             </>
