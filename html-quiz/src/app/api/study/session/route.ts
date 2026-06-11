@@ -29,13 +29,15 @@ function toClient(tag: TagWithQuestions, isNew: boolean): SessionTag {
   };
 }
 
-export async function GET() {
+export async function GET(req: Request) {
   const session = await auth();
   if (!session?.user?.id) {
     return NextResponse.json({ error: "Chưa đăng nhập" }, { status: 401 });
   }
   const userId = session.user.id;
   const now = new Date();
+  // extra=1: học vượt — bỏ giới hạn thẻ mới/ngày, lấy tiếp 5 thẻ chưa học kế tiếp
+  const extra = new URL(req.url).searchParams.get("extra") === "1";
 
   const due = await prisma.userTagProgress.findMany({
     where: { userId, dueAt: { lte: now } },
@@ -48,7 +50,7 @@ export async function GET() {
   const newToday = await prisma.userTagProgress.count({
     where: { userId, createdAt: { gte: startOfDay } },
   });
-  const allowedNew = Math.max(0, NEW_PER_DAY - newToday);
+  const allowedNew = extra ? NEW_PER_DAY : Math.max(0, NEW_PER_DAY - newToday);
 
   let newTags: TagWithQuestions[] = [];
   if (allowedNew > 0) {

@@ -120,8 +120,16 @@ export default async function DashboardPage() {
             Hôm nay xong rồi!
           </p>
           <p className="mt-1 text-sm text-emerald-700/70">
-            Bộ nhớ cần thời gian — quay lại vào ngày mai nhé.
+            Bộ nhớ cần thời gian — quay lại ôn vào ngày mai nhé.
           </p>
+          {unseen > 0 && (
+            <Link
+              href="/study?extra=1"
+              className="mt-4 inline-block rounded-full bg-flame-500 px-6 py-2.5 text-sm font-semibold text-white shadow-sm transition-all hover:bg-flame-600 hover:shadow-md"
+            >
+              ⚡ Học vượt {Math.min(5, unseen)} thẻ của ngày sau
+            </Link>
+          )}
         </div>
       )}
 

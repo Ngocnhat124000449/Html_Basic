@@ -4,7 +4,8 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 
 const LINKS = [
-  { href: "/", label: "Tổng quan" },
+  // Trên mobile ẩn "Tổng quan" (logo đã dẫn về trang chủ) để 4 link còn lại vừa màn 375px
+  { href: "/", label: "Tổng quan", mobileHidden: true },
   { href: "/tags", label: "Thẻ" },
   { href: "/study", label: "Học" },
   { href: "/reflex", label: "Phản xạ" },
@@ -16,13 +17,15 @@ export default function NavLinks() {
 
   return (
     <div className="no-scrollbar flex items-center gap-1 overflow-x-auto">
-      {LINKS.map(({ href, label }) => {
+      {LINKS.map(({ href, label, mobileHidden }) => {
         const active = pathname === href;
         return (
           <Link
             key={href}
             href={href}
-            className={`whitespace-nowrap rounded-full px-2.5 py-1.5 text-sm font-medium transition-colors sm:px-3 ${
+            className={`whitespace-nowrap rounded-full px-2 py-1.5 text-sm font-medium transition-colors sm:px-3 ${
+              mobileHidden ? "hidden sm:inline-block" : ""
+            } ${
               active
                 ? "bg-flame-500 text-white shadow-sm"
                 : "text-ink/70 hover:bg-flame-100 hover:text-flame-700"

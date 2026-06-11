@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import type { AnswerResult, SessionTag } from "@/lib/study-types";
 
@@ -26,11 +26,26 @@ export default function StudyPage() {
   const inputRef = useRef<HTMLInputElement | null>(null);
   const textareaRef = useRef<HTMLTextAreaElement | null>(null);
 
-  useEffect(() => {
-    fetch("/api/study/session")
+  // Tải phiên học; extra=true bỏ giới hạn ngày để học vượt bài của ngày sau
+  const loadSession = useCallback((extra: boolean) => {
+    setTags(null);
+    setTagIdx(0);
+    setQIdx(0);
+    setSelected(null);
+    setAnswer("");
+    setFeedback(null);
+    setWrongCount(0);
+    setTagFailed(false);
+    setSummary([]);
+    fetch(`/api/study/session${extra ? "?extra=1" : ""}`)
       .then((r) => r.json())
       .then((d) => setTags(d.tags ?? []));
   }, []);
+
+  useEffect(() => {
+    const extra = new URLSearchParams(window.location.search).get("extra") === "1";
+    loadSession(extra);
+  }, [loadSession]);
 
   // Tự focus ô nhập khi sang câu mới
   useEffect(() => {
@@ -55,13 +70,23 @@ export default function StudyPage() {
       <div className="animate-rise py-20 text-center">
         <p className="text-4xl">🎉</p>
         <h1 className="mt-3 font-display text-2xl font-bold">Không có thẻ nào đến hạn</h1>
-        <p className="mt-2 text-ink/60">Bạn đã hoàn thành mục tiêu hôm nay. Hẹn gặp lại ngày mai!</p>
-        <Link
-          href="/"
-          className="mt-6 inline-block rounded-full bg-flame-500 px-6 py-2.5 font-medium text-white transition-colors hover:bg-flame-600"
-        >
-          ← Về trang chủ
-        </Link>
+        <p className="mt-2 text-ink/60">
+          Bạn đã hoàn thành mục tiêu hôm nay — nhưng vẫn có thể học vượt bài của ngày sau.
+        </p>
+        <div className="mt-6 flex flex-wrap justify-center gap-3">
+          <button
+            onClick={() => loadSession(true)}
+            className="rounded-full bg-flame-500 px-6 py-2.5 font-medium text-white transition-colors hover:bg-flame-600"
+          >
+            ⚡ Học thêm 5 thẻ mới
+          </button>
+          <Link
+            href="/"
+            className="rounded-full border border-ink/15 px-6 py-2.5 font-medium text-ink/70 transition-colors hover:border-flame-300 hover:text-flame-700"
+          >
+            ← Về trang chủ
+          </Link>
+        </div>
       </div>
     );
   }
@@ -97,14 +122,20 @@ export default function StudyPage() {
             </li>
           ))}
         </ul>
-        <p className="text-center">
+        <div className="flex flex-wrap justify-center gap-3">
+          <button
+            onClick={() => loadSession(true)}
+            className="rounded-full bg-flame-500 px-6 py-2.5 font-medium text-white transition-colors hover:bg-flame-600"
+          >
+            ⚡ Học thêm 5 thẻ mới
+          </button>
           <Link
             href="/"
-            className="inline-block rounded-full bg-flame-500 px-6 py-2.5 font-medium text-white transition-colors hover:bg-flame-600"
+            className="rounded-full border border-ink/15 px-6 py-2.5 font-medium text-ink/70 transition-colors hover:border-flame-300 hover:text-flame-700"
           >
             ← Về trang chủ
           </Link>
-        </p>
+        </div>
       </div>
     );
   }

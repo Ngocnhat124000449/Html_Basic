@@ -45,7 +45,7 @@ export default async function RootLayout({
     >
       <body className="min-h-screen font-sans antialiased">
         <header className="sticky top-0 z-40 border-b border-ink/10 bg-paper/85 backdrop-blur">
-          <nav className="mx-auto flex max-w-3xl items-center gap-2 px-4 py-3 sm:gap-4">
+          <nav className="mx-auto flex max-w-3xl items-center gap-1.5 px-3 py-3 sm:gap-4 sm:px-4">
             <Link href="/" className="group flex shrink-0 items-center gap-2">
               <span className="rounded-lg bg-flame-500 px-1.5 py-0.5 font-mono text-sm font-bold text-white transition-transform group-hover:-rotate-3">
                 &lt;/&gt;
@@ -67,8 +67,12 @@ export default async function RootLayout({
                       await signOut({ redirectTo: "/login" });
                     }}
                   >
-                    <button className="whitespace-nowrap rounded-full border border-ink/15 px-2.5 py-1.5 text-sm text-ink/70 transition-colors hover:border-flame-300 hover:bg-flame-50 hover:text-flame-700 sm:px-3">
-                      Đăng xuất
+                    <button
+                      title="Đăng xuất"
+                      className="whitespace-nowrap rounded-full border border-ink/15 px-2.5 py-1.5 text-sm text-ink/70 transition-colors hover:border-flame-300 hover:bg-flame-50 hover:text-flame-700 sm:px-3"
+                    >
+                      <span className="sm:hidden">⏻</span>
+                      <span className="hidden sm:inline">Đăng xuất</span>
                     </button>
                   </form>
                 </div>
