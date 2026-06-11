@@ -34,6 +34,7 @@ export default async function DashboardPage() {
     const p = progressByTagId.get(tag.id);
     return {
       name: tag.name,
+      inSrs: !!p, // chưa có progress = chỉ luyện tự do (phản xạ/tổng hợp), chưa vào lịch SRS
       mastered: p?.mastered ?? false,
       dueAt: p?.dueAt ?? null,
       scheduled: p ? p.dueAt > now : false,
@@ -137,18 +138,20 @@ export default async function DashboardPage() {
                 className={`flex items-center gap-2 rounded-full border px-3 py-1.5 text-sm ${
                   t.mastered
                     ? "border-emerald-200 bg-emerald-50"
-                    : t.scheduled
+                    : !t.inSrs || t.scheduled
                       ? "border-ink/10 bg-paper"
                       : "border-amber-200 bg-amber-50"
                 }`}
               >
                 <code className="font-mono font-bold text-flame-600">&lt;{t.name}&gt;</code>
                 <span className="text-xs text-ink/60">
-                  {t.mastered
-                    ? "✓ nắm vững"
-                    : t.scheduled && t.dueAt
-                      ? `ôn lại ${shortDate.format(t.dueAt)}`
-                      : "học lại hôm nay"}
+                  {!t.inSrs
+                    ? "luyện tự do"
+                    : t.mastered
+                      ? "✓ nắm vững"
+                      : t.scheduled && t.dueAt
+                        ? `ôn lại ${shortDate.format(t.dueAt)}`
+                        : "học lại hôm nay"}
                 </span>
               </li>
             ))}
