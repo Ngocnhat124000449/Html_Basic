@@ -3,6 +3,7 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import type { AnswerResult, SessionTag } from "@/lib/study-types";
+import { TAG_ATTRIBUTES, type AttrImportance } from "@/lib/attribute-data";
 
 const TIER_INFO: Record<number, { label: string; cls: string }> = {
   1: { label: "Bậc 1 · Nhận biết", cls: "bg-sky-100 text-sky-700" },
@@ -10,7 +11,84 @@ const TIER_INFO: Record<number, { label: string; cls: string }> = {
   3: { label: "Bậc 3 · Viết được", cls: "bg-flame-100 text-flame-700" },
 };
 
+const ATTR_GROUPS: { importance: AttrImportance; title: string; chip: string }[] = [
+  { importance: "essential", title: "★ Quan trọng nhất", chip: "bg-flame-500 text-white" },
+  { importance: "common", title: "● Hay dùng", chip: "bg-sky-600 text-white" },
+  { importance: "rare", title: "○ Ít dùng nhưng hợp lệ", chip: "bg-ink/70 text-white" },
+];
+
 const MAX_WRONG = 3;
+
+// Màn làm quen thẻ mới: mô tả + đủ 3 nhóm thuộc tính trước khi vào câu hỏi
+function TagIntro({ tag, onStart }: { tag: SessionTag; onStart: () => void }) {
+  const entry = TAG_ATTRIBUTES.find((t) => t.tag === tag.name);
+  return (
+    <div className="animate-rise space-y-5 py-8">
+      <div className="text-center">
+        <span className="rounded-full bg-flame-100 px-3 py-1 text-xs font-semibold text-flame-700">
+          ✦ Thẻ mới — làm quen trước khi trả lời
+        </span>
+        <p className="mt-4">
+          <code className="rounded-xl bg-ink px-3 py-1.5 font-mono text-2xl font-bold text-flame-300">
+            &lt;{tag.name}&gt;
+          </code>
+        </p>
+        <p className="mt-3 text-lg leading-relaxed text-ink/80">{tag.description}</p>
+      </div>
+
+      <div className="rounded-2xl border border-ink/10 bg-surface p-5">
+        <h2 className="font-display font-bold">Thuộc tính của &lt;{tag.name}&gt;</h2>
+        {entry?.note && <p className="mt-1 text-sm text-ink/60">💡 {entry.note}</p>}
+        {ATTR_GROUPS.map(({ importance, title, chip }) => {
+          const group = entry?.attrs.filter((a) => a.importance === importance) ?? [];
+          if (group.length === 0) return null;
+          return (
+            <div key={importance} className="mt-4">
+              <p className="text-xs font-semibold uppercase tracking-wide text-ink/50">{title}</p>
+              <ul className="mt-2 space-y-2.5">
+                {group.map((a) => (
+                  <li key={a.name} className="text-sm leading-relaxed">
+                    <code
+                      className={`mr-1.5 rounded px-1.5 py-0.5 font-mono text-xs font-bold ${chip}`}
+                    >
+                      {a.name}
+                    </code>
+                    {a.desc}
+                    <span className="text-ink/50"> · {a.when}</span>
+                    <code className="mt-1 block w-fit max-w-full overflow-x-auto rounded bg-ink px-2 py-1 font-mono text-xs text-flame-100">
+                      {a.example}
+                    </code>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          );
+        })}
+        <p className="mt-4 text-xs text-ink/50">
+          Xem đầy đủ kèm thuộc tính chung tại{" "}
+          <Link
+            href={`/tags/${tag.name}`}
+            target="_blank"
+            className="font-medium text-flame-600 hover:underline"
+          >
+            trang chi tiết thẻ ↗
+          </Link>
+        </p>
+      </div>
+
+      <div className="text-center">
+        <button
+          onClick={onStart}
+          autoFocus
+          className="rounded-full bg-flame-500 px-8 py-3 font-display text-lg font-bold text-white shadow-lg shadow-flame-500/30 transition-all hover:-translate-y-0.5 hover:bg-flame-600 hover:shadow-xl"
+        >
+          Bắt đầu trả lời ✍️
+        </button>
+        <p className="mt-2 text-xs text-ink/40">hoặc nhấn Enter</p>
+      </div>
+    </div>
+  );
+}
 
 export default function StudyPage() {
   const [tags, setTags] = useState<SessionTag[] | null>(null);
@@ -23,6 +101,8 @@ export default function StudyPage() {
   const [tagFailed, setTagFailed] = useState(false);
   const [summary, setSummary] = useState<{ name: string; passed: boolean }[]>([]);
   const [submitting, setSubmitting] = useState(false);
+  // Đã xem màn làm quen của thẻ mới hiện tại chưa
+  const [introSeen, setIntroSeen] = useState(false);
   const inputRef = useRef<HTMLInputElement | null>(null);
   const textareaRef = useRef<HTMLTextAreaElement | null>(null);
 
@@ -37,6 +117,7 @@ export default function StudyPage() {
     setWrongCount(0);
     setTagFailed(false);
     setSummary([]);
+    setIntroSeen(false);
     fetch(`/api/study/session${extra ? "?extra=1" : ""}`)
       .then((r) => r.json())
       .then((d) => setTags(d.tags ?? []));
@@ -185,6 +266,7 @@ export default function StudyPage() {
     setFeedback(null);
     setWrongCount(0);
     setTagFailed(false);
+    setIntroSeen(false);
   }
 
   async function next() {
@@ -209,6 +291,11 @@ export default function StudyPage() {
       setSelected(null);
       setAnswer("");
     }
+  }
+
+  // Thẻ mới: học thuộc tính + giá trị trước khi vào câu hỏi
+  if (tag.isNew && !introSeen) {
+    return <TagIntro tag={tag} onStart={() => setIntroSeen(true)} />;
   }
 
   const sessionPct = ((tagIdx + qIdx / tag.questions.length) / tags.length) * 100;
