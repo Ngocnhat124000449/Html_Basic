@@ -256,7 +256,7 @@ export default function PracticeGame() {
         </p>
         <ul className="mx-auto mt-6 max-w-sm space-y-2 text-left text-sm text-ink/70">
           <li className="flex gap-2">
-            <span>♾️</span> Vô tận — hết ~390 câu sẽ tự xáo lại vòng mới
+            <span>♾️</span> Vô tận — hết ~780 câu sẽ tự xáo lại vòng mới
           </li>
           <li className="flex gap-2">
             <span>⏱️</span> {TIME_FAST}s câu nhanh · {TIME_CODE}s câu gõ code
