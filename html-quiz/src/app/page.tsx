@@ -224,6 +224,26 @@ export default async function DashboardPage() {
       >
         Xem toàn bộ {totalTags} thẻ HTML →
       </Link>
+
+      {/* Khóa học CSS — mở cổng Beta */}
+      <Link
+        href="/css"
+        className="animate-rise stagger-4 group block rounded-2xl border border-sky-200 bg-sky-50/60 p-5 transition-all hover:-translate-y-0.5 hover:border-sky-400 hover:shadow-md"
+      >
+        <p className="font-display text-lg font-bold">
+          🎨 Khóa học CSS{" "}
+          <span className="ml-1 rounded-full bg-sky-100 px-2 py-0.5 align-middle text-xs font-semibold text-sky-700">
+            Beta
+          </span>
+        </p>
+        <p className="mt-0.5 text-sm text-ink/60">
+          Học theo phần: Nền tảng → Giao diện → Bố cục → Hiệu ứng · lịch ôn tập riêng, không ảnh
+          hưởng tiến độ HTML
+        </p>
+        <span className="mt-2 inline-block text-sm font-medium text-sky-700 transition-transform group-hover:translate-x-1">
+          Xem lộ trình →
+        </span>
+      </Link>
     </div>
   );
 }

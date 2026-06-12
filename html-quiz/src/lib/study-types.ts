@@ -9,6 +9,7 @@ export type ClientQuestion = {
 
 export type SessionTag = {
   tagId: string;
+  track: "html" | "css";
   name: string;
   topic: string;
   description: string;

@@ -26,6 +26,7 @@ function pickOnePerTier(questions: TagWithQuestions["questions"]) {
 function toClient(tag: TagWithQuestions, isNew: boolean): SessionTag {
   return {
     tagId: tag.id,
+    track: tag.track === "css" ? "css" : "html",
     name: tag.name,
     topic: tag.topic,
     description: tag.description,
@@ -50,11 +51,14 @@ export async function GET(req: Request) {
   }
   const userId = session.user.id;
   const now = new Date();
+  const params = new URL(req.url).searchParams;
   // extra=1: học vượt — bỏ giới hạn thẻ mới/ngày, lấy tiếp 5 thẻ chưa học kế tiếp
-  const extra = new URL(req.url).searchParams.get("extra") === "1";
+  const extra = params.get("extra") === "1";
+  // track: html (mặc định) | css — hàng đợi và quota tách riêng từng track
+  const track = params.get("track") === "css" ? "css" : "html";
 
   const due = await prisma.userTagProgress.findMany({
-    where: { userId, dueAt: { lte: now }, tag: { track: "html" } },
+    where: { userId, dueAt: { lte: now }, tag: { track } },
     orderBy: { dueAt: "asc" },
     include: { tag: { include: { questions: { orderBy: { tier: "asc" } } } } },
   });
@@ -63,18 +67,18 @@ export async function GET(req: Request) {
   startOfDay.setHours(0, 0, 0, 0);
   // Quota 5 thẻ mới/ngày tính riêng từng track
   const newToday = await prisma.userTagProgress.count({
-    where: { userId, createdAt: { gte: startOfDay }, tag: { track: "html" } },
+    where: { userId, createdAt: { gte: startOfDay }, tag: { track } },
   });
   const allowedNew = extra ? NEW_PER_DAY : Math.max(0, NEW_PER_DAY - newToday);
 
   let newTags: TagWithQuestions[] = [];
   if (allowedNew > 0) {
     const seen = await prisma.userTagProgress.findMany({
-      where: { userId, tag: { track: "html" } },
+      where: { userId, tag: { track } },
       select: { tagId: true },
     });
     newTags = await prisma.tag.findMany({
-      where: { track: "html", id: { notIn: seen.map((s) => s.tagId) } },
+      where: { track, id: { notIn: seen.map((s) => s.tagId) } },
       orderBy: { order: "asc" },
       take: allowedNew,
       include: { questions: { orderBy: { tier: "asc" } } },

@@ -4,12 +4,13 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 
 const LINKS = [
-  // Trên mobile ẩn "Tổng quan" (logo đã dẫn về trang chủ) để 4 link còn lại vừa màn 375px
+  // Trên mobile ẩn "Tổng quan" (logo đã dẫn về trang chủ) để các link còn lại vừa màn 375px
   { href: "/", label: "Tổng quan", mobileHidden: true },
   { href: "/tags", label: "Thẻ" },
   { href: "/study", label: "Học" },
   { href: "/reflex", label: "Phản xạ" },
   { href: "/practice", label: "Tổng hợp" },
+  { href: "/css", label: "CSS β" },
 ];
 
 export default function NavLinks() {
