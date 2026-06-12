@@ -24,7 +24,7 @@ type SeedTag = {
   questions: SeedQuestion[];
 };
 
-const tags: SeedTag[] = [
+export const tags: SeedTag[] = [
   // ===== VĂN BẢN =====
   {
     name: "h1",
