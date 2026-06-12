@@ -13,11 +13,13 @@ export default async function DashboardPage() {
   startOfDay.setHours(0, 0, 0, 0);
 
   const [totalTags, progress, newToday, attemptsToday] = await Promise.all([
-    prisma.tag.count(),
-    prisma.userTagProgress.findMany({ where: { userId } }),
-    prisma.userTagProgress.count({ where: { userId, createdAt: { gte: startOfDay } } }),
+    prisma.tag.count({ where: { track: "html" } }),
+    prisma.userTagProgress.findMany({ where: { userId, tag: { track: "html" } } }),
+    prisma.userTagProgress.count({
+      where: { userId, createdAt: { gte: startOfDay }, tag: { track: "html" } },
+    }),
     prisma.attempt.findMany({
-      where: { userId, createdAt: { gte: startOfDay } },
+      where: { userId, createdAt: { gte: startOfDay }, question: { tag: { track: "html" } } },
       include: { question: { select: { tag: { select: { id: true, name: true } } } } },
       orderBy: { createdAt: "asc" },
     }),

@@ -3747,9 +3747,9 @@ async function main() {
   let order = 0;
   for (const t of tags) {
     const tag = await prisma.tag.upsert({
-      where: { name: t.name },
+      where: { track_name: { track: "html", name: t.name } },
       update: { topic: t.topic, description: t.description, order },
-      create: { name: t.name, topic: t.topic, description: t.description, order },
+      create: { track: "html", name: t.name, topic: t.topic, description: t.description, order },
     });
     order++;
 
@@ -3783,13 +3783,16 @@ async function main() {
     });
   }
 
-  // Dọn thẻ không còn trong seed (câu hỏi/tiến độ của riêng thẻ đó cascade theo)
-  await prisma.tag.deleteMany({ where: { name: { notIn: tags.map((t) => t.name) } } });
+  // Dọn thẻ HTML không còn trong seed — TUYỆT ĐỐI giới hạn track html,
+  // không được đụng dữ liệu của track khác (css...)
+  await prisma.tag.deleteMany({
+    where: { track: "html", name: { notIn: tags.map((t) => t.name) } },
+  });
 
   const [tagCount, qCount, progressCount] = await Promise.all([
-    prisma.tag.count(),
-    prisma.question.count(),
-    prisma.userTagProgress.count(),
+    prisma.tag.count({ where: { track: "html" } }),
+    prisma.question.count({ where: { tag: { track: "html" } } }),
+    prisma.userTagProgress.count({ where: { tag: { track: "html" } } }),
   ]);
   console.log(
     `Đã seed ${tagCount} thẻ, ${qCount} câu hỏi — giữ nguyên ${progressCount} bản ghi tiến độ`

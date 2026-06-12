@@ -91,7 +91,9 @@ export default async function TagDetailPage({
   if (!session?.user?.id) redirect("/login");
 
   const { name } = await params;
-  const tag = await prisma.tag.findUnique({ where: { name } });
+  const tag = await prisma.tag.findUnique({
+    where: { track_name: { track: "html", name } },
+  });
   if (!tag) notFound();
 
   const progress = await prisma.userTagProgress.findUnique({

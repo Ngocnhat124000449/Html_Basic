@@ -19,12 +19,18 @@ model User {
 
 model Tag {
   id          String            @id @default(cuid())
-  name        String            @unique
+  // Khóa học: "html" | "css" — dữ liệu cũ mặc định html
+  track       String            @default("html")
+  name        String
   topic       String
+  // Phần lớn của lộ trình (CSS: "Nền tảng", "Giao diện"...) — HTML không dùng
+  part        String?
   description String
   order       Int
   questions   Question[]
   progress    UserTagProgress[]
+
+  @@unique([track, name])
 }
 
 enum QuestionType {

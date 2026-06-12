@@ -46,8 +46,8 @@ export default async function TagsPage() {
   const now = new Date();
 
   const [tags, progress] = await Promise.all([
-    prisma.tag.findMany({ orderBy: { order: "asc" } }),
-    prisma.userTagProgress.findMany({ where: { userId } }),
+    prisma.tag.findMany({ where: { track: "html" }, orderBy: { order: "asc" } }),
+    prisma.userTagProgress.findMany({ where: { userId, tag: { track: "html" } } }),
   ]);
   const progressByTag = new Map(progress.map((p) => [p.tagId, p]));
 

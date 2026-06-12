@@ -11,6 +11,7 @@ export async function GET() {
   }
 
   const questions = await prisma.question.findMany({
+    where: { tag: { track: "html" } },
     include: { tag: { select: { name: true, description: true } } },
     orderBy: { tag: { order: "asc" } },
   });

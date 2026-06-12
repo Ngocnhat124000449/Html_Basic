@@ -54,26 +54,27 @@ export async function GET(req: Request) {
   const extra = new URL(req.url).searchParams.get("extra") === "1";
 
   const due = await prisma.userTagProgress.findMany({
-    where: { userId, dueAt: { lte: now } },
+    where: { userId, dueAt: { lte: now }, tag: { track: "html" } },
     orderBy: { dueAt: "asc" },
     include: { tag: { include: { questions: { orderBy: { tier: "asc" } } } } },
   });
 
   const startOfDay = new Date(now);
   startOfDay.setHours(0, 0, 0, 0);
+  // Quota 5 thẻ mới/ngày tính riêng từng track
   const newToday = await prisma.userTagProgress.count({
-    where: { userId, createdAt: { gte: startOfDay } },
+    where: { userId, createdAt: { gte: startOfDay }, tag: { track: "html" } },
   });
   const allowedNew = extra ? NEW_PER_DAY : Math.max(0, NEW_PER_DAY - newToday);
 
   let newTags: TagWithQuestions[] = [];
   if (allowedNew > 0) {
     const seen = await prisma.userTagProgress.findMany({
-      where: { userId },
+      where: { userId, tag: { track: "html" } },
       select: { tagId: true },
     });
     newTags = await prisma.tag.findMany({
-      where: { id: { notIn: seen.map((s) => s.tagId) } },
+      where: { track: "html", id: { notIn: seen.map((s) => s.tagId) } },
       orderBy: { order: "asc" },
       take: allowedNew,
       include: { questions: { orderBy: { tier: "asc" } } },
