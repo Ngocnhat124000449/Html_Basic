@@ -9,6 +9,20 @@ const SESSION_CAP = 10;
 
 type TagWithQuestions = Prisma.TagGetPayload<{ include: { questions: true } }>;
 
+// Mỗi bậc có nhiều biến thể — mỗi phiên chọn ngẫu nhiên 1 câu/bậc
+// để lần ôn sau không gặp lại đúng đề cũ
+function pickOnePerTier(questions: TagWithQuestions["questions"]) {
+  const byTier = new Map<number, TagWithQuestions["questions"]>();
+  for (const q of questions) {
+    const list = byTier.get(q.tier) ?? [];
+    list.push(q);
+    byTier.set(q.tier, list);
+  }
+  return [...byTier.entries()]
+    .sort(([a], [b]) => a - b)
+    .map(([, list]) => list[Math.floor(Math.random() * list.length)]);
+}
+
 function toClient(tag: TagWithQuestions, isNew: boolean): SessionTag {
   return {
     tagId: tag.id,
@@ -16,7 +30,7 @@ function toClient(tag: TagWithQuestions, isNew: boolean): SessionTag {
     topic: tag.topic,
     description: tag.description,
     isNew,
-    questions: tag.questions.map(
+    questions: pickOnePerTier(tag.questions).map(
       (q): ClientQuestion => ({
         id: q.id,
         tier: q.tier,
