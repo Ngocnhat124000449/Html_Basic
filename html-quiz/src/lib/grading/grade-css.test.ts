@@ -57,6 +57,12 @@ describe("gradeCss — selector", () => {
     expect(gradeCss("ul   >   li { color: red; }", r).passed).toBe(true);
   });
 
+  it("khoan dung quote trong attribute selector", () => {
+    const r: CssRequirement[] = [{ type: "selector", value: 'input[type="email"]' }];
+    expect(gradeCss("input[type=email] { border-color: teal; }", r).passed).toBe(true);
+    expect(gradeCss("input[type='email'] { border-color: teal; }", r).passed).toBe(true);
+  });
+
   it("rớt khi sai selector và chỉ ra đang viết gì", () => {
     const out = gradeCss("#card { color: red; }", reqs);
     expect(out.passed).toBe(false);

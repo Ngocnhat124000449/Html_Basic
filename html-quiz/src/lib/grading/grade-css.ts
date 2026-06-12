@@ -4,10 +4,12 @@ import type { CssRequirement } from "./css-types";
 type CssRule = { selector: string; decls: Map<string, string> };
 
 // Chuẩn hóa selector: lowercase, gọn khoảng trắng, bỏ khoảng quanh tổ hợp > + ~ ,
+// bỏ quote trong attribute selector ([type="email"] = [type=email])
 function normSelector(s: string): string {
   return s
     .trim()
     .toLowerCase()
+    .replace(/['"]/g, "")
     .replace(/\s*([>+~,])\s*/g, "$1")
     .replace(/\s+/g, " ");
 }

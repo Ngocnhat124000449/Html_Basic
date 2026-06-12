@@ -1,0 +1,1012 @@
+import type { CssSeedTag } from "./types";
+
+const PART = "Nền tảng";
+
+// PHẦN 1 — Chương 1 (Cú pháp & nhúng CSS) + Chương 2 (Selector)
+// Mỗi mục: 3 MCQ bậc 1 + 3 MCQ bậc 2 + 1 WRITE_CSS bậc 3 (luôn kèm HTML căn cứ)
+export const PART1_CHUONG_1_2: CssSeedTag[] = [
+  // ===== CHƯƠNG 1: CÚ PHÁP & NHÚNG CSS =====
+  {
+    name: "cú pháp rule",
+    topic: "Cú pháp & nhúng CSS",
+    part: PART,
+    description: "Cấu trúc một rule: selector { thuộc-tính: giá-trị; }",
+    questions: [
+      {
+        tier: 1, type: "MCQ",
+        prompt: "Một rule CSS hoàn chỉnh gồm những phần nào?",
+        options: [
+          "Tên thẻ và nội dung văn bản",
+          "Selector và khối khai báo { thuộc-tính: giá-trị; }",
+          "Thuộc tính HTML và giá trị",
+          "Tên file .css và đường dẫn",
+        ],
+        correctIndex: 1,
+      },
+      {
+        tier: 1, type: "MCQ",
+        prompt: "Trong rule  p { color: red; }  thì  p  được gọi là gì?",
+        options: ["Thuộc tính", "Giá trị", "Selector", "Khai báo"],
+        correctIndex: 2,
+      },
+      {
+        tier: 1, type: "MCQ",
+        prompt: "Trong khai báo  font-size: 16px;  dấu hai chấm (:) ngăn cách giữa gì với gì?",
+        options: [
+          "Selector và khối khai báo",
+          "Tên thuộc tính và giá trị của nó",
+          "Hai khai báo liên tiếp",
+          "Tên file và phần mở rộng",
+        ],
+        correctIndex: 1,
+      },
+      {
+        tier: 2, type: "MCQ",
+        prompt: "Bạn quên dấu chấm phẩy (;) giữa hai khai báo:  p { color: red  font-size: 16px; }  — chuyện gì xảy ra?",
+        options: [
+          "Trình duyệt báo lỗi và dừng tải trang",
+          "Cả hai khai báo vẫn chạy bình thường",
+          "Khai báo bị lỗi sẽ bị trình duyệt bỏ qua trong im lặng — chữ không to lên mà không có thông báo nào",
+          "Toàn bộ file CSS bị vô hiệu",
+        ],
+        correctIndex: 2,
+      },
+      {
+        tier: 2, type: "MCQ",
+        prompt: "Rule viết thiếu cặp ngoặc nhọn:  h1 color: blue;  — kết quả là gì?",
+        options: [
+          "Vẫn áp dụng vì trình duyệt tự hiểu",
+          "Phần viết sai bị bỏ qua, h1 giữ nguyên kiểu mặc định",
+          "Trang trắng hoàn toàn",
+          "Chỉ áp dụng cho h1 đầu tiên",
+        ],
+        correctIndex: 1,
+      },
+      {
+        tier: 2, type: "MCQ",
+        prompt: "Vì sao nên gom nhiều khai báo vào MỘT rule  p { color: gray; line-height: 1.6; }  thay vì viết hai rule p riêng biệt?",
+        options: [
+          "Hai rule p riêng biệt sẽ báo lỗi cú pháp",
+          "Kết quả như nhau nhưng một rule gọn hơn, dễ tìm và sửa về sau",
+          "Trình duyệt chỉ đọc rule p đầu tiên",
+          "Một rule chạy nhanh hơn rõ rệt",
+        ],
+        correctIndex: 1,
+      },
+      {
+        tier: 3, type: "WRITE_CSS",
+        prompt: "HTML có sẵn một đoạn văn. Viết MỘT rule CSS chọn thẻ p, đặt màu chữ red và cỡ chữ 20px.",
+        requirements: [
+          { type: "selector", value: "p" },
+          { type: "value", selector: "p", name: "color", value: "red" },
+          { type: "value", selector: "p", name: "font-size", value: "20px" },
+        ],
+        starterCode: "/* HTML căn cứ:\n<p>Xin chào CSS</p>\n*/\n",
+      },
+    ],
+  },
+  {
+    name: "nhúng file css",
+    topic: "Cú pháp & nhúng CSS",
+    part: PART,
+    description: "Nhúng file .css ngoài bằng <link rel=\"stylesheet\">",
+    questions: [
+      {
+        tier: 1, type: "MCQ",
+        prompt: "Bạn có file styles.css riêng. Dòng nào nhúng nó vào trang HTML?",
+        options: [
+          '<style src="styles.css">',
+          '<link rel="stylesheet" href="styles.css">',
+          '<css href="styles.css">',
+          '<script src="styles.css"></script>',
+        ],
+        correctIndex: 1,
+      },
+      {
+        tier: 1, type: "MCQ",
+        prompt: "Thẻ <link rel=\"stylesheet\"> nên đặt ở đâu trong file HTML?",
+        options: ["Cuối <body>", "Trong <head>", "Ngay sau <!DOCTYPE html>", "Bất kỳ đâu cũng như nhau"],
+        correctIndex: 1,
+      },
+      {
+        tier: 1, type: "MCQ",
+        prompt: "Website có 10 trang dùng chung một bộ giao diện. Cách nhúng CSS nào hợp lý nhất?",
+        options: [
+          "Copy khối <style> vào từng trang",
+          "Viết style inline trên từng thẻ",
+          "Một file .css ngoài, mọi trang cùng <link> tới nó",
+          "Mỗi trang một file .css riêng nội dung giống hệt nhau",
+        ],
+        correctIndex: 2,
+      },
+      {
+        tier: 2, type: "MCQ",
+        prompt: "Vì sao file CSS ngoài tốt hơn <style> nội bộ cho website nhiều trang?",
+        options: [
+          "File ngoài có thêm thuộc tính CSS mà <style> không hỗ trợ",
+          "Trình duyệt cache file ngoài dùng lại cho mọi trang, và sửa giao diện chỉ cần sửa một file",
+          "<style> nội bộ bị các trình duyệt mới chặn",
+          "File ngoài tự nén nội dung",
+        ],
+        correctIndex: 1,
+      },
+      {
+        tier: 2, type: "MCQ",
+        prompt: "Viết  <link href=\"styles.css\">  nhưng quên  rel=\"stylesheet\"  — kết quả?",
+        options: [
+          "CSS vẫn áp dụng vì href đã đủ",
+          "Trình duyệt không coi đó là stylesheet nên CSS không được áp dụng",
+          "Trình duyệt báo lỗi đỏ trên trang",
+          "Chỉ Firefox bị lỗi",
+        ],
+        correctIndex: 1,
+      },
+      {
+        tier: 2, type: "MCQ",
+        prompt: "Bạn đổi tên file thành giao-dien.css nhưng href trong <link> vẫn trỏ tới styles.css. Người dùng thấy gì?",
+        options: [
+          "Trang báo lỗi 404 và không hiện nội dung",
+          "Trang vẫn hiện đủ nội dung HTML nhưng mất toàn bộ style — file css trả về 404",
+          "Trình duyệt tự tìm file css gần đúng nhất",
+          "Trang trắng hoàn toàn",
+        ],
+        correctIndex: 1,
+      },
+      {
+        tier: 3, type: "WRITE_CSS",
+        prompt: "Trang đã <link> tới styles.css. Trong file styles.css, viết rule chọn thẻ h1, đặt màu chữ blue.",
+        requirements: [
+          { type: "selector", value: "h1" },
+          { type: "value", selector: "h1", name: "color", value: "blue" },
+        ],
+        starterCode: "/* HTML căn cứ:\n<link rel=\"stylesheet\" href=\"styles.css\">\n<h1>Trang chủ</h1>\n*/\n",
+      },
+    ],
+  },
+  {
+    name: "css nội bộ",
+    topic: "Cú pháp & nhúng CSS",
+    part: PART,
+    description: "Viết CSS ngay trong HTML bằng thẻ <style>",
+    questions: [
+      {
+        tier: 1, type: "MCQ",
+        prompt: "Muốn viết CSS ngay trong file HTML (không tạo file ngoài), bạn dùng thẻ nào?",
+        options: ["<css>", "<style>", "<link>", "<script>"],
+        correctIndex: 1,
+      },
+      {
+        tier: 1, type: "MCQ",
+        prompt: "Bạn làm một trang demo duy nhất, cần thêm vài chục dòng CSS nhanh gọn. Cách nào phù hợp?",
+        options: [
+          "Khối <style> trong <head>",
+          "Style inline trên từng thẻ",
+          "Tạo 3 file css ngoài",
+          "Viết CSS trong <body> dưới dạng văn bản",
+        ],
+        correctIndex: 0,
+      },
+      {
+        tier: 1, type: "MCQ",
+        prompt: "Thẻ <style> thường được đặt ở đâu?",
+        options: ["Trong <head>", "Sau </html>", "Trong <footer>", "Trước <!DOCTYPE html>"],
+        correctIndex: 0,
+      },
+      {
+        tier: 2, type: "MCQ",
+        prompt: "Trường hợp nào dùng <style> nội bộ hợp lý hơn file css ngoài?",
+        options: [
+          "Website thương mại 50 trang",
+          "Trang đơn lẻ độc lập (demo, landing page một file, email HTML)",
+          "Khi muốn trình duyệt cache style",
+          "Khi team có nhiều người cùng sửa giao diện",
+        ],
+        correctIndex: 1,
+      },
+      {
+        tier: 2, type: "MCQ",
+        prompt: "5 trang của website đều copy cùng một khối <style> giống hệt nhau. Nhược điểm lớn nhất?",
+        options: [
+          "Trình duyệt từ chối đọc <style> trùng lặp",
+          "Đổi một màu phải sửa 5 file, dễ sót — và mỗi trang phải tải lại đoạn style đó",
+          "Trang tải chậm gấp 5 lần",
+          "Không có nhược điểm nào",
+        ],
+        correctIndex: 1,
+      },
+      {
+        tier: 2, type: "MCQ",
+        prompt: "Cú pháp rule viết trong <style> so với viết trong file .css ngoài khác nhau thế nào?",
+        options: [
+          "Trong <style> phải thêm dấu @ trước selector",
+          "Hoàn toàn giống nhau — chỉ khác chỗ đặt code",
+          "Trong file ngoài không được dùng comment",
+          "Trong <style> không dùng được class selector",
+        ],
+        correctIndex: 1,
+      },
+      {
+        tier: 3, type: "WRITE_CSS",
+        prompt: "Trong khối <style> của trang, viết rule chọn class menu, đặt màu nền yellow.",
+        requirements: [
+          { type: "selector", value: ".menu" },
+          { type: "value", selector: ".menu", name: "background-color", value: "yellow" },
+        ],
+        starterCode: "/* HTML căn cứ:\n<head><style> ... </style></head>\n<ul class=\"menu\">...</ul>\n*/\n",
+      },
+    ],
+  },
+  {
+    name: "style inline",
+    topic: "Cú pháp & nhúng CSS",
+    part: PART,
+    description: "Khai báo CSS trực tiếp qua thuộc tính style của thẻ",
+    questions: [
+      {
+        tier: 1, type: "MCQ",
+        prompt: "Muốn đổi màu đúng MỘT thẻ duy nhất ngay tại chỗ trong HTML, bạn viết:",
+        options: [
+          '<p style="color: red">...</p>',
+          '<p css="color: red">...</p>',
+          '<p class="color: red">...</p>',
+          '<style p="color: red">',
+        ],
+        correctIndex: 0,
+      },
+      {
+        tier: 1, type: "MCQ",
+        prompt: "Trong  <p style=\"color: red\">  thì  style  là gì?",
+        options: [
+          "Một thẻ HTML",
+          "Một thuộc tính HTML chứa các khai báo CSS",
+          "Một selector",
+          "Tên file CSS",
+        ],
+        correctIndex: 1,
+      },
+      {
+        tier: 1, type: "MCQ",
+        prompt: "Bên trong giá trị của thuộc tính style, bạn có viết selector và cặp ngoặc { } không?",
+        options: [
+          "Có, viết đầy đủ như file css",
+          "Không — chỉ viết các khai báo thuộc-tính: giá-trị, cách nhau bằng dấu ;",
+          "Chỉ viết selector, bỏ khai báo",
+          "Viết gì cũng được",
+        ],
+        correctIndex: 1,
+      },
+      {
+        tier: 2, type: "MCQ",
+        prompt: "Vì sao nên hạn chế style inline trong dự án thực tế?",
+        options: [
+          "Trình duyệt cũ không hỗ trợ",
+          "Style rải rác từng thẻ rất khó bảo trì, không tái sử dụng được, và độ ưu tiên cao khiến việc ghi đè sau này rắc rối",
+          "Inline làm chữ hiển thị mờ hơn",
+          "Inline chỉ chạy khi có internet",
+        ],
+        correctIndex: 1,
+      },
+      {
+        tier: 2, type: "MCQ",
+        prompt: "Một thẻ vừa có  style=\"color: red\"  vừa khớp rule  .ghi-chu { color: blue; }  — chữ màu gì?",
+        options: [
+          "Xanh — rule trong file css luôn thắng",
+          "Đỏ — style inline có độ ưu tiên cao hơn selector class",
+          "Màu pha giữa đỏ và xanh",
+          "Trình duyệt báo lỗi xung đột",
+        ],
+        correctIndex: 1,
+      },
+      {
+        tier: 2, type: "MCQ",
+        prompt: "Điều nào style inline KHÔNG làm được?",
+        options: [
+          "Đặt màu chữ",
+          "Đặt cỡ chữ",
+          "Tạo hiệu ứng :hover khi rê chuột (pseudo-class) hay media query",
+          "Đặt màu nền",
+        ],
+        correctIndex: 2,
+      },
+      {
+        tier: 3, type: "WRITE_CSS",
+        prompt: "Thẻ p đang dùng style inline. Hãy chuyển sang rule CSS: viết rule chọn class canh-bao, đặt màu chữ orange.",
+        requirements: [
+          { type: "selector", value: ".canh-bao" },
+          { type: "value", selector: ".canh-bao", name: "color", value: "orange" },
+        ],
+        starterCode: "/* HTML căn cứ (đã bỏ style inline):\n<p class=\"canh-bao\">Tài khoản sắp hết hạn!</p>\n*/\n",
+      },
+    ],
+  },
+  {
+    name: "chú thích css",
+    topic: "Cú pháp & nhúng CSS",
+    part: PART,
+    description: "Ghi chú trong CSS bằng /* ... */",
+    questions: [
+      {
+        tier: 1, type: "MCQ",
+        prompt: "Cú pháp chú thích (comment) trong CSS là gì?",
+        options: ["// ghi chú", "<!-- ghi chú -->", "/* ghi chú */", "# ghi chú"],
+        correctIndex: 2,
+      },
+      {
+        tier: 1, type: "MCQ",
+        prompt: "Bạn muốn đánh dấu khu vực 'Header' trong file css cho dễ tìm. Viết thế nào?",
+        options: ["/* Header */", "<!-- Header -->", "// Header", "'Header'"],
+        correctIndex: 0,
+      },
+      {
+        tier: 1, type: "MCQ",
+        prompt: "CSS có chấp nhận kiểu chú thích // một dòng như JavaScript không?",
+        options: [
+          "Có, từ CSS3 trở đi",
+          "Không — CSS chỉ có một kiểu chú thích /* */",
+          "Chỉ trong file .css, không trong <style>",
+          "Chỉ khi khai báo charset",
+        ],
+        correctIndex: 1,
+      },
+      {
+        tier: 2, type: "MCQ",
+        prompt: "Ngoài ghi chú giải thích, comment còn được dùng làm gì khi debug CSS?",
+        options: [
+          "Tăng tốc độ tải trang",
+          "Bọc tạm một rule để vô hiệu hóa nó mà không xóa code",
+          "Đổi màu chữ trong DevTools",
+          "Tự sửa lỗi cú pháp",
+        ],
+        correctIndex: 1,
+      },
+      {
+        tier: 2, type: "MCQ",
+        prompt: "Bạn mở comment bằng /* nhưng quên đóng */ ở giữa file. Hậu quả?",
+        options: [
+          "Chỉ dòng đó thành comment",
+          "Toàn bộ CSS phía sau bị nuốt vào comment — mọi rule bên dưới ngừng hoạt động",
+          "Trình duyệt tự thêm */ giúp bạn",
+          "File css bị từ chối tải",
+        ],
+        correctIndex: 1,
+      },
+      {
+        tier: 2, type: "MCQ",
+        prompt: "Comment có làm trang chậm đi đáng kể không?",
+        options: [
+          "Có, mỗi comment tốn một lần xử lý nặng",
+          "Không đáng kể — và khi build production, công cụ minify thường xóa sạch comment",
+          "Có, vì trình duyệt phải dịch comment sang HTML",
+          "Chỉ chậm trên điện thoại",
+        ],
+        correctIndex: 1,
+      },
+      {
+        tier: 3, type: "WRITE_CSS",
+        prompt: "Viết rule chọn class tieu-de đặt màu chữ green. Giữ lại dòng chú thích /* Khu vực tiêu đề */ phía trên rule.",
+        requirements: [
+          { type: "selector", value: ".tieu-de" },
+          { type: "value", selector: ".tieu-de", name: "color", value: "green" },
+        ],
+        starterCode: "/* HTML căn cứ:\n<h2 class=\"tieu-de\">Tin tức hôm nay</h2>\n*/\n\n/* Khu vực tiêu đề */\n",
+      },
+    ],
+  },
+
+  // ===== CHƯƠNG 2: SELECTOR =====
+  {
+    name: "selector thẻ",
+    topic: "Selector",
+    part: PART,
+    description: "Chọn phần tử theo tên thẻ (element selector)",
+    questions: [
+      {
+        tier: 1, type: "MCQ",
+        prompt: "Muốn MỌI đoạn văn <p> trên trang đều màu xám, selector nào đúng?",
+        options: ["#p", ".p", "p", "<p>"],
+        correctIndex: 2,
+      },
+      {
+        tier: 1, type: "MCQ",
+        prompt: "Selector  h2  chọn những gì?",
+        options: [
+          "Thẻ h2 đầu tiên trên trang",
+          "Tất cả các thẻ h2 trên trang",
+          "Thẻ có class h2",
+          "Thẻ có id h2",
+        ],
+        correctIndex: 1,
+      },
+      {
+        tier: 1, type: "MCQ",
+        prompt: "Cách viết selector chọn mọi thẻ <li>?",
+        options: ["li { }", ".li { }", "#li { }", "<li> { }"],
+        correctIndex: 0,
+      },
+      {
+        tier: 2, type: "MCQ",
+        prompt: "Trang có 40 thẻ <p>. Rule  p { color: gray; }  ảnh hưởng bao nhiêu thẻ?",
+        options: ["Chỉ thẻ p đầu tiên", "Cả 40 thẻ", "Chỉ các thẻ p trong <main>", "Không thẻ nào nếu thiếu class"],
+        correctIndex: 1,
+      },
+      {
+        tier: 2, type: "MCQ",
+        prompt: "Vì sao không nên style toàn bộ website CHỈ bằng element selector (p, div, a...)?",
+        options: [
+          "Element selector chạy chậm hơn class",
+          "Mọi vùng trên trang bị áp cùng một kiểu — không phân biệt được menu, bài viết, footer cần kiểu khác nhau",
+          "Element selector bị giới hạn 10 rule",
+          "Trình duyệt khuyến cáo bỏ element selector",
+        ],
+        correctIndex: 1,
+      },
+      {
+        tier: 2, type: "MCQ",
+        prompt: "Khác biệt giữa selector  p  và  .p  là gì?",
+        options: [
+          "Như nhau",
+          "p chọn mọi thẻ <p>; .p chọn mọi phần tử có class=\"p\" bất kể tên thẻ",
+          ".p là cách viết tắt của p",
+          "p chỉ dùng trong <style>, .p chỉ dùng trong file ngoài",
+        ],
+        correctIndex: 1,
+      },
+      {
+        tier: 3, type: "WRITE_CSS",
+        prompt: "HTML có danh sách đồ uống. Viết rule chọn mọi thẻ li, đặt màu chữ brown.",
+        requirements: [
+          { type: "selector", value: "li" },
+          { type: "value", selector: "li", name: "color", value: "brown" },
+        ],
+        starterCode: "/* HTML căn cứ:\n<ul>\n  <li>Trà sữa</li>\n  <li>Cà phê</li>\n</ul>\n*/\n",
+      },
+    ],
+  },
+  {
+    name: "selector class",
+    topic: "Selector",
+    part: PART,
+    description: "Chọn phần tử theo class với dấu chấm (.)",
+    questions: [
+      {
+        tier: 1, type: "MCQ",
+        prompt: "HTML có  <p class=\"ghi-chu\">  — selector nào chọn nó?",
+        options: ["ghi-chu", "#ghi-chu", ".ghi-chu", "p.ghi-chú()"],
+        correctIndex: 2,
+      },
+      {
+        tier: 1, type: "MCQ",
+        prompt: "Class selector bắt đầu bằng ký tự nào?",
+        options: ["Dấu thăng #", "Dấu chấm .", "Dấu sao *", "Dấu hai chấm :"],
+        correctIndex: 1,
+      },
+      {
+        tier: 1, type: "MCQ",
+        prompt: "Nhiều thẻ KHÁC LOẠI (p, div, li) cần cùng kiểu chữ đỏ in đậm. Cách gọn nhất?",
+        options: [
+          "Viết 3 rule p, div, li giống hệt nhau",
+          "Đặt chung một class cho các thẻ đó rồi viết 1 rule cho class",
+          "Dùng id giống nhau cho cả 3",
+          "Style inline từng thẻ",
+        ],
+        correctIndex: 1,
+      },
+      {
+        tier: 2, type: "MCQ",
+        prompt: "Một thẻ có được mang NHIỀU class không, ví dụ  class=\"card noi-bat\"?",
+        options: [
+          "Không, mỗi thẻ một class",
+          "Được — các class cách nhau bằng khoảng trắng, thẻ nhận style của cả hai",
+          "Được nhưng chỉ class đầu có hiệu lực",
+          "Chỉ thẻ div mới được nhiều class",
+        ],
+        correctIndex: 1,
+      },
+      {
+        tier: 2, type: "MCQ",
+        prompt: "Selector  .card.noi-bat  (hai class viết LIỀN nhau) chọn gì?",
+        options: [
+          "Mọi phần tử có class card HOẶC noi-bat",
+          "Phần tử có CẢ HAI class card và noi-bat",
+          "Phần tử noi-bat nằm trong phần tử card",
+          "Không hợp lệ",
+        ],
+        correctIndex: 1,
+      },
+      {
+        tier: 2, type: "MCQ",
+        prompt: "Kiểu 'thẻ sản phẩm' lặp lại 20 lần trên trang. Nên chọn bằng class hay id, vì sao?",
+        options: [
+          "id — vì id mạnh hơn",
+          "class — vì class được phép dùng lại trên nhiều phần tử, id thì mỗi trang chỉ một",
+          "id — vì class chỉ dành cho chữ",
+          "Cái nào cũng như nhau",
+        ],
+        correctIndex: 1,
+      },
+      {
+        tier: 3, type: "WRITE_CSS",
+        prompt: "HTML có khối class khung. Viết rule chọn class khung, đặt màu nền #eee và padding 12px.",
+        requirements: [
+          { type: "selector", value: ".khung" },
+          { type: "value", selector: ".khung", name: "background-color", value: "#eee" },
+          { type: "value", selector: ".khung", name: "padding", value: "12px" },
+        ],
+        starterCode: "/* HTML căn cứ:\n<div class=\"khung\">Nội dung quan trọng</div>\n*/\n",
+      },
+    ],
+  },
+  {
+    name: "selector id",
+    topic: "Selector",
+    part: PART,
+    description: "Chọn phần tử duy nhất theo id với dấu thăng (#)",
+    questions: [
+      {
+        tier: 1, type: "MCQ",
+        prompt: "HTML có  <header id=\"menu-chinh\">  — selector nào chọn nó?",
+        options: [".menu-chinh", "#menu-chinh", "menu-chinh", "id=menu-chinh"],
+        correctIndex: 1,
+      },
+      {
+        tier: 1, type: "MCQ",
+        prompt: "Id selector bắt đầu bằng ký tự nào?",
+        options: ["Dấu chấm .", "Dấu thăng #", "Dấu gạch dưới _", "Dấu @"],
+        correctIndex: 1,
+      },
+      {
+        tier: 1, type: "MCQ",
+        prompt: "Một giá trị id được phép xuất hiện bao nhiêu lần trên MỘT trang?",
+        options: ["Tối đa 1 lần", "2 lần", "Không giới hạn", "Tùy trình duyệt"],
+        correctIndex: 0,
+      },
+      {
+        tier: 2, type: "MCQ",
+        prompt: "Vì sao nhiều team quy ước style bằng class, hạn chế style bằng id?",
+        options: [
+          "id không hoạt động trong file css ngoài",
+          "id có độ ưu tiên rất cao nên về sau khó ghi đè, và không tái sử dụng được cho phần tử khác",
+          "id làm trang tải chậm",
+          "class hiển thị đẹp hơn id",
+        ],
+        correctIndex: 1,
+      },
+      {
+        tier: 2, type: "MCQ",
+        prompt: "Lỡ đặt hai phần tử cùng  id=\"banner\"  — điều gì đúng?",
+        options: [
+          "Trình duyệt xóa phần tử thứ hai",
+          "HTML không còn hợp lệ; CSS có thể vẫn tô cả hai nhưng JS getElementById chỉ lấy được một — nguồn bug khó tìm",
+          "Hoàn toàn bình thường, id cho phép trùng",
+          "CSS chỉ tô phần tử thứ hai",
+        ],
+        correctIndex: 1,
+      },
+      {
+        tier: 2, type: "MCQ",
+        prompt: "Khác biệt cốt lõi giữa  #menu  và  .menu?",
+        options: [
+          "#menu mạnh hơn .menu về cỡ chữ",
+          "#menu trỏ tới MỘT phần tử duy nhất theo id; .menu áp cho MỌI phần tử mang class menu",
+          ".menu chỉ dùng cho thẻ ul",
+          "Không khác gì",
+        ],
+        correctIndex: 1,
+      },
+      {
+        tier: 3, type: "WRITE_CSS",
+        prompt: "HTML có chân trang với id chan-trang. Viết rule chọn id chan-trang, căn chữ giữa (text-align: center) và màu chữ gray.",
+        requirements: [
+          { type: "selector", value: "#chan-trang" },
+          { type: "value", selector: "#chan-trang", name: "text-align", value: "center" },
+          { type: "value", selector: "#chan-trang", name: "color", value: "gray" },
+        ],
+        starterCode: "/* HTML căn cứ:\n<footer id=\"chan-trang\">© 2026 ShopVN</footer>\n*/\n",
+      },
+    ],
+  },
+  {
+    name: "selector lồng nhau",
+    topic: "Selector",
+    part: PART,
+    description: "Chọn theo quan hệ: hậu duệ (khoảng trắng) và con trực tiếp (>)",
+    questions: [
+      {
+        tier: 1, type: "MCQ",
+        prompt: "Chọn mọi thẻ <a> nằm BÊN TRONG <nav> (ở mọi cấp lồng), selector nào đúng?",
+        options: ["nav + a", "nav a", "nav.a", "a > nav"],
+        correctIndex: 1,
+      },
+      {
+        tier: 1, type: "MCQ",
+        prompt: "Selector  ul > li  chọn gì?",
+        options: [
+          "Mọi li ở bất kỳ đâu",
+          "Các li là con TRỰC TIẾP của ul",
+          "ul nằm trong li",
+          "li đầu tiên của ul",
+        ],
+        correctIndex: 1,
+      },
+      {
+        tier: 1, type: "MCQ",
+        prompt: "Khoảng trắng giữa hai selector trong  header p  có nghĩa là gì?",
+        options: [
+          "Chọn cả header và p",
+          "Chọn p nằm bên trong header, ở mọi cấp lồng",
+          "Chọn p đứng ngay sau header",
+          "Lỗi cú pháp",
+        ],
+        correctIndex: 1,
+      },
+      {
+        tier: 2, type: "MCQ",
+        prompt: "Khác nhau giữa  div p  và  div > p?",
+        options: [
+          "Như nhau",
+          "div p chọn p ở MỌI cấp bên trong div; div > p chỉ chọn p là con trực tiếp",
+          "div > p chọn nhiều phần tử hơn div p",
+          "div p chỉ chọn p đầu tiên",
+        ],
+        correctIndex: 1,
+      },
+      {
+        tier: 2, type: "MCQ",
+        prompt: "HTML:  <nav><ul><li><a>...</a></li></ul></nav>.  Selector  nav > a  có chọn được thẻ a không?",
+        options: [
+          "Có, vì a nằm trong nav",
+          "Không — a không phải con TRỰC TIẾP của nav (nó nằm sâu trong ul > li); muốn chọn phải dùng nav a",
+          "Có nhưng chỉ trên Chrome",
+          "Không vì nav không được chứa a",
+        ],
+        correctIndex: 1,
+      },
+      {
+        tier: 2, type: "MCQ",
+        prompt: "Lợi ích của  nav a { }  so với việc gắn class riêng cho từng link trong menu?",
+        options: [
+          "nav a có độ ưu tiên thấp hơn nên an toàn hơn",
+          "Không phải sửa HTML, link mới thêm vào menu tự nhận đúng style — đổi lại nó phụ thuộc cấu trúc HTML",
+          "nav a chạy nhanh hơn hẳn",
+          "Không có lợi ích gì",
+        ],
+        correctIndex: 1,
+      },
+      {
+        tier: 3, type: "WRITE_CSS",
+        prompt: "HTML có menu điều hướng. Viết MỘT rule chọn các thẻ a bên trong nav (selector nav a), đặt màu chữ white và bỏ gạch chân (text-decoration: none).",
+        requirements: [
+          { type: "selector", value: "nav a" },
+          { type: "value", selector: "nav a", name: "color", value: "white" },
+          { type: "value", selector: "nav a", name: "text-decoration", value: "none" },
+        ],
+        starterCode: "/* HTML căn cứ:\n<nav>\n  <ul>\n    <li><a href=\"/\">Trang chủ</a></li>\n    <li><a href=\"/tin\">Tin tức</a></li>\n  </ul>\n</nav>\n*/\n",
+      },
+    ],
+  },
+  {
+    name: "selector nhóm",
+    topic: "Selector",
+    part: PART,
+    description: "Áp một khối khai báo cho nhiều selector bằng dấu phẩy",
+    questions: [
+      {
+        tier: 1, type: "MCQ",
+        prompt: "h1, h2 và h3 cần cùng một font. Cách viết MỘT rule cho cả ba?",
+        options: [
+          "h1 h2 h3 { }",
+          "h1, h2, h3 { }",
+          "h1 + h2 + h3 { }",
+          "h1 > h2 > h3 { }",
+        ],
+        correctIndex: 1,
+      },
+      {
+        tier: 1, type: "MCQ",
+        prompt: "Dấu phẩy giữa các selector có nghĩa là gì?",
+        options: [
+          "Chọn phần tử lồng nhau",
+          "Khối khai báo áp dụng cho TỪNG selector một cách độc lập",
+          "Chỉ chọn phần tử đầu tiên",
+          "Nối hai selector thành một",
+        ],
+        correctIndex: 1,
+      },
+      {
+        tier: 1, type: "MCQ",
+        prompt: "Selector  h1, .tieu-de  chọn những gì?",
+        options: [
+          "Chỉ h1 có class tieu-de",
+          "Mọi thẻ h1 VÀ mọi phần tử có class tieu-de",
+          "h1 nằm trong phần tử tieu-de",
+          "Không hợp lệ",
+        ],
+        correctIndex: 1,
+      },
+      {
+        tier: 2, type: "MCQ",
+        prompt: "Trong  h1, h2 span { color: red; }  — phần  span  áp dụng cho ai?",
+        options: [
+          "Mọi span trong cả h1 lẫn h2",
+          "Chỉ span nằm trong h2 — mỗi phần ngăn bởi dấu phẩy là một selector trọn vẹn, riêng biệt",
+          "Mọi span trên trang",
+          "span đứng sau h2",
+        ],
+        correctIndex: 1,
+      },
+      {
+        tier: 2, type: "MCQ",
+        prompt: "Lợi ích chính của việc nhóm selector?",
+        options: [
+          "Tăng độ ưu tiên",
+          "Tránh lặp lại cùng khối khai báo nhiều lần — đổi kiểu chữ chung chỉ sửa một chỗ",
+          "Trang render nhanh gấp đôi",
+          "Bắt buộc của chuẩn CSS3",
+        ],
+        correctIndex: 1,
+      },
+      {
+        tier: 2, type: "MCQ",
+        prompt: "Khác nhau giữa  h1, h2 { }  và  h1 h2 { }?",
+        options: [
+          "Như nhau",
+          "Dấu phẩy = áp cho cả h1 và h2; khoảng trắng = chỉ chọn h2 nằm BÊN TRONG h1",
+          "Dấu phẩy chọn ít phần tử hơn",
+          "Khoảng trắng là lỗi cú pháp",
+        ],
+        correctIndex: 1,
+      },
+      {
+        tier: 3, type: "WRITE_CSS",
+        prompt: "HTML có h1 và h2. Viết MỘT rule chung cho cả hai (selector h1, h2) đặt màu chữ navy.",
+        requirements: [
+          { type: "selector", value: "h1, h2" },
+          { type: "value", selector: "h1, h2", name: "color", value: "navy" },
+        ],
+        starterCode: "/* HTML căn cứ:\n<h1>Tin mới nhất</h1>\n...\n<h2>Thể thao</h2>\n*/\n",
+      },
+    ],
+  },
+  {
+    name: "selector thuộc tính",
+    topic: "Selector",
+    part: PART,
+    description: "Chọn phần tử theo thuộc tính HTML: [type=\"text\"]",
+    questions: [
+      {
+        tier: 1, type: "MCQ",
+        prompt: "Chọn mọi  <input type=\"text\">  trên trang, selector nào đúng?",
+        options: [
+          "input.text",
+          'input[type="text"]',
+          "input#text",
+          "input:text",
+        ],
+        correctIndex: 1,
+      },
+      {
+        tier: 1, type: "MCQ",
+        prompt: "Selector  a[target=\"_blank\"]  chọn gì?",
+        options: [
+          "Mọi link trên trang",
+          "Các link mở ở tab mới (có target=\"_blank\")",
+          "Link có class _blank",
+          "Link đầu tiên của trang",
+        ],
+        correctIndex: 1,
+      },
+      {
+        tier: 1, type: "MCQ",
+        prompt: "Cú pháp chung của attribute selector là gì?",
+        options: [
+          "(thuộc-tính=giá-trị)",
+          "[thuộc-tính=\"giá-trị\"]",
+          "{thuộc-tính: giá-trị}",
+          "@thuộc-tính=giá-trị",
+        ],
+        correctIndex: 1,
+      },
+      {
+        tier: 2, type: "MCQ",
+        prompt: "Selector  [required]  (chỉ tên, không có giá trị) chọn gì?",
+        options: [
+          "Phần tử có class required",
+          "Mọi phần tử CÓ thuộc tính required, bất kể giá trị",
+          "Phần tử bắt buộc đầu tiên",
+          "Không hợp lệ vì thiếu giá trị",
+        ],
+        correctIndex: 1,
+      },
+      {
+        tier: 2, type: "MCQ",
+        prompt: "Trong  a[href^=\"https\"]  thì dấu  ^=  nghĩa là gì?",
+        options: [
+          "Giá trị href KẾT THÚC bằng https",
+          "Giá trị href BẮT ĐẦU bằng https",
+          "Giá trị href chứa https ở bất kỳ đâu",
+          "href khác https",
+        ],
+        correctIndex: 1,
+      },
+      {
+        tier: 2, type: "MCQ",
+        prompt: "Khi nào attribute selector tiện hơn việc thêm class?",
+        options: [
+          "Khi muốn độ ưu tiên cao nhất",
+          "Khi HTML ĐÃ CÓ sẵn thuộc tính phân biệt (type, disabled, target...) — style theo nó khỏi cần sửa HTML thêm class",
+          "Khi trang không có file css",
+          "Không bao giờ — class luôn tốt hơn",
+        ],
+        correctIndex: 1,
+      },
+      {
+        tier: 3, type: "WRITE_CSS",
+        prompt: "HTML có ô nhập email. Viết rule dùng attribute selector input[type=\"email\"], đặt màu viền (border-color) teal.",
+        requirements: [
+          { type: "selector", value: 'input[type="email"]' },
+          { type: "value", selector: 'input[type="email"]', name: "border-color", value: "teal" },
+        ],
+        starterCode: "/* HTML căn cứ:\n<input type=\"email\" placeholder=\"Nhập email\">\n*/\n",
+      },
+    ],
+  },
+  {
+    name: "pseudo-class cấu trúc",
+    topic: "Selector",
+    part: PART,
+    description: "Chọn theo vị trí: :first-child, :last-child, :nth-child()",
+    questions: [
+      {
+        tier: 1, type: "MCQ",
+        prompt: "Chọn thẻ <li> ĐẦU TIÊN trong danh sách, selector nào đúng?",
+        options: ["li:first", "li:first-child", "li[0]", "first li"],
+        correctIndex: 1,
+      },
+      {
+        tier: 1, type: "MCQ",
+        prompt: "Selector  li:last-child  chọn gì?",
+        options: [
+          "li cuối cùng trong phần tử cha của nó",
+          "Mọi li trừ cái đầu",
+          "li có class last",
+          "Thẻ đứng sau li",
+        ],
+        correctIndex: 0,
+      },
+      {
+        tier: 1, type: "MCQ",
+        prompt: "Tô màu nền xen kẽ cho các hàng CHẴN của bảng, selector nào đúng?",
+        options: [
+          "tr:even",
+          "tr:nth-child(even)",
+          "tr.even-child",
+          "tr::even",
+        ],
+        correctIndex: 1,
+      },
+      {
+        tier: 2, type: "MCQ",
+        prompt: "Điều kiện để  li:first-child  khớp là gì?",
+        options: [
+          "li là phần tử li đầu tiên trên trang",
+          "li phải là CON ĐẦU TIÊN của cha nó — nếu trước nó còn phần tử khác (dù không phải li) thì không khớp",
+          "li có ít nhất một con",
+          "li nằm trong ul",
+        ],
+        correctIndex: 1,
+      },
+      {
+        tier: 2, type: "MCQ",
+        prompt: ":nth-child(2n)  tương đương với gì?",
+        options: [
+          ":nth-child(odd) — các phần tử lẻ",
+          ":nth-child(even) — các phần tử chẵn (2, 4, 6...)",
+          "Hai phần tử đầu tiên",
+          "Phần tử thứ 2 duy nhất",
+        ],
+        correctIndex: 1,
+      },
+      {
+        tier: 2, type: "MCQ",
+        prompt: "Vì sao  tr:nth-child(even)  tốt hơn việc gắn tay class  xen-ke  vào từng hàng chẵn?",
+        options: [
+          "nth-child có độ ưu tiên cao hơn class",
+          "Khi thêm/xóa hàng, màu xen kẽ TỰ đúng lại — gắn class tay thì phải sửa lại toàn bộ",
+          "class xen-ke không hợp lệ trong bảng",
+          "nth-child render nhanh hơn",
+        ],
+        correctIndex: 1,
+      },
+      {
+        tier: 3, type: "WRITE_CSS",
+        prompt: "HTML có bảng xếp hạng class bxh. Viết rule chọn li đầu tiên trong .bxh (selector .bxh li:first-child), in đậm (font-weight: bold) và màu chữ goldenrod.",
+        requirements: [
+          { type: "selector", value: ".bxh li:first-child" },
+          { type: "value", selector: ".bxh li:first-child", name: "font-weight", value: "bold" },
+          { type: "value", selector: ".bxh li:first-child", name: "color", value: "goldenrod" },
+        ],
+        starterCode: "/* HTML căn cứ:\n<ol class=\"bxh\">\n  <li>Đội Nhất</li>\n  <li>Đội Nhì</li>\n</ol>\n*/\n",
+      },
+    ],
+  },
+  {
+    name: "selector toàn cục",
+    topic: "Selector",
+    part: PART,
+    description: "Dấu sao (*) chọn mọi phần tử — nền tảng của CSS reset",
+    questions: [
+      {
+        tier: 1, type: "MCQ",
+        prompt: "Selector nào chọn MỌI phần tử trên trang?",
+        options: ["all", "*", "body.all", "#everything"],
+        correctIndex: 1,
+      },
+      {
+        tier: 1, type: "MCQ",
+        prompt: "Rule  * { margin: 0; }  có tác dụng gì?",
+        options: [
+          "Xóa margin của thẻ body",
+          "Xóa margin mặc định của MỌI phần tử — bước đầu của CSS reset",
+          "Đặt margin tự động",
+          "Chỉ tác dụng với div",
+        ],
+        correctIndex: 1,
+      },
+      {
+        tier: 1, type: "MCQ",
+        prompt: "Dấu  *  trong CSS được gọi là gì?",
+        options: [
+          "Wildcard operator",
+          "Universal selector (selector toàn cục)",
+          "Pointer selector",
+          "Global attribute",
+        ],
+        correctIndex: 1,
+      },
+      {
+        tier: 2, type: "MCQ",
+        prompt: "Cách dùng phổ biến nhất của  *  trong dự án thực tế?",
+        options: [
+          "Đặt màu chữ cho cả trang",
+          "Khối reset đầu file: * { margin: 0; padding: 0; box-sizing: border-box; } để xóa khác biệt mặc định giữa các trình duyệt",
+          "Chọn phần tử đầu tiên của body",
+          "Tăng độ ưu tiên cho rule",
+        ],
+        correctIndex: 1,
+      },
+      {
+        tier: 2, type: "MCQ",
+        prompt: "Độ ưu tiên (specificity) của  *  là bao nhiêu?",
+        options: [
+          "Cao nhất — đè mọi rule khác",
+          "Bằng 0 — BẤT KỲ selector nào khác (kể cả p) đều đè được nó",
+          "Bằng class selector",
+          "Bằng id selector",
+        ],
+        correctIndex: 1,
+      },
+      {
+        tier: 2, type: "MCQ",
+        prompt: "Vì sao không nên đặt thuộc tính nặng (như box-shadow) lên  *?",
+        options: [
+          "* không nhận box-shadow",
+          "Nó áp lên TẤT CẢ phần tử kể cả nơi không cần — vừa lãng phí vừa gây kết quả khó lường; * chỉ nên dành cho reset gọn",
+          "box-shadow chỉ dành cho class",
+          "Sẽ báo lỗi cú pháp",
+        ],
+        correctIndex: 1,
+      },
+      {
+        tier: 3, type: "WRITE_CSS",
+        prompt: "Viết khối reset cho cả trang bằng selector *, đặt margin 0, padding 0 và box-sizing: border-box.",
+        requirements: [
+          { type: "selector", value: "*" },
+          { type: "value", selector: "*", name: "margin", value: "0" },
+          { type: "value", selector: "*", name: "padding", value: "0" },
+          { type: "value", selector: "*", name: "box-sizing", value: "border-box" },
+        ],
+        starterCode: "/* HTML căn cứ: trang bất kỳ, ví dụ\n<body>\n  <h1>Blog</h1>\n  <p>Bài viết...</p>\n</body>\n*/\n",
+      },
+    ],
+  },
+];

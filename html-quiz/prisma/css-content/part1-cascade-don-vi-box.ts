@@ -1,0 +1,1192 @@
+import type { CssSeedTag } from "./types";
+
+const PART = "Nền tảng";
+
+// PHẦN 1 — Chương 3 (Cascade & kế thừa) + Chương 4 (Đơn vị & màu sắc) + Chương 5 (Box model)
+export const PART1_CHUONG_3_5: CssSeedTag[] = [
+  // ===== CHƯƠNG 3: CASCADE & KẾ THỪA =====
+  {
+    name: "cascade",
+    topic: "Cascade & kế thừa",
+    part: PART,
+    description: "Cơ chế quyết định khai báo nào thắng khi nhiều rule xung đột",
+    questions: [
+      {
+        tier: 1, type: "MCQ",
+        prompt: "File css có 2 rule:  p { color: red; }  rồi bên dưới  p { color: blue; }  — đoạn văn màu gì?",
+        options: [
+          "Đỏ — rule viết trước thắng",
+          "Xanh — cùng độ ưu tiên thì rule viết SAU thắng",
+          "Tím — trộn hai màu",
+          "Đen — xung đột thì hủy cả hai",
+        ],
+        correctIndex: 1,
+      },
+      {
+        tier: 1, type: "MCQ",
+        prompt: "'Cascade' trong tên gọi CSS (Cascading Style Sheets) nghĩa là gì?",
+        options: [
+          "Hiệu ứng thác nước khi cuộn trang",
+          "Cơ chế xếp tầng quyết định khai báo nào được áp dụng khi nhiều rule cùng nhắm một phần tử",
+          "Cách viết CSS theo bậc thang thụt lề",
+          "Kiểu kế thừa từ thẻ cha",
+        ],
+        correctIndex: 1,
+      },
+      {
+        tier: 1, type: "MCQ",
+        prompt: "Style bạn viết trong file css và style mặc định của trình duyệt — bên nào ưu tiên hơn?",
+        options: [
+          "Style mặc định trình duyệt",
+          "Style của bạn (tác giả trang) — style trình duyệt chỉ là nền khi bạn không viết gì",
+          "Luôn bằng nhau",
+          "Tùy hệ điều hành",
+        ],
+        correctIndex: 1,
+      },
+      {
+        tier: 2, type: "MCQ",
+        prompt: "Trang link hai file: base.css trước, theme.css sau. Cả hai có rule  .nut { background: ... }  cùng độ ưu tiên. Rule nào thắng?",
+        options: [
+          "base.css — file đầu tiên",
+          "theme.css — hai file được nối tiếp nhau, rule ở file link SAU đứng sau nên thắng",
+          "File có tên ngắn hơn",
+          "Trình duyệt hỏi người dùng",
+        ],
+        correctIndex: 1,
+      },
+      {
+        tier: 2, type: "MCQ",
+        prompt: "Khi hai khai báo xung đột, cascade so sánh theo thứ tự nào?",
+        options: [
+          "Thứ tự xuất hiện → độ dài selector → màu sắc",
+          "!important trước, rồi đến độ ưu tiên selector (specificity), cuối cùng mới xét thứ tự xuất hiện",
+          "Chỉ xét thứ tự xuất hiện",
+          "Chỉ xét độ dài file css",
+        ],
+        correctIndex: 1,
+      },
+      {
+        tier: 2, type: "MCQ",
+        prompt: "Bạn chưa viết dòng CSS nào mà <h1> đã to đậm, <a> đã xanh có gạch chân. Style đó từ đâu ra?",
+        options: [
+          "Từ file HTML",
+          "Từ stylesheet mặc định của trình duyệt (user-agent stylesheet)",
+          "Từ hệ điều hành",
+          "HTML tự có màu sắc",
+        ],
+        correctIndex: 1,
+      },
+      {
+        tier: 3, type: "WRITE_CSS",
+        prompt: "Rule có sẵn đặt màu chữ .thong-bao là red. KHÔNG sửa rule cũ — viết THÊM một rule .thong-bao phía dưới đổi color thành green (rule sau thắng).",
+        requirements: [
+          { type: "selector", value: ".thong-bao" },
+          { type: "value", selector: ".thong-bao", name: "color", value: "green" },
+        ],
+        starterCode: "/* HTML căn cứ:\n<p class=\"thong-bao\">Đặt hàng thành công</p>\n*/\n.thong-bao { color: red; }\n",
+      },
+    ],
+  },
+  {
+    name: "specificity",
+    topic: "Cascade & kế thừa",
+    part: PART,
+    description: "Độ ưu tiên của selector: inline > id > class > thẻ",
+    questions: [
+      {
+        tier: 1, type: "MCQ",
+        prompt: "Cùng nhắm một phần tử: rule dùng #id và rule dùng .class — bên nào thắng?",
+        options: [
+          ".class — vì linh hoạt hơn",
+          "#id — id có độ ưu tiên cao hơn class",
+          "Rule nào viết sau",
+          "Trình duyệt chọn ngẫu nhiên",
+        ],
+        correctIndex: 1,
+      },
+      {
+        tier: 1, type: "MCQ",
+        prompt: "Xếp các loại theo độ ưu tiên GIẢM dần:",
+        options: [
+          "thẻ > class > id > inline",
+          "style inline > #id > .class > thẻ",
+          ".class > #id > inline > thẻ",
+          "Tất cả bằng nhau",
+        ],
+        correctIndex: 1,
+      },
+      {
+        tier: 1, type: "MCQ",
+        prompt: "Hai rule:  p.note { color: red; }  và  p { color: blue; }  — thẻ <p class=\"note\"> màu gì?",
+        options: [
+          "Xanh — rule p ngắn gọn hơn",
+          "Đỏ — p.note có thêm class nên độ ưu tiên cao hơn p",
+          "Tùy thứ tự viết",
+          "Đen",
+        ],
+        correctIndex: 1,
+      },
+      {
+        tier: 2, type: "MCQ",
+        prompt: "File css viết  .menu a { color: white; }  ở ĐẦU file và  a { color: blue; }  ở CUỐI file. Link trong menu màu gì?",
+        options: [
+          "Xanh — rule cuối luôn thắng",
+          "Trắng — .menu a có specificity cao hơn; thứ tự chỉ xét khi specificity BẰNG nhau",
+          "Xanh vì a là selector gốc",
+          "Trắng vì menu là vùng đặc biệt",
+        ],
+        correctIndex: 1,
+      },
+      {
+        tier: 2, type: "MCQ",
+        prompt: "So độ ưu tiên:  nav .item a  với  .menu a  — bên nào mạnh hơn?",
+        options: [
+          ".menu a — vì tên dài hơn",
+          "nav .item a — đếm (id-class-thẻ): 0-1-2 so với 0-1-1, cùng số class nhưng nhiều thẻ hơn",
+          "Bằng nhau",
+          "Không so sánh được",
+        ],
+        correctIndex: 1,
+      },
+      {
+        tier: 2, type: "MCQ",
+        prompt: "Rule  .nut { background: gray; }  đang thắng. Muốn nút class nut-chinh có nền khác mà KHÔNG dùng !important, cách đúng là?",
+        options: [
+          "Viết lại y nguyên rule cũ",
+          "Viết rule có specificity bằng hoặc cao hơn (vd .nut.nut-chinh) đặt sau — cascade sẽ cho nó thắng",
+          "Xóa class nut khỏi HTML là cách duy nhất",
+          "Đổi tên file css",
+        ],
+        correctIndex: 1,
+      },
+      {
+        tier: 3, type: "WRITE_CSS",
+        prompt: "Rule có sẵn .ghi-chu đặt màu gray. Viết THÊM rule dùng id #loi-chao đặt color crimson — id thắng class nên chữ đổi màu.",
+        requirements: [
+          { type: "selector", value: "#loi-chao" },
+          { type: "value", selector: "#loi-chao", name: "color", value: "crimson" },
+        ],
+        starterCode: "/* HTML căn cứ:\n<p class=\"ghi-chu\" id=\"loi-chao\">Xin chào bạn mới</p>\n*/\n.ghi-chu { color: gray; }\n",
+      },
+    ],
+  },
+  {
+    name: "kế thừa",
+    topic: "Cascade & kế thừa",
+    part: PART,
+    description: "Thuộc tính chữ truyền từ cha xuống con; thuộc tính hộp thì không",
+    questions: [
+      {
+        tier: 1, type: "MCQ",
+        prompt: "Đặt  body { color: #333; }  — các thẻ <p> bên trong (không có rule màu riêng) hiển thị màu gì?",
+        options: [
+          "Đen mặc định, vì rule chỉ áp cho body",
+          "#333 — color là thuộc tính KẾ THỪA, truyền từ cha xuống con",
+          "Trong suốt",
+          "Mỗi p một màu ngẫu nhiên",
+        ],
+        correctIndex: 1,
+      },
+      {
+        tier: 1, type: "MCQ",
+        prompt: "Thuộc tính nào sau đây KHÔNG kế thừa xuống con?",
+        options: ["color", "font-family", "border", "font-size"],
+        correctIndex: 2,
+      },
+      {
+        tier: 1, type: "MCQ",
+        prompt: "Nhóm thuộc tính nào THƯỜNG kế thừa?",
+        options: [
+          "Nhóm hộp: margin, padding, border",
+          "Nhóm chữ: color, font-family, font-size, line-height, text-align",
+          "Nhóm vị trí: position, top, left",
+          "Không thuộc tính nào kế thừa",
+        ],
+        correctIndex: 1,
+      },
+      {
+        tier: 2, type: "MCQ",
+        prompt: "Vì sao chỉ cần đặt font-family MỘT lần lên body là cả trang đổi font?",
+        options: [
+          "body là selector mạnh nhất",
+          "font-family kế thừa — mọi phần tử con chưa có font riêng đều nhận theo cha",
+          "Trình duyệt copy rule sang mọi thẻ",
+          "Đó là bug của trình duyệt",
+        ],
+        correctIndex: 1,
+      },
+      {
+        tier: 2, type: "MCQ",
+        prompt: "Đặt  body { border: 1px solid black; }  — có khiến mọi phần tử con đều có viền không?",
+        options: [
+          "Có, viền kế thừa như màu chữ",
+          "Không — các thuộc tính hộp (border, margin, padding) KHÔNG kế thừa; chỉ body có viền",
+          "Chỉ thẻ p có viền",
+          "Có nhưng viền mỏng dần theo cấp",
+        ],
+        correctIndex: 1,
+      },
+      {
+        tier: 2, type: "MCQ",
+        prompt: "Muốn một phần tử nhận giá trị của CHA cho thuộc tính vốn không kế thừa (vd border), bạn dùng giá trị gì?",
+        options: ["auto", "inherit", "none", "copy"],
+        correctIndex: 1,
+      },
+      {
+        tier: 3, type: "WRITE_CSS",
+        prompt: "Viết MỘT rule lên thẻ body đặt font-family: Arial, sans-serif và color: #333 — toàn bộ chữ trong trang sẽ kế thừa.",
+        requirements: [
+          { type: "selector", value: "body" },
+          { type: "value", selector: "body", name: "font-family", value: "Arial, sans-serif" },
+          { type: "value", selector: "body", name: "color", value: "#333" },
+        ],
+        starterCode: "/* HTML căn cứ:\n<body>\n  <main>\n    <p>Bài viết hôm nay...</p>\n  </main>\n</body>\n*/\n",
+      },
+    ],
+  },
+  {
+    name: "important",
+    topic: "Cascade & kế thừa",
+    part: PART,
+    description: "!important ép khai báo thắng — con dao hai lưỡi của cascade",
+    questions: [
+      {
+        tier: 1, type: "MCQ",
+        prompt: "Cú pháp đúng của !important?",
+        options: [
+          "!important color: red;",
+          "color: red !important;",
+          "color!: red important;",
+          "important(color: red);",
+        ],
+        correctIndex: 1,
+      },
+      {
+        tier: 1, type: "MCQ",
+        prompt: "!important có tác dụng gì?",
+        options: [
+          "Đánh dấu khai báo cần review",
+          "Ép khai báo đó thắng các khai báo thường, bất kể specificity",
+          "In đậm giá trị",
+          "Tăng tốc render",
+        ],
+        correctIndex: 1,
+      },
+      {
+        tier: 1, type: "MCQ",
+        prompt: "!important được viết ở vị trí nào?",
+        options: [
+          "Trước tên thuộc tính",
+          "Sau giá trị, trước dấu chấm phẩy",
+          "Trên dòng riêng",
+          "Trong selector",
+        ],
+        correctIndex: 1,
+      },
+      {
+        tier: 2, type: "MCQ",
+        prompt: "Vì sao lạm dụng !important bị coi là thói quen xấu?",
+        options: [
+          "Trình duyệt phạt hiệu năng",
+          "Nó phá vỡ cascade tự nhiên — về sau muốn ghi đè lại phải !important chồng lên !important, file css thành mớ rối không gỡ được",
+          "!important sắp bị xóa khỏi chuẩn",
+          "Nó chỉ chạy trên Chrome",
+        ],
+        correctIndex: 1,
+      },
+      {
+        tier: 2, type: "MCQ",
+        prompt: "HAI khai báo cùng có !important xung đột nhau — phân thắng bại thế nào?",
+        options: [
+          "Cả hai bị hủy",
+          "Quay về luật thường giữa chúng: so specificity, rồi đến thứ tự xuất hiện",
+          "Khai báo viết trước thắng",
+          "Trình duyệt báo lỗi",
+        ],
+        correctIndex: 1,
+      },
+      {
+        tier: 2, type: "MCQ",
+        prompt: "Trường hợp nào dùng !important được chấp nhận rộng rãi?",
+        options: [
+          "Mọi khai báo quan trọng với thương hiệu",
+          "Ghi đè style của thư viện/widget bên thứ ba mà bạn không sửa được mã nguồn, hoặc các utility class cố ý",
+          "Toàn bộ file reset",
+          "Khi lười đếm specificity",
+        ],
+        correctIndex: 1,
+      },
+      {
+        tier: 3, type: "WRITE_CSS",
+        prompt: "Widget thuê ngoài chèn rule rất mạnh đè màu nút. Viết rule .nut-dat-hang đặt  color: white !important  để ghi đè.",
+        requirements: [
+          { type: "selector", value: ".nut-dat-hang" },
+          { type: "value", selector: ".nut-dat-hang", name: "color", value: "white !important" },
+        ],
+        starterCode: "/* HTML căn cứ:\n<button class=\"nut-dat-hang\">Đặt hàng</button>\n(thư viện ngoài đang ép màu chữ nút này bằng selector rất mạnh)\n*/\n",
+      },
+    ],
+  },
+  {
+    name: "inherit initial unset",
+    topic: "Cascade & kế thừa",
+    part: PART,
+    description: "Ba giá trị đặc biệt điều khiển kế thừa: inherit, initial, unset",
+    questions: [
+      {
+        tier: 1, type: "MCQ",
+        prompt: "Giá trị nào ÉP phần tử lấy giá trị của thuộc tính đó theo phần tử cha?",
+        options: ["auto", "inherit", "initial", "parent"],
+        correctIndex: 1,
+      },
+      {
+        tier: 1, type: "MCQ",
+        prompt: "Giá trị  initial  làm gì?",
+        options: [
+          "Lấy theo phần tử cha",
+          "Đưa thuộc tính về giá trị mặc định theo chuẩn CSS của chính thuộc tính đó",
+          "Xóa thuộc tính khỏi phần tử",
+          "Lấy giá trị đầu tiên trong file",
+        ],
+        correctIndex: 1,
+      },
+      {
+        tier: 1, type: "MCQ",
+        prompt: "Giá trị  unset  hoạt động thế nào?",
+        options: [
+          "Luôn về 0",
+          "Bằng inherit nếu thuộc tính vốn kế thừa, ngược lại bằng initial",
+          "Bằng initial trong mọi trường hợp",
+          "Vô hiệu hóa selector",
+        ],
+        correctIndex: 1,
+      },
+      {
+        tier: 2, type: "MCQ",
+        prompt: "Link <a> mặc định màu xanh. Muốn link trong footer CÙNG MÀU với chữ của footer (tự đổi khi footer đổi màu), khai báo nào gọn nhất?",
+        options: [
+          "color: blue;",
+          "color: inherit;",
+          "color: initial;",
+          "color: auto;",
+        ],
+        correctIndex: 1,
+      },
+      {
+        tier: 2, type: "MCQ",
+        prompt: "Bẫy của initial: đặt  div { display: initial; }  thì div hiển thị thế nào?",
+        options: [
+          "block — như mặc định của div",
+          "inline — initial lấy mặc định CỦA THUỘC TÍNH display (là inline), không phải mặc định trình duyệt dành cho div",
+          "none — biến mất",
+          "flex",
+        ],
+        correctIndex: 1,
+      },
+      {
+        tier: 2, type: "MCQ",
+        prompt: "Khai báo  all: unset  thường dùng để làm gì?",
+        options: [
+          "Tắt CSS toàn trang",
+          "Gỡ gần như toàn bộ style của MỘT phần tử (vd <button>) để tự style lại từ đầu",
+          "Khôi phục style trình duyệt",
+          "Xóa file css khỏi cache",
+        ],
+        correctIndex: 1,
+      },
+      {
+        tier: 3, type: "WRITE_CSS",
+        prompt: "Footer chữ màu xám nhưng link bên trong vẫn xanh mặc định. Viết rule footer a đặt color theo phần tử cha (giá trị inherit).",
+        requirements: [
+          { type: "selector", value: "footer a" },
+          { type: "value", selector: "footer a", name: "color", value: "inherit" },
+        ],
+        starterCode: "/* HTML căn cứ:\n<footer>\n  <p>Liên hệ: <a href=\"/lien-he\">tại đây</a></p>\n</footer>\n*/\n",
+      },
+    ],
+  },
+
+  // ===== CHƯƠNG 4: ĐƠN VỊ & MÀU SẮC =====
+  {
+    name: "đơn vị px",
+    topic: "Đơn vị & màu sắc",
+    part: PART,
+    description: "Pixel — đơn vị tuyệt đối, cố định không theo ngữ cảnh",
+    questions: [
+      {
+        tier: 1, type: "MCQ",
+        prompt: "px là loại đơn vị gì?",
+        options: [
+          "Tương đối theo phần tử cha",
+          "Tuyệt đối — không thay đổi theo cỡ chữ cha hay viewport",
+          "Tương đối theo viewport",
+          "Chỉ dùng cho ảnh",
+        ],
+        correctIndex: 1,
+      },
+      {
+        tier: 1, type: "MCQ",
+        prompt: "Khai báo  font-size: 16px;  nghĩa là gì?",
+        options: [
+          "Cỡ chữ bằng 16% cha",
+          "Cỡ chữ 16 pixel, cố định",
+          "Cỡ chữ tự co giãn tối đa 16",
+          "16 ký tự mỗi dòng",
+        ],
+        correctIndex: 1,
+      },
+      {
+        tier: 1, type: "MCQ",
+        prompt: "Người dùng tăng cỡ chữ mặc định của trình duyệt từ 16 lên 20. Giá trị đặt bằng đơn vị nào KHÔNG đổi theo?",
+        options: ["rem", "em", "px", "%"],
+        correctIndex: 2,
+      },
+      {
+        tier: 2, type: "MCQ",
+        prompt: "px hợp lý nhất cho trường hợp nào?",
+        options: [
+          "Cỡ chữ toàn trang",
+          "Chi tiết nhỏ cần cố định: độ dày viền 1px, bóng đổ, bo góc",
+          "Chiều rộng layout chính",
+          "Khoảng cách giữa các đoạn văn",
+        ],
+        correctIndex: 1,
+      },
+      {
+        tier: 2, type: "MCQ",
+        prompt: "Nhược điểm của việc đặt font-size toàn trang bằng px?",
+        options: [
+          "px hiển thị mờ trên màn hình lớn",
+          "Không tôn trọng cài đặt cỡ chữ của người dùng — người mắt kém tăng cỡ chữ trình duyệt nhưng trang không đổi (vấn đề accessibility)",
+          "px bị cấm trong chuẩn mới",
+          "Mỗi trình duyệt hiểu px một kiểu",
+        ],
+        correctIndex: 1,
+      },
+      {
+        tier: 2, type: "MCQ",
+        prompt: "1px trong CSS có luôn bằng đúng 1 điểm ảnh vật lý của màn hình không?",
+        options: [
+          "Luôn luôn",
+          "Không — màn hình mật độ cao (Retina) dùng 2-3 điểm ảnh vật lý cho 1px CSS (device pixel ratio)",
+          "Chỉ bằng trên điện thoại",
+          "px là đơn vị in ấn, không liên quan màn hình",
+        ],
+        correctIndex: 1,
+      },
+      {
+        tier: 3, type: "WRITE_CSS",
+        prompt: "HTML có khối class hop. Viết rule .hop đặt chiều rộng 200px và viền  border: 1px solid black.",
+        requirements: [
+          { type: "selector", value: ".hop" },
+          { type: "value", selector: ".hop", name: "width", value: "200px" },
+          { type: "value", selector: ".hop", name: "border", value: "1px solid black" },
+        ],
+        starterCode: "/* HTML căn cứ:\n<div class=\"hop\">Hộp sản phẩm</div>\n*/\n",
+      },
+    ],
+  },
+  {
+    name: "em và rem",
+    topic: "Đơn vị & màu sắc",
+    part: PART,
+    description: "Đơn vị tương đối theo cỡ chữ: rem theo gốc html, em theo cha",
+    questions: [
+      {
+        tier: 1, type: "MCQ",
+        prompt: "Đơn vị rem tính theo cỡ chữ của phần tử nào?",
+        options: [
+          "Phần tử cha trực tiếp",
+          "Phần tử gốc <html> (root em)",
+          "Phần tử body",
+          "Chính phần tử đó",
+        ],
+        correctIndex: 1,
+      },
+      {
+        tier: 1, type: "MCQ",
+        prompt: "Đơn vị em (khi dùng cho font-size) tính theo gì?",
+        options: [
+          "Cỡ chữ của phần tử CHA",
+          "Cỡ chữ thẻ html",
+          "Chiều rộng màn hình",
+          "Luôn bằng 16px",
+        ],
+        correctIndex: 0,
+      },
+      {
+        tier: 1, type: "MCQ",
+        prompt: "html có font-size 16px. Vậy  2rem  bằng bao nhiêu?",
+        options: ["8px", "16px", "32px", "2px"],
+        correctIndex: 2,
+      },
+      {
+        tier: 2, type: "MCQ",
+        prompt: "Vì sao rem dễ kiểm soát hơn em khi phần tử lồng nhau nhiều cấp?",
+        options: [
+          "rem có giá trị nhỏ hơn",
+          "em nhân CHỒNG qua từng cấp (1.2em trong 1.2em = 1.44 gốc) khó lường; rem luôn tính từ một mốc duy nhất là html",
+          "em không hợp lệ trong flexbox",
+          "rem được cache tốt hơn",
+        ],
+        correctIndex: 1,
+      },
+      {
+        tier: 2, type: "MCQ",
+        prompt: "Lợi ích accessibility của việc đặt cỡ chữ bằng rem thay vì px?",
+        options: [
+          "rem hiển thị sắc nét hơn",
+          "Người dùng tăng cỡ chữ mặc định trình duyệt → mốc html tăng → toàn bộ chữ theo rem tự to lên tương ứng",
+          "rem tự xuống dòng đẹp hơn",
+          "Không có khác biệt",
+        ],
+        correctIndex: 1,
+      },
+      {
+        tier: 2, type: "MCQ",
+        prompt: "Phần tử có font-size 20px và khai báo  padding: 1.5em.  Padding thực tế là bao nhiêu?",
+        options: [
+          "15px",
+          "30px — em dùng cho thuộc tính khác font-size thì tính theo cỡ chữ của CHÍNH phần tử đó: 1.5 × 20",
+          "24px",
+          "1.5px",
+        ],
+        correctIndex: 1,
+      },
+      {
+        tier: 3, type: "WRITE_CSS",
+        prompt: "HTML có tiêu đề class tieu-de-lon. Viết rule .tieu-de-lon đặt font-size 2rem và margin-bottom 1rem.",
+        requirements: [
+          { type: "selector", value: ".tieu-de-lon" },
+          { type: "value", selector: ".tieu-de-lon", name: "font-size", value: "2rem" },
+          { type: "value", selector: ".tieu-de-lon", name: "margin-bottom", value: "1rem" },
+        ],
+        starterCode: "/* HTML căn cứ:\n<h1 class=\"tieu-de-lon\">Tin nóng trong ngày</h1>\n*/\n",
+      },
+    ],
+  },
+  {
+    name: "phần trăm",
+    topic: "Đơn vị & màu sắc",
+    part: PART,
+    description: "Đơn vị % — tương đối theo phần tử cha",
+    questions: [
+      {
+        tier: 1, type: "MCQ",
+        prompt: "Khai báo  width: 50%  thì 50% được tính theo gì?",
+        options: [
+          "Chiều rộng màn hình",
+          "Chiều rộng phần tử CHA",
+          "Chiều rộng thẻ html",
+          "Một nửa của 100px",
+        ],
+        correctIndex: 1,
+      },
+      {
+        tier: 1, type: "MCQ",
+        prompt: "% là đơn vị tuyệt đối hay tương đối?",
+        options: [
+          "Tuyệt đối",
+          "Tương đối — giá trị thật phụ thuộc phần tử cha",
+          "Tuyệt đối với width, tương đối với height",
+          "Không phải đơn vị",
+        ],
+        correctIndex: 1,
+      },
+      {
+        tier: 1, type: "MCQ",
+        prompt: "Muốn ảnh co giãn theo khung chứa, không bao giờ tràn ra ngoài — khai báo kinh điển là gì?",
+        options: [
+          "width: auto",
+          "max-width: 100%",
+          "size: full",
+          "overflow: hidden",
+        ],
+        correctIndex: 1,
+      },
+      {
+        tier: 2, type: "MCQ",
+        prompt: "Đặt  height: 100%  cho phần tử nhưng 'không ăn' — nguyên nhân thường gặp nhất?",
+        options: [
+          "height không nhận đơn vị %",
+          "Phần tử CHA không có chiều cao xác định — 100% của 'không xác định' thì trình duyệt bỏ qua",
+          "Thiếu !important",
+          "Trình duyệt chặn height 100%",
+        ],
+        correctIndex: 1,
+      },
+      {
+        tier: 2, type: "MCQ",
+        prompt: "Bẫy ít người biết:  padding-top: 50%  được tính theo gì?",
+        options: [
+          "Chiều CAO phần tử cha",
+          "Chiều RỘNG phần tử cha — mọi padding/margin theo % đều tính theo chiều rộng cha (kể cả top/bottom)",
+          "Chiều cao chính phần tử",
+          "Chiều cao màn hình",
+        ],
+        correctIndex: 1,
+      },
+      {
+        tier: 2, type: "MCQ",
+        prompt: "Khác nhau giữa  width: 50%  và  width: 50vw?",
+        options: [
+          "Như nhau",
+          "% tính theo phần tử cha; vw tính theo chiều rộng VIEWPORT bất kể cha là ai",
+          "vw chỉ chạy trên mobile",
+          "% mới hơn vw",
+        ],
+        correctIndex: 1,
+      },
+      {
+        tier: 3, type: "WRITE_CSS",
+        prompt: "HTML có cột trái class cot-trai nằm trong khung. Viết rule .cot-trai đặt chiều rộng 50% của khung cha.",
+        requirements: [
+          { type: "selector", value: ".cot-trai" },
+          { type: "value", selector: ".cot-trai", name: "width", value: "50%" },
+        ],
+        starterCode: "/* HTML căn cứ:\n<div class=\"hang\">\n  <div class=\"cot-trai\">Danh mục</div>\n</div>\n*/\n",
+      },
+    ],
+  },
+  {
+    name: "vw và vh",
+    topic: "Đơn vị & màu sắc",
+    part: PART,
+    description: "Đơn vị viewport: 1vw = 1% chiều rộng, 1vh = 1% chiều cao màn nhìn",
+    questions: [
+      {
+        tier: 1, type: "MCQ",
+        prompt: "100vh tương ứng với gì?",
+        options: [
+          "100 pixel chiều cao",
+          "Toàn bộ chiều cao vùng nhìn (viewport) của trình duyệt",
+          "Chiều cao phần tử cha",
+          "100% chiều cao file HTML",
+        ],
+        correctIndex: 1,
+      },
+      {
+        tier: 1, type: "MCQ",
+        prompt: "vw là viết tắt của gì và 1vw bằng bao nhiêu?",
+        options: [
+          "viewport width — 1vw = 1% chiều rộng viewport",
+          "view width — 1vw = 1px",
+          "visible width — 1vw = 10% màn hình",
+          "web width — 1vw = 1em",
+        ],
+        correctIndex: 0,
+      },
+      {
+        tier: 1, type: "MCQ",
+        prompt: "Muốn hero section cao đúng bằng màn hình khi mở trang, khai báo nào đúng?",
+        options: [
+          "height: 100%",
+          "height: 100vh",
+          "height: full",
+          "min-height: auto",
+        ],
+        correctIndex: 1,
+      },
+      {
+        tier: 2, type: "MCQ",
+        prompt: "Vì sao  height: 100vh  'ăn ngay' còn  height: 100%  hay bị phụ thuộc?",
+        options: [
+          "vh được trình duyệt ưu tiên",
+          "vh tính thẳng theo viewport, không cần cha có chiều cao xác định như %",
+          "% chậm hơn vh",
+          "Không có khác biệt",
+        ],
+        correctIndex: 1,
+      },
+      {
+        tier: 2, type: "MCQ",
+        prompt: "Trên màn hình rộng 1200px, phần tử đặt  width: 50vw  rộng bao nhiêu?",
+        options: ["50px", "600px", "1200px", "Tùy phần tử cha"],
+        correctIndex: 1,
+      },
+      {
+        tier: 2, type: "MCQ",
+        prompt: "Nhược điểm kinh điển của  width: 100vw?",
+        options: [
+          "Không chạy trên Safari",
+          "100vw tính cả phần THANH CUỘN dọc chiếm chỗ — trang có scrollbar sẽ bị tràn ngang vài pixel, sinh thanh cuộn ngang",
+          "Chỉ nhận giá trị nguyên",
+          "Làm chữ bị giãn",
+        ],
+        correctIndex: 1,
+      },
+      {
+        tier: 3, type: "WRITE_CSS",
+        prompt: "HTML có hero section class hero. Viết rule .hero đặt chiều cao đúng bằng màn hình: height 100vh.",
+        requirements: [
+          { type: "selector", value: ".hero" },
+          { type: "value", selector: ".hero", name: "height", value: "100vh" },
+        ],
+        starterCode: "/* HTML căn cứ:\n<section class=\"hero\">\n  <h1>Chào hè 2026</h1>\n</section>\n*/\n",
+      },
+    ],
+  },
+  {
+    name: "màu sắc",
+    topic: "Đơn vị & màu sắc",
+    part: PART,
+    description: "Bốn cách ghi màu: keyword, hex, rgb(), hsl()",
+    questions: [
+      {
+        tier: 1, type: "MCQ",
+        prompt: "Mã hex  #ff0000  là màu gì?",
+        options: ["Xanh dương", "Đỏ", "Xanh lá", "Trắng"],
+        correctIndex: 1,
+      },
+      {
+        tier: 1, type: "MCQ",
+        prompt: "Cách ghi màu nào cho phép chỉnh ĐỘ TRONG SUỐT (alpha)?",
+        options: [
+          "Tên màu (red, blue)",
+          "rgba() — ví dụ rgba(0, 0, 0, 0.5) là đen mờ 50%",
+          "Hex 6 ký tự #rrggbb",
+          "Không cách nào",
+        ],
+        correctIndex: 1,
+      },
+      {
+        tier: 1, type: "MCQ",
+        prompt: "#fff là cách viết tắt của mã nào?",
+        options: ["#f0f0f0", "#ffffff", "#fff000", "#0fffff"],
+        correctIndex: 1,
+      },
+      {
+        tier: 2, type: "MCQ",
+        prompt: "rgb(0, 0, 0) là màu gì?",
+        options: [
+          "Trắng — cả ba kênh rỗng",
+          "Đen — cả ba kênh sáng đỏ/lục/lam đều bằng 0, không có ánh sáng",
+          "Xám 50%",
+          "Trong suốt",
+        ],
+        correctIndex: 1,
+      },
+      {
+        tier: 2, type: "MCQ",
+        prompt: "Khi cần chỉnh tay 'màu này nhưng nhạt hơn chút', hsl() tiện hơn hex ở điểm nào?",
+        options: [
+          "hsl ít ký tự hơn",
+          "hsl tách màu thành tông màu (hue), độ bão hòa, độ sáng — muốn nhạt hơn chỉ tăng độ sáng, giữ nguyên hai số kia; hex thì phải tính lại cả 6 ký tự",
+          "hsl hiển thị chuẩn hơn hex",
+          "hex sắp bị loại bỏ",
+        ],
+        correctIndex: 1,
+      },
+      {
+        tier: 2, type: "MCQ",
+        prompt: "Giá trị  transparent  tương đương với gì?",
+        options: [
+          "Màu trắng",
+          "rgba(0, 0, 0, 0) — trong suốt hoàn toàn, nhìn xuyên xuống lớp dưới",
+          "Màu nền của cha",
+          "Không tô gì nhưng vẫn chặn lớp dưới",
+        ],
+        correctIndex: 1,
+      },
+      {
+        tier: 3, type: "WRITE_CSS",
+        prompt: "HTML có nhãn khuyến mãi class khuyen-mai. Viết rule .khuyen-mai đặt màu chữ #e34f26 và màu nền (background-color) #fff3e0.",
+        requirements: [
+          { type: "selector", value: ".khuyen-mai" },
+          { type: "value", selector: ".khuyen-mai", name: "color", value: "#e34f26" },
+          { type: "value", selector: ".khuyen-mai", name: "background-color", value: "#fff3e0" },
+        ],
+        starterCode: "/* HTML căn cứ:\n<p class=\"khuyen-mai\">Giảm 50% hôm nay</p>\n*/\n",
+      },
+    ],
+  },
+
+  // ===== CHƯƠNG 5: BOX MODEL =====
+  {
+    name: "box model",
+    topic: "Box model",
+    part: PART,
+    description: "Mọi phần tử là một hộp: content → padding → border → margin",
+    questions: [
+      {
+        tier: 1, type: "MCQ",
+        prompt: "Thứ tự các lớp của box model từ TRONG ra NGOÀI?",
+        options: [
+          "margin → border → padding → content",
+          "content → padding → border → margin",
+          "content → margin → padding → border",
+          "padding → content → border → margin",
+        ],
+        correctIndex: 1,
+      },
+      {
+        tier: 1, type: "MCQ",
+        prompt: "Lớp nào nằm GIỮA padding và margin?",
+        options: ["content", "border", "outline", "background"],
+        correctIndex: 1,
+      },
+      {
+        tier: 1, type: "MCQ",
+        prompt: "'Khoảng đệm giữa nội dung và đường viền' là lớp nào?",
+        options: ["margin", "padding", "border", "gap"],
+        correctIndex: 1,
+      },
+      {
+        tier: 2, type: "MCQ",
+        prompt: "Hộp content-box có width 200px, padding 20px mỗi bên, border 2px mỗi bên. Chiều rộng chiếm chỗ thật là?",
+        options: [
+          "200px",
+          "244px — 200 + 20×2 + 2×2",
+          "222px",
+          "240px",
+        ],
+        correctIndex: 1,
+      },
+      {
+        tier: 2, type: "MCQ",
+        prompt: "Màu nền (background) của phần tử tô đến lớp nào?",
+        options: [
+          "Chỉ phần content",
+          "Hết content và padding (bên trong border) — KHÔNG tô margin",
+          "Tô cả margin",
+          "Chỉ tô border",
+        ],
+        correctIndex: 1,
+      },
+      {
+        tier: 2, type: "MCQ",
+        prompt: "Trong sơ đồ hộp của DevTools (tab Computed), vùng màu cam NGOÀI CÙNG là gì?",
+        options: ["padding", "margin", "border", "content"],
+        correctIndex: 1,
+      },
+      {
+        tier: 3, type: "WRITE_CSS",
+        prompt: "HTML có thẻ bài viết class bai-viet. Viết rule .bai-viet với đủ ba lớp hộp: padding 16px, margin 24px, viền  border: 1px solid #ddd.",
+        requirements: [
+          { type: "selector", value: ".bai-viet" },
+          { type: "value", selector: ".bai-viet", name: "padding", value: "16px" },
+          { type: "value", selector: ".bai-viet", name: "margin", value: "24px" },
+          { type: "value", selector: ".bai-viet", name: "border", value: "1px solid #ddd" },
+        ],
+        starterCode: "/* HTML căn cứ:\n<article class=\"bai-viet\">\n  <h2>Tiêu đề</h2>\n  <p>Nội dung...</p>\n</article>\n*/\n",
+      },
+    ],
+  },
+  {
+    name: "padding",
+    topic: "Box model",
+    part: PART,
+    description: "Khoảng đệm bên trong viền — đẩy nội dung ra xa mép hộp",
+    questions: [
+      {
+        tier: 1, type: "MCQ",
+        prompt: "Chữ trong khung đang dính sát viền rất khó đọc. Tăng thuộc tính nào?",
+        options: ["margin", "padding", "border", "line-height"],
+        correctIndex: 1,
+      },
+      {
+        tier: 1, type: "MCQ",
+        prompt: "Khai báo  padding: 10px 20px  nghĩa là gì?",
+        options: [
+          "10px bốn phía, 20px dự phòng",
+          "10px trên/dưới, 20px trái/phải",
+          "10px trái/phải, 20px trên/dưới",
+          "10px trên, 20px dưới",
+        ],
+        correctIndex: 1,
+      },
+      {
+        tier: 1, type: "MCQ",
+        prompt: "padding 4 giá trị  padding: 1px 2px 3px 4px  đi theo thứ tự nào?",
+        options: [
+          "trái → phải → trên → dưới",
+          "trên → phải → dưới → trái (thuận kim đồng hồ từ 12h)",
+          "trên → dưới → trái → phải",
+          "Tùy trình duyệt",
+        ],
+        correctIndex: 1,
+      },
+      {
+        tier: 2, type: "MCQ",
+        prompt: "Ở chế độ mặc định (content-box), tăng padding có làm hộp to ra không?",
+        options: [
+          "Không, hộp giữ nguyên",
+          "Có — padding cộng THÊM vào width/height khai báo, hộp chiếm chỗ nhiều hơn",
+          "Chỉ to ra theo chiều ngang",
+          "Chỉ to khi có border",
+        ],
+        correctIndex: 1,
+      },
+      {
+        tier: 2, type: "MCQ",
+        prompt: "padding có nhận giá trị ÂM không?",
+        options: [
+          "Có, để kéo nội dung ra ngoài",
+          "Không — padding âm không hợp lệ và bị bỏ qua (margin mới nhận giá trị âm)",
+          "Chỉ âm được bên trái",
+          "Chỉ trong flexbox",
+        ],
+        correctIndex: 1,
+      },
+      {
+        tier: 2, type: "MCQ",
+        prompt: "Muốn nút bấm có VÙNG BẤM rộng thoáng quanh chữ, dùng padding hay margin? Vì sao?",
+        options: [
+          "margin — đẩy các nút ra xa nhau",
+          "padding — phần đệm bên trong vẫn thuộc nút, bấm vào trúng; margin là khoảng trống bên ngoài, bấm vào không trúng nút",
+          "Cả hai như nhau",
+          "border — viền dày dễ bấm",
+        ],
+        correctIndex: 1,
+      },
+      {
+        tier: 3, type: "WRITE_CSS",
+        prompt: "HTML có nút mua hàng class nut-mua. Viết rule .nut-mua đặt  padding: 12px 24px  cho vùng bấm rộng rãi.",
+        requirements: [
+          { type: "selector", value: ".nut-mua" },
+          { type: "value", selector: ".nut-mua", name: "padding", value: "12px 24px" },
+        ],
+        starterCode: "/* HTML căn cứ:\n<button class=\"nut-mua\">Mua ngay</button>\n*/\n",
+      },
+    ],
+  },
+  {
+    name: "margin",
+    topic: "Box model",
+    part: PART,
+    description: "Khoảng cách bên ngoài viền — đẩy các hộp ra xa nhau",
+    questions: [
+      {
+        tier: 1, type: "MCQ",
+        prompt: "Hai thẻ sản phẩm đứng dính sát nhau. Muốn tạo khoảng cách GIỮA chúng, dùng gì?",
+        options: ["padding", "margin", "border", "gap trong mọi trường hợp"],
+        correctIndex: 1,
+      },
+      {
+        tier: 1, type: "MCQ",
+        prompt: "Khai báo kinh điển  margin: 0 auto  dùng để làm gì?",
+        options: [
+          "Xóa margin",
+          "Căn GIỮA NGANG một khối đã có width — hai bên tự chia đều khoảng trống",
+          "Căn giữa dọc",
+          "Tự động co giãn margin theo nội dung",
+        ],
+        correctIndex: 1,
+      },
+      {
+        tier: 1, type: "MCQ",
+        prompt: "Khác nhau cơ bản giữa margin và padding?",
+        options: [
+          "margin bên trong viền, padding bên ngoài",
+          "margin là khoảng trống BÊN NGOÀI viền (giữa các hộp), padding là khoảng đệm BÊN TRONG viền",
+          "margin chỉ dùng cho div",
+          "Như nhau, hai tên một thứ",
+        ],
+        correctIndex: 1,
+      },
+      {
+        tier: 2, type: "MCQ",
+        prompt: "Hiện tượng 'margin collapse' là gì?",
+        options: [
+          "Margin bị xóa khi trang thu nhỏ",
+          "Margin DỌC của hai khối kề nhau gộp làm một, lấy giá trị LỚN hơn thay vì cộng dồn (40px trên + 20px dưới = 40px, không phải 60px)",
+          "Margin âm phá layout",
+          "Margin ngang tự chia đôi",
+        ],
+        correctIndex: 1,
+      },
+      {
+        tier: 2, type: "MCQ",
+        prompt: "margin có nhận giá trị ÂM không?",
+        options: [
+          "Không bao giờ",
+          "Có — margin âm kéo phần tử lại gần/đè lên phần tử khác, đôi khi dùng cố ý trong layout",
+          "Chỉ margin-top",
+          "Chỉ trong bảng",
+        ],
+        correctIndex: 1,
+      },
+      {
+        tier: 2, type: "MCQ",
+        prompt: "Vì sao  margin: 0 auto  KHÔNG căn giữa được một thẻ <span> bình thường?",
+        options: [
+          "span không nhận margin",
+          "span là phần tử inline, không có width riêng để chia khoảng trống — cần phần tử block (hoặc đổi display) kèm width thì auto mới có chỗ tính",
+          "auto chỉ chạy với ảnh",
+          "Phải dùng !important",
+        ],
+        correctIndex: 1,
+      },
+      {
+        tier: 3, type: "WRITE_CSS",
+        prompt: "HTML có khung nội dung class khung-giua. Viết rule .khung-giua đặt width 600px và căn giữa ngang bằng  margin: 0 auto.",
+        requirements: [
+          { type: "selector", value: ".khung-giua" },
+          { type: "value", selector: ".khung-giua", name: "width", value: "600px" },
+          { type: "value", selector: ".khung-giua", name: "margin", value: "0 auto" },
+        ],
+        starterCode: "/* HTML căn cứ:\n<div class=\"khung-giua\">Nội dung chính của trang</div>\n*/\n",
+      },
+    ],
+  },
+  {
+    name: "border",
+    topic: "Box model",
+    part: PART,
+    description: "Đường viền quanh hộp — shorthand: độ dày, kiểu, màu",
+    questions: [
+      {
+        tier: 1, type: "MCQ",
+        prompt: "Cách viết gọn viền liền nét 1px màu đen?",
+        options: [
+          "border: black 1px;",
+          "border: 1px solid black;",
+          "border: solid;",
+          "border-line: 1px black;",
+        ],
+        correctIndex: 1,
+      },
+      {
+        tier: 1, type: "MCQ",
+        prompt: "Shorthand border gồm ba phần nào?",
+        options: [
+          "màu, vị trí, độ mờ",
+          "độ dày (width), kiểu nét (style), màu (color)",
+          "trên, giữa, dưới",
+          "trong, viền, ngoài",
+        ],
+        correctIndex: 1,
+      },
+      {
+        tier: 1, type: "MCQ",
+        prompt: "Kiểu viền CHẤM CHẤM dùng giá trị nào?",
+        options: ["dashed", "dotted", "double", "groove"],
+        correctIndex: 1,
+      },
+      {
+        tier: 2, type: "MCQ",
+        prompt: "Thuộc tính  border-radius  làm gì?",
+        options: [
+          "Tăng độ dày viền",
+          "Bo tròn các góc của hộp — giá trị càng lớn góc càng tròn, 50% biến hình vuông thành hình tròn",
+          "Xoay viền",
+          "Tạo bóng quanh viền",
+        ],
+        correctIndex: 1,
+      },
+      {
+        tier: 2, type: "MCQ",
+        prompt: "Danh sách bài viết cần MỘT đường kẻ mảnh ngăn cách dưới mỗi mục — dùng gì gọn nhất?",
+        options: [
+          "border: 1px solid — kẻ cả bốn phía",
+          "border-bottom: 1px solid — chỉ kẻ cạnh dưới",
+          "Chèn thẻ <hr> sau mỗi mục",
+          "text-decoration: underline",
+        ],
+        correctIndex: 1,
+      },
+      {
+        tier: 2, type: "MCQ",
+        prompt: "Khác nhau giữa border và outline?",
+        options: [
+          "Như nhau",
+          "border CHIẾM CHỖ trong box model; outline vẽ đè ra ngoài KHÔNG chiếm chỗ — nên outline hay dùng cho viền focus mà không xô lệch layout",
+          "outline dày hơn border",
+          "border chỉ có màu đen",
+        ],
+        correctIndex: 1,
+      },
+      {
+        tier: 3, type: "WRITE_CSS",
+        prompt: "HTML có ảnh đại diện class avatar. Viết rule .avatar đặt viền  border: 2px solid #e34f26  và bo tròn thành hình tròn với border-radius 50%.",
+        requirements: [
+          { type: "selector", value: ".avatar" },
+          { type: "value", selector: ".avatar", name: "border", value: "2px solid #e34f26" },
+          { type: "value", selector: ".avatar", name: "border-radius", value: "50%" },
+        ],
+        starterCode: "/* HTML căn cứ:\n<img class=\"avatar\" src=\"chan-dung.jpg\" alt=\"Ảnh đại diện\">\n*/\n",
+      },
+    ],
+  },
+  {
+    name: "box-sizing",
+    topic: "Box model",
+    part: PART,
+    description: "border-box: width là kích thước THẬT đã gồm padding và border",
+    questions: [
+      {
+        tier: 1, type: "MCQ",
+        prompt: "box-sizing: border-box  nghĩa là gì?",
+        options: [
+          "Hộp chỉ tính border",
+          "width/height khai báo là kích thước THẬT của hộp — đã bao gồm cả padding và border",
+          "Tự thêm viền cho hộp",
+          "Hộp co theo nội dung",
+        ],
+        correctIndex: 1,
+      },
+      {
+        tier: 1, type: "MCQ",
+        prompt: "Giá trị MẶC ĐỊNH của box-sizing là gì?",
+        options: ["border-box", "content-box", "auto", "inherit"],
+        correctIndex: 1,
+      },
+      {
+        tier: 1, type: "MCQ",
+        prompt: "Muốn khai báo  width: 300px  là chiều rộng cuối cùng thật sự (kể cả padding, border), bạn đặt gì?",
+        options: [
+          "box-sizing: content-box",
+          "box-sizing: border-box",
+          "width-mode: full",
+          "max-width: 300px",
+        ],
+        correctIndex: 1,
+      },
+      {
+        tier: 2, type: "MCQ",
+        prompt: "Vì sao hầu hết dự án đặt  * { box-sizing: border-box; }  ngay đầu file?",
+        options: [
+          "Bắt buộc của chuẩn CSS3",
+          "Để 'width là width' — cộng padding/border không làm hộp phình to ngoài dự tính, tính toán layout cột kèm % trở nên dễ đoán",
+          "Giúp trang tải nhanh hơn",
+          "Để xóa margin mặc định",
+        ],
+        correctIndex: 1,
+      },
+      {
+        tier: 2, type: "MCQ",
+        prompt: "Chế độ content-box: hộp có  width: 300px; padding: 20px  — chiều rộng chiếm chỗ thật?",
+        options: [
+          "300px",
+          "340px — content giữ nguyên 300, cộng 20 đệm mỗi bên",
+          "320px",
+          "280px",
+        ],
+        correctIndex: 1,
+      },
+      {
+        tier: 2, type: "MCQ",
+        prompt: "Chế độ border-box: hộp có  width: 300px; padding: 20px  — phần CONTENT còn rộng bao nhiêu?",
+        options: [
+          "300px",
+          "260px — tổng cố định 300, trừ 20 đệm mỗi bên",
+          "340px",
+          "280px",
+        ],
+        correctIndex: 1,
+      },
+      {
+        tier: 3, type: "WRITE_CSS",
+        prompt: "HTML có thanh bên class thanh-ben. Viết rule .thanh-ben với width 300px, padding 20px và box-sizing: border-box để tổng chiều rộng đúng bằng 300px.",
+        requirements: [
+          { type: "selector", value: ".thanh-ben" },
+          { type: "value", selector: ".thanh-ben", name: "width", value: "300px" },
+          { type: "value", selector: ".thanh-ben", name: "padding", value: "20px" },
+          { type: "value", selector: ".thanh-ben", name: "box-sizing", value: "border-box" },
+        ],
+        starterCode: "/* HTML căn cứ:\n<aside class=\"thanh-ben\">\n  <h3>Danh mục</h3>\n</aside>\n*/\n",
+      },
+    ],
+  },
+];
