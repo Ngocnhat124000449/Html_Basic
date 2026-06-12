@@ -39,6 +39,7 @@ enum QuestionType {
   WRITE_TAG
   FIX_BUG
   WRITE_STRUCTURE
+  WRITE_CSS
 }
 
 model Question {

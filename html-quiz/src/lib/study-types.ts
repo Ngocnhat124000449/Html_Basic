@@ -1,7 +1,7 @@
 export type ClientQuestion = {
   id: string;
   tier: number;
-  type: "MCQ" | "FILL_BLANK" | "WRITE_TAG" | "FIX_BUG" | "WRITE_STRUCTURE";
+  type: "MCQ" | "FILL_BLANK" | "WRITE_TAG" | "FIX_BUG" | "WRITE_STRUCTURE" | "WRITE_CSS";
   prompt: string;
   options: string[] | null;
   starterCode: string | null;
