@@ -249,7 +249,7 @@ export default function StudyPage() {
   }
 
   const unit = track === "css" ? "mục" : "thẻ";
-  const homeHref = track === "css" ? "/css" : "/";
+  const homeHref = track === "css" ? "/css" : "/html";
 
   if (tags.length === 0) {
     return (
