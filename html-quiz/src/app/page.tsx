@@ -9,11 +9,13 @@ export default async function HomePage() {
   const userId = session.user.id;
   const now = new Date();
 
-  const [htmlTotal, htmlProgress, cssTotal, cssProgress] = await Promise.all([
+  const [htmlTotal, htmlProgress, cssTotal, cssProgress, jsTotal, jsProgress] = await Promise.all([
     prisma.tag.count({ where: { track: "html" } }),
     prisma.userTagProgress.findMany({ where: { userId, tag: { track: "html" } } }),
     prisma.tag.count({ where: { track: "css" } }),
     prisma.userTagProgress.findMany({ where: { userId, tag: { track: "css" } } }),
+    prisma.tag.count({ where: { track: "js" } }),
+    prisma.userTagProgress.findMany({ where: { userId, tag: { track: "js" } } }),
   ]);
 
   const courses = [
@@ -53,6 +55,24 @@ export default async function HomePage() {
       },
       beta: true,
     },
+    {
+      href: "/js",
+      name: "JavaScript",
+      icon: "⚡",
+      desc: "Lập trình tương tác cho trang web",
+      total: jsTotal,
+      unit: "mục",
+      mastered: jsProgress.filter((p) => p.mastered).length,
+      due: jsProgress.filter((p) => p.dueAt <= now).length,
+      started: jsProgress.length,
+      accent: {
+        card: "border-amber-200 bg-amber-50/50 hover:border-amber-400",
+        bar: "from-amber-400 to-amber-600",
+        chip: "bg-amber-100 text-amber-700",
+        cta: "text-amber-700",
+      },
+      beta: true,
+    },
   ];
 
   return (
@@ -64,7 +84,7 @@ export default async function HomePage() {
         <p className="mt-2 text-ink/60">Chọn khóa học để bắt đầu</p>
       </div>
 
-      <div className="grid gap-4 sm:grid-cols-2">
+      <div className="grid gap-4 sm:grid-cols-3">
         {courses.map((c, i) => {
           const pct = c.total > 0 ? Math.round((c.mastered / c.total) * 100) : 0;
           const startedPct = c.total > 0 ? Math.round((c.started / c.total) * 100) : 0;

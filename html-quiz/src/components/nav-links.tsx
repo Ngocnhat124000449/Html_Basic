@@ -11,6 +11,7 @@ const LINKS = [
   { href: "/reflex", label: "Phản xạ" },
   { href: "/practice", label: "Tổng hợp" },
   { href: "/css", label: "CSS β" },
+  { href: "/js", label: "JS β" },
 ];
 
 export default function NavLinks() {

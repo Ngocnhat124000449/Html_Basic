@@ -23,9 +23,9 @@ const ATTR_GROUPS: { importance: AttrImportance; title: string; chip: string }[]
 
 const MAX_WRONG = 3;
 
-// Nhãn hiển thị: thẻ HTML bọc <>, mục CSS hiện tên trần
-const tagLabel = (tag: { track: "html" | "css"; name: string }) =>
-  tag.track === "css" ? tag.name : `<${tag.name}>`;
+// Nhãn hiển thị: thẻ HTML bọc <>, mục CSS/JS hiện tên trần
+const tagLabel = (tag: { track: "html" | "css" | "js"; name: string }) =>
+  tag.track === "html" ? `<${tag.name}>` : tag.name;
 
 const CSS_VALUE_META: Record<CssValueImportance, { title: string; chip: string }> = {
   essential: { title: "★ Giá trị quan trọng nhất", chip: "bg-sky-600 text-white" },
@@ -83,6 +83,35 @@ function CssIntro({ tag, onStart }: { tag: SessionTag; onStart: () => void }) {
         </div>
       )}
 
+      <div className="text-center">
+        <button
+          onClick={onStart}
+          autoFocus
+          className="rounded-full bg-flame-500 px-8 py-3 font-display text-lg font-bold text-white shadow-lg shadow-flame-500/30 transition-all hover:-translate-y-0.5 hover:bg-flame-600 hover:shadow-xl"
+        >
+          Bắt đầu trả lời ✍️
+        </button>
+        <p className="mt-2 text-xs text-ink/40">hoặc nhấn Enter</p>
+      </div>
+    </div>
+  );
+}
+
+// Màn làm quen mục JS mới: chương + mô tả
+function JsIntro({ tag, onStart }: { tag: SessionTag; onStart: () => void }) {
+  return (
+    <div className="animate-rise space-y-5 py-8">
+      <div className="text-center">
+        <span className="rounded-full bg-amber-100 px-3 py-1 text-xs font-semibold text-amber-700">
+          ✦ Mục mới — chương {tag.topic}
+        </span>
+        <p className="mt-4">
+          <code className="rounded-xl bg-ink px-3 py-1.5 font-mono text-2xl font-bold text-amber-300">
+            {tag.name}
+          </code>
+        </p>
+        <p className="mt-3 text-lg leading-relaxed text-ink/80">{tag.description}</p>
+      </div>
       <div className="text-center">
         <button
           onClick={onStart}
@@ -181,8 +210,8 @@ export default function StudyPage() {
   const [submitting, setSubmitting] = useState(false);
   // Đã xem màn làm quen của thẻ mới hiện tại chưa
   const [introSeen, setIntroSeen] = useState(false);
-  // Track của phiên học: html (mặc định) | css — đọc từ ?track= trên URL
-  const [track, setTrack] = useState<"html" | "css">("html");
+  // Track của phiên học: html (mặc định) | css | js — đọc từ ?track= trên URL
+  const [track, setTrack] = useState<"html" | "css" | "js">("html");
   const inputRef = useRef<HTMLInputElement | null>(null);
   const textareaRef = useRef<HTMLTextAreaElement | null>(null);
 
@@ -201,7 +230,7 @@ export default function StudyPage() {
       setIntroSeen(false);
       const qs = new URLSearchParams();
       if (extra) qs.set("extra", "1");
-      if (track === "css") qs.set("track", "css");
+      if (track !== "html") qs.set("track", track);
       fetch(`/api/study/session${qs.size > 0 ? `?${qs}` : ""}`)
         .then((r) => r.json())
         .then((d) => setTags(d.tags ?? []));
@@ -213,10 +242,11 @@ export default function StudyPage() {
   useEffect(() => {
     const params = new URLSearchParams(window.location.search);
     const extra = params.get("extra") === "1";
-    const trk = params.get("track") === "css" ? "css" : "html";
+    const tp = params.get("track");
+    const trk = tp === "css" || tp === "js" ? tp : "html";
     const qs = new URLSearchParams();
     if (extra) qs.set("extra", "1");
-    if (trk === "css") qs.set("track", "css");
+    if (trk !== "html") qs.set("track", trk);
     let cancelled = false;
     fetch(`/api/study/session${qs.size > 0 ? `?${qs}` : ""}`)
       .then((r) => r.json())
@@ -248,8 +278,8 @@ export default function StudyPage() {
     );
   }
 
-  const unit = track === "css" ? "mục" : "thẻ";
-  const homeHref = track === "css" ? "/css" : "/html";
+  const unit = track === "html" ? "thẻ" : "mục";
+  const homeHref = track === "css" ? "/css" : track === "js" ? "/js" : "/html";
 
   if (tags.length === 0) {
     return (
@@ -332,7 +362,8 @@ export default function StudyPage() {
   const tag = tags[tagIdx];
   const q = tag.questions[qIdx];
   const isCode = q.type !== "MCQ";
-  const isMultiline = q.type === "WRITE_STRUCTURE" || q.type === "WRITE_CSS";
+  const isMultiline =
+    q.type === "WRITE_STRUCTURE" || q.type === "WRITE_CSS" || q.type === "WRITE_JS";
   const tier = TIER_INFO[q.tier] ?? TIER_INFO[1];
 
   async function completeTag(passed: boolean) {
@@ -403,11 +434,9 @@ export default function StudyPage() {
 
   // Thẻ/mục mới: làm quen trước khi vào câu hỏi
   if (tag.isNew && !introSeen) {
-    return tag.track === "css" ? (
-      <CssIntro tag={tag} onStart={() => setIntroSeen(true)} />
-    ) : (
-      <TagIntro tag={tag} onStart={() => setIntroSeen(true)} />
-    );
+    if (tag.track === "css") return <CssIntro tag={tag} onStart={() => setIntroSeen(true)} />;
+    if (tag.track === "js") return <JsIntro tag={tag} onStart={() => setIntroSeen(true)} />;
+    return <TagIntro tag={tag} onStart={() => setIntroSeen(true)} />;
   }
 
   const sessionPct = ((tagIdx + qIdx / tag.questions.length) / tags.length) * 100;
@@ -418,7 +447,7 @@ export default function StudyPage() {
       <div className="space-y-2">
         <div className="flex items-center justify-between text-sm">
           <span className="font-medium text-ink/60">
-            {track === "css" ? "Mục" : "Thẻ"} {tagIdx + 1}/{tags.length}
+            {track === "html" ? "Thẻ" : "Mục"} {tagIdx + 1}/{tags.length}
           </span>
           <span className={`rounded-full px-2.5 py-1 text-xs font-semibold ${tier.cls}`}>
             {tier.label}

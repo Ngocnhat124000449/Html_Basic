@@ -1,0 +1,1159 @@
+import type { JsSeedTag } from "./types";
+
+const PART = "Nền tảng";
+
+// PHẦN 1 — Nền tảng: nhúng & cú pháp, biến, kiểu dữ liệu, toán tử, chuỗi & ép kiểu.
+// Bậc 3 (WRITE_JS) dùng requirement TĨNH (construct/contains/notContains) — chấm ngay ở server.
+export const PART1_NEN_TANG: JsSeedTag[] = [
+  // ===== CHƯƠNG 1: NHÚNG & CÚ PHÁP =====
+  {
+    name: "nhúng javascript",
+    topic: "Nhúng & cú pháp",
+    part: PART,
+    description: "Đưa JS vào trang bằng thẻ <script>",
+    questions: [
+      {
+        tier: 1, type: "MCQ",
+        prompt: "Nhúng một file JS ngoài tên app.js vào trang HTML dùng thẻ nào?",
+        options: ['<script src="app.js"></script>', '<js src="app.js">', '<link src="app.js">', '<script href="app.js">'],
+        correctIndex: 0,
+      },
+      {
+        tier: 1, type: "MCQ",
+        prompt: "Viết JS trực tiếp trong HTML thì đặt code vào đâu?",
+        options: ["Bên trong cặp thẻ <script>...</script>", "Trong thuộc tính style", "Trong thẻ <css>", "Trong <head> dưới dạng văn bản"],
+        correctIndex: 0,
+      },
+      {
+        tier: 1, type: "MCQ",
+        prompt: "Vì sao thẻ <script> thường đặt ở CUỐI <body>?",
+        options: [
+          "Để HTML tải xong trước, JS mới chạy và thấy được các phần tử",
+          "Vì <script> không chạy được trong <head>",
+          "Để code ngắn hơn",
+          "Bắt buộc của chuẩn HTML",
+        ],
+        correctIndex: 0,
+      },
+      {
+        tier: 2, type: "MCQ",
+        prompt: "Thuộc tính defer trên <script src> có tác dụng gì?",
+        options: [
+          "Hoãn chạy script tới khi HTML phân tích xong, giữ đúng thứ tự — cho phép đặt script trong <head> an toàn",
+          "Tải script nhanh gấp đôi",
+          "Bỏ qua lỗi trong script",
+          "Chạy script trước khi tải HTML",
+        ],
+        correctIndex: 0,
+      },
+      {
+        tier: 2, type: "MCQ",
+        prompt: "Khác nhau giữa defer và async trên thẻ script?",
+        options: [
+          "defer chạy sau khi HTML xong và giữ thứ tự; async chạy ngay khi tải xong, không đảm bảo thứ tự",
+          "Hoàn toàn giống nhau",
+          "async giữ thứ tự, defer thì không",
+          "defer chỉ cho script nội bộ",
+        ],
+        correctIndex: 0,
+      },
+      {
+        tier: 2, type: "MCQ",
+        prompt: "Một file JS ngoài đặt được nhiều lần trên nhiều trang có lợi gì so với viết inline?",
+        options: [
+          "Trình duyệt cache lại dùng chung, sửa logic chỉ cần một file",
+          "Chạy nhanh hơn gấp 10 lần",
+          "Không cần thẻ script",
+          "Tự động nén code",
+        ],
+        correctIndex: 0,
+      },
+      {
+        tier: 3, type: "WRITE_JS",
+        prompt: "Viết một câu lệnh JS in dòng chữ Xin chào ra console bằng console.log.",
+        requirements: [
+          { type: "contains", text: "console.log", message: "Dùng console.log để in" },
+          { type: "contains", text: "Xin chào", message: "In đúng nội dung 'Xin chào'" },
+        ],
+        starterCode:
+          "// HTML căn cứ: <script src=\"app.js\"></script>\n// Viết trong app.js:\n// console.log(\"Xin chào\");\n",
+      },
+    ],
+  },
+  {
+    name: "console.log",
+    topic: "Nhúng & cú pháp",
+    part: PART,
+    description: "In giá trị ra console để kiểm tra/gỡ lỗi",
+    questions: [
+      {
+        tier: 1, type: "MCQ",
+        prompt: "Lệnh nào in một giá trị ra console của trình duyệt?",
+        options: ["console.log(x)", "print(x)", "echo x", "log.console(x)"],
+        correctIndex: 0,
+      },
+      {
+        tier: 1, type: "MCQ",
+        prompt: "Mở console của trình duyệt để xem kết quả console.log bằng cách nào?",
+        options: ["Mở DevTools (F12) → tab Console", "Xem trong tab Network", "Bấm chuột phải → Lưu", "Xem mã nguồn trang"],
+        correctIndex: 0,
+      },
+      {
+        tier: 1, type: "MCQ",
+        prompt: "console.log nhận được bao nhiêu giá trị một lần?",
+        options: ["Nhiều giá trị, cách nhau dấu phẩy: console.log(a, b, c)", "Chỉ đúng 1", "Tối đa 2", "Chỉ chuỗi"],
+        correctIndex: 0,
+      },
+      {
+        tier: 2, type: "MCQ",
+        prompt: "Ngoài console.log, console.error khác gì?",
+        options: [
+          "In dưới dạng thông báo lỗi (thường màu đỏ, kèm stack) — hợp để báo lỗi",
+          "Dừng chương trình",
+          "Không in gì",
+          "Chỉ chạy khi có lỗi thật",
+        ],
+        correctIndex: 0,
+      },
+      {
+        tier: 2, type: "MCQ",
+        prompt: "console.log có làm thay đổi giá trị biến hay giao diện trang không?",
+        options: [
+          "Không — nó chỉ in để xem, là công cụ gỡ lỗi, không ảnh hưởng dữ liệu/UI",
+          "Có, nó cập nhật DOM",
+          "Có, nó xóa biến sau khi in",
+          "Có, làm trang tải lại",
+        ],
+        correctIndex: 0,
+      },
+      {
+        tier: 2, type: "MCQ",
+        prompt: "Vì sao nên xóa bớt console.log trước khi đưa web lên production?",
+        options: [
+          "Tránh lộ thông tin nội bộ và làm console rối; giữ code sạch",
+          "Vì console.log gây lỗi trên production",
+          "Vì trình duyệt cấm console.log",
+          "Vì nó làm trang trắng",
+        ],
+        correctIndex: 0,
+      },
+      {
+        tier: 3, type: "WRITE_JS",
+        prompt: "Khai báo biến tuoi bằng const với giá trị 18, rồi in tuoi ra console.",
+        requirements: [
+          { type: "construct", construct: "const", message: "Khai báo bằng const" },
+          { type: "contains", text: "tuoi", message: "Đặt tên biến là tuoi" },
+          { type: "contains", text: "18", message: "Gán giá trị 18" },
+          { type: "contains", text: "console.log", message: "In ra bằng console.log" },
+        ],
+        starterCode: "// Khai báo const tuoi = 18 rồi console.log(tuoi)\n",
+      },
+    ],
+  },
+  {
+    name: "câu lệnh & comment",
+    topic: "Nhúng & cú pháp",
+    part: PART,
+    description: "Kết thúc câu lệnh bằng ; và ghi chú trong JS",
+    questions: [
+      {
+        tier: 1, type: "MCQ",
+        prompt: "Comment một dòng trong JS viết thế nào?",
+        options: ["// ghi chú", "/* ghi chú", "# ghi chú", "<!-- ghi chú -->"],
+        correctIndex: 0,
+      },
+      {
+        tier: 1, type: "MCQ",
+        prompt: "Comment nhiều dòng trong JS dùng cú pháp nào?",
+        options: ["/* ... */", "// ... //", "<!-- ... -->", "''' ... '''"],
+        correctIndex: 0,
+      },
+      {
+        tier: 1, type: "MCQ",
+        prompt: "Mỗi câu lệnh JS thường kết thúc bằng ký tự nào?",
+        options: ["Dấu chấm phẩy ;", "Dấu chấm .", "Dấu phẩy ,", "Dấu hai chấm :"],
+        correctIndex: 0,
+      },
+      {
+        tier: 2, type: "MCQ",
+        prompt: "Dấu chấm phẩy ; ở cuối câu lệnh JS có bắt buộc không?",
+        options: [
+          "Không bắt buộc tuyệt đối (có ASI tự chèn) nhưng NÊN viết để tránh lỗi khó lường",
+          "Bắt buộc, thiếu là lỗi cú pháp",
+          "Cấm dùng",
+          "Chỉ cần trong hàm",
+        ],
+        correctIndex: 0,
+      },
+      {
+        tier: 2, type: "MCQ",
+        prompt: "Comment dùng để làm gì khi gỡ lỗi?",
+        options: [
+          "Tạm vô hiệu hóa một đoạn code mà không xóa nó",
+          "Tăng tốc chạy code",
+          "Tự sửa lỗi cú pháp",
+          "In ra console",
+        ],
+        correctIndex: 0,
+      },
+      {
+        tier: 2, type: "MCQ",
+        prompt: "JS phân biệt chữ hoa/thường (case-sensitive) — điều nào đúng?",
+        options: [
+          "tuoi và Tuoi là HAI biến khác nhau",
+          "tuoi và Tuoi là một",
+          "JS không phân biệt hoa thường",
+          "Chỉ phân biệt với hàm",
+        ],
+        correctIndex: 0,
+      },
+      {
+        tier: 3, type: "WRITE_JS",
+        prompt: "Viết một dòng comment bất kỳ, sau đó khai báo const ten = \"An\" (kết thúc bằng dấu chấm phẩy).",
+        requirements: [
+          { type: "construct", construct: "const", message: "Dùng const" },
+          { type: "contains", text: "ten", message: "Đặt tên biến ten" },
+          { type: "contains", text: "An", message: 'Gán giá trị "An"' },
+          { type: "contains", text: "//", message: "Có ít nhất một comment //" },
+        ],
+        starterCode: "// vd: đây là comment\nconst ten = \"An\";\n",
+      },
+    ],
+  },
+
+  // ===== CHƯƠNG 2: BIẾN =====
+  {
+    name: "let",
+    topic: "Biến",
+    part: PART,
+    description: "Khai báo biến CÓ THỂ gán lại bằng let",
+    questions: [
+      {
+        tier: 1, type: "MCQ",
+        prompt: "Khai báo một biến điểm số có thể thay đổi về sau dùng từ khóa nào?",
+        options: ["let", "const", "final", "def"],
+        correctIndex: 0,
+      },
+      {
+        tier: 1, type: "MCQ",
+        prompt: "Sau let diem = 5; muốn đổi diem thành 8 viết thế nào?",
+        options: ["diem = 8;", "let diem = 8;", "const diem = 8;", "diem := 8;"],
+        correctIndex: 0,
+      },
+      {
+        tier: 1, type: "MCQ",
+        prompt: "let có cho phép khai báo biến mà CHƯA gán giá trị không?",
+        options: ["Có: let x; (giá trị là undefined)", "Không, bắt buộc gán", "Chỉ với số", "Chỉ trong hàm"],
+        correctIndex: 0,
+      },
+      {
+        tier: 2, type: "MCQ",
+        prompt: "Phạm vi (scope) của biến let là gì?",
+        options: [
+          "Block scope — chỉ tồn tại trong cặp { } gần nhất chứa nó",
+          "Toàn cục mọi nơi",
+          "Chỉ trong hàm",
+          "Toàn file bất kể { }",
+        ],
+        correctIndex: 0,
+      },
+      {
+        tier: 2, type: "MCQ",
+        prompt: "Khai báo lại CÙNG tên biến bằng let hai lần trong cùng scope thì sao?",
+        options: [
+          "Lỗi: 'already been declared' — let không cho khai báo trùng trong cùng scope",
+          "Ghi đè bình thường",
+          "Tạo biến thứ hai",
+          "Cảnh báo nhưng vẫn chạy",
+        ],
+        correctIndex: 0,
+      },
+      {
+        tier: 2, type: "MCQ",
+        prompt: "Khi nào nên dùng let thay vì const?",
+        options: [
+          "Khi giá trị CẦN thay đổi về sau (biến đếm, tổng tích lũy, trạng thái)",
+          "Luôn dùng let cho mọi biến",
+          "Chỉ khi biến là chuỗi",
+          "Khi biến nằm ngoài hàm",
+        ],
+        correctIndex: 0,
+      },
+      {
+        tier: 3, type: "WRITE_JS",
+        prompt: "Khai báo biến demSP bằng let với giá trị 0 (biến đếm sẽ thay đổi sau này).",
+        requirements: [
+          { type: "construct", construct: "let", message: "Dùng let" },
+          { type: "contains", text: "demSP", message: "Tên biến demSP" },
+          { type: "contains", text: "0", message: "Giá trị khởi tạo 0" },
+        ],
+        starterCode: "// let demSP = 0;\n",
+      },
+    ],
+  },
+  {
+    name: "const",
+    topic: "Biến",
+    part: PART,
+    description: "Khai báo hằng KHÔNG gán lại bằng const",
+    questions: [
+      {
+        tier: 1, type: "MCQ",
+        prompt: "Khai báo một giá trị không bao giờ đổi (vd số PI) dùng từ khóa nào?",
+        options: ["const", "let", "var", "static"],
+        correctIndex: 0,
+      },
+      {
+        tier: 1, type: "MCQ",
+        prompt: "const có bắt buộc gán giá trị ngay khi khai báo không?",
+        options: ["Có — const PI = 3.14; phải gán ngay", "Không, gán sau cũng được", "Chỉ với số", "Tùy trình duyệt"],
+        correctIndex: 0,
+      },
+      {
+        tier: 1, type: "MCQ",
+        prompt: "Sau const ten = \"An\"; thử ten = \"Bình\"; thì sao?",
+        options: ["Lỗi: Assignment to constant variable", "Đổi thành công", "Tạo biến mới", "Cảnh báo nhưng vẫn đổi"],
+        correctIndex: 0,
+      },
+      {
+        tier: 2, type: "MCQ",
+        prompt: "const sp = { gia: 100 }; — câu nào ĐÚNG?",
+        options: [
+          "Vẫn sửa được sp.gia = 200 (nội dung object đổi được), chỉ KHÔNG gán lại cả sp",
+          "Không sửa được gì bên trong",
+          "Lỗi khi khai báo object bằng const",
+          "sp tự đông cứng hoàn toàn",
+        ],
+        correctIndex: 0,
+      },
+      {
+        tier: 2, type: "MCQ",
+        prompt: "Vì sao nhiều dự án khuyên 'mặc định dùng const, chỉ dùng let khi cần đổi'?",
+        options: [
+          "const giúp code an toàn hơn — đọc vào biết ngay biến này không bị gán lại bất ngờ",
+          "const chạy nhanh hơn let nhiều",
+          "let đã lỗi thời",
+          "const ngắn hơn let",
+        ],
+        correctIndex: 0,
+      },
+      {
+        tier: 2, type: "MCQ",
+        prompt: "const cũng là block scope như let. Điều nào đúng?",
+        options: [
+          "const chỉ tồn tại trong { } chứa nó, không bị 'rò' ra ngoài",
+          "const là toàn cục",
+          "const chỉ trong hàm",
+          "const không có scope",
+        ],
+        correctIndex: 0,
+      },
+      {
+        tier: 3, type: "WRITE_JS",
+        prompt: "Khai báo hằng MAX_SP bằng const với giá trị 99.",
+        requirements: [
+          { type: "construct", construct: "const", message: "Dùng const" },
+          { type: "contains", text: "MAX_SP", message: "Tên hằng MAX_SP" },
+          { type: "contains", text: "99", message: "Giá trị 99" },
+        ],
+        starterCode: "// const MAX_SP = 99;\n",
+      },
+    ],
+  },
+  {
+    name: "tránh var",
+    topic: "Biến",
+    part: PART,
+    description: "Vì sao nên dùng let/const thay cho var cũ",
+    questions: [
+      {
+        tier: 1, type: "MCQ",
+        prompt: "Hai từ khóa khai báo biến hiện đại (ES6+) được khuyên dùng là?",
+        options: ["let và const", "var và let", "var và const", "def và val"],
+        correctIndex: 0,
+      },
+      {
+        tier: 1, type: "MCQ",
+        prompt: "var là cách khai báo biến kiểu cũ — nên dùng thế nào?",
+        options: ["Hạn chế, ưu tiên let/const", "Luôn dùng var", "var nhanh hơn nên ưu tiên", "var là bắt buộc"],
+        correctIndex: 0,
+      },
+      {
+        tier: 1, type: "MCQ",
+        prompt: "var có scope gì khác let?",
+        options: [
+          "var là function scope (rò ra ngoài block { }); let là block scope",
+          "Giống hệt let",
+          "var là block scope",
+          "var không có scope",
+        ],
+        correctIndex: 0,
+      },
+      {
+        tier: 2, type: "MCQ",
+        prompt: "Vì sao var dễ gây bug hơn let?",
+        options: [
+          "var bị hoisting (kéo lên) và rò ra khỏi block — biến tồn tại ngoài nơi ta tưởng",
+          "var không in được",
+          "var chỉ nhận số",
+          "var chậm hơn nhiều",
+        ],
+        correctIndex: 0,
+      },
+      {
+        tier: 2, type: "MCQ",
+        prompt: "Khai báo trùng tên bằng var hai lần trong cùng scope thì sao?",
+        options: [
+          "Không báo lỗi, lần sau ghi đè lần trước — nguồn bug âm thầm",
+          "Lỗi ngay như let",
+          "Tạo hai biến riêng",
+          "Trình duyệt từ chối chạy",
+        ],
+        correctIndex: 0,
+      },
+      {
+        tier: 2, type: "MCQ",
+        prompt: "Quy tắc thực hành tốt cho khai báo biến ngày nay là gì?",
+        options: [
+          "Mặc định const; cần gán lại thì let; tránh var",
+          "Mặc định var cho mọi thứ",
+          "Chỉ dùng let",
+          "Tùy ý, không quan trọng",
+        ],
+        correctIndex: 0,
+      },
+      {
+        tier: 3, type: "WRITE_JS",
+        prompt: "Khai báo biến gioHang bằng let với giá trị 0 — KHÔNG được dùng var.",
+        requirements: [
+          { type: "construct", construct: "let", message: "Dùng let" },
+          { type: "contains", text: "gioHang", message: "Tên biến gioHang" },
+          { type: "notContains", text: "var", message: "Không được dùng var" },
+        ],
+        starterCode: "// let gioHang = 0;  (không dùng var)\n",
+      },
+    ],
+  },
+
+  // ===== CHƯƠNG 3: KIỂU DỮ LIỆU =====
+  {
+    name: "kiểu string",
+    topic: "Kiểu dữ liệu",
+    part: PART,
+    description: "Chuỗi ký tự — bọc trong nháy '', \"\" hoặc ``",
+    questions: [
+      {
+        tier: 1, type: "MCQ",
+        prompt: "Giá trị nào là một chuỗi (string) hợp lệ?",
+        options: ['"Xin chào"', "Xin chào", "123 (không nháy)", "true"],
+        correctIndex: 0,
+      },
+      {
+        tier: 1, type: "MCQ",
+        prompt: "Chuỗi trong JS bọc được bằng những ký tự nào?",
+        options: ["Nháy đơn '', nháy kép \"\", hoặc backtick ``", "Chỉ nháy kép", "Chỉ nháy đơn", "Dấu ngoặc ()"],
+        correctIndex: 0,
+      },
+      {
+        tier: 1, type: "MCQ",
+        prompt: "Lấy độ dài chuỗi s dùng gì?",
+        options: ["s.length", "s.size()", "length(s)", "s.count"],
+        correctIndex: 0,
+      },
+      {
+        tier: 2, type: "MCQ",
+        prompt: '"5" + 2 cho kết quả gì?',
+        options: [
+          '"52" — số 2 bị ép thành chuỗi rồi nối',
+          "7",
+          "Lỗi",
+          '"5 2"',
+        ],
+        correctIndex: 0,
+      },
+      {
+        tier: 2, type: "MCQ",
+        prompt: "Truy cập ký tự đầu tiên của chuỗi s = \"abc\" dùng gì?",
+        options: ['s[0] (trả "a")', "s(0)", "s.first", "s{0}"],
+        correctIndex: 0,
+      },
+      {
+        tier: 2, type: "MCQ",
+        prompt: "Chuỗi trong JS là bất biến (immutable) nghĩa là gì?",
+        options: [
+          "Không sửa từng ký tự tại chỗ; mọi method trả về CHUỖI MỚI",
+          "Không gán lại được biến chuỗi",
+          "Chuỗi không có method",
+          "Chuỗi luôn rỗng",
+        ],
+        correctIndex: 0,
+      },
+      {
+        tier: 3, type: "WRITE_JS",
+        prompt: "Khai báo const loiChao = \"Xin chào\" rồi in độ dài của nó bằng console.log(loiChao.length).",
+        requirements: [
+          { type: "contains", text: "loiChao", message: "Tên biến loiChao" },
+          { type: "contains", text: "Xin chào", message: 'Giá trị "Xin chào"' },
+          { type: "contains", text: ".length", message: "Dùng .length" },
+          { type: "contains", text: "console.log", message: "In ra console" },
+        ],
+        starterCode: "// const loiChao = \"Xin chào\";\n// console.log(loiChao.length);\n",
+      },
+    ],
+  },
+  {
+    name: "kiểu number",
+    topic: "Kiểu dữ liệu",
+    part: PART,
+    description: "Số — nguyên và thực dùng chung kiểu number",
+    questions: [
+      {
+        tier: 1, type: "MCQ",
+        prompt: "Giá trị nào là kiểu number?",
+        options: ["3.14", '"3.14"', "true", "null"],
+        correctIndex: 0,
+      },
+      {
+        tier: 1, type: "MCQ",
+        prompt: "JS có phân biệt số nguyên và số thực thành hai kiểu riêng không?",
+        options: ["Không — cả hai đều là kiểu number", "Có: int và float", "Có: integer và double", "Chỉ có số nguyên"],
+        correctIndex: 0,
+      },
+      {
+        tier: 1, type: "MCQ",
+        prompt: "Kết quả 10 / 3 trong JS xấp xỉ là?",
+        options: ["3.333... (số thực)", "3 (làm tròn)", "Lỗi", "3.0 cố định"],
+        correctIndex: 0,
+      },
+      {
+        tier: 2, type: "MCQ",
+        prompt: "Giá trị NaN nghĩa là gì?",
+        options: [
+          "Not a Number — kết quả của phép số không hợp lệ, vd Number(\"abc\")",
+          "Số 0",
+          "Số âm",
+          "Null dạng số",
+        ],
+        correctIndex: 0,
+      },
+      {
+        tier: 2, type: "MCQ",
+        prompt: "Làm tròn xuống số nguyên gần nhất dùng gì?",
+        options: ["Math.floor(x)", "Math.round.down(x)", "x.int()", "floor x"],
+        correctIndex: 0,
+      },
+      {
+        tier: 2, type: "MCQ",
+        prompt: "0.1 + 0.2 trong JS cho kết quả?",
+        options: [
+          "0.30000000000000004 — sai số dấu phẩy động (binary float)",
+          "0.3 chính xác",
+          "Lỗi",
+          "0.5",
+        ],
+        correctIndex: 0,
+      },
+      {
+        tier: 3, type: "WRITE_JS",
+        prompt: "Khai báo const gia = 100 và const soLuong = 3, rồi tính const tong = gia * soLuong.",
+        requirements: [
+          { type: "contains", text: "gia", message: "Biến gia" },
+          { type: "contains", text: "soLuong", message: "Biến soLuong" },
+          { type: "contains", text: "tong", message: "Biến tong" },
+          { type: "contains", text: "*", message: "Dùng phép nhân *" },
+        ],
+        starterCode: "// const gia = 100;\n// const soLuong = 3;\n// const tong = gia * soLuong;\n",
+      },
+    ],
+  },
+  {
+    name: "kiểu boolean",
+    topic: "Kiểu dữ liệu",
+    part: PART,
+    description: "Đúng/sai: true và false",
+    questions: [
+      {
+        tier: 1, type: "MCQ",
+        prompt: "Hai giá trị của kiểu boolean là gì?",
+        options: ["true và false", "1 và 0", '"yes" và "no"', "on và off"],
+        correctIndex: 0,
+      },
+      {
+        tier: 1, type: "MCQ",
+        prompt: "Phép so sánh 5 > 3 trả về giá trị gì?",
+        options: ["true (boolean)", "5", '"có"', "1"],
+        correctIndex: 0,
+      },
+      {
+        tier: 1, type: "MCQ",
+        prompt: "Boolean thường dùng để làm gì?",
+        options: ["Quyết định luồng if/else và điều kiện", "Lưu văn bản", "Tính tổng", "Đặt màu"],
+        correctIndex: 0,
+      },
+      {
+        tier: 2, type: "MCQ",
+        prompt: "Giá trị 'falsy' trong JS là gì?",
+        options: [
+          "Giá trị được coi như false khi xét điều kiện: 0, \"\", null, undefined, NaN, false",
+          "Chỉ có false",
+          "Chỉ số 0",
+          "Mọi chuỗi",
+        ],
+        correctIndex: 0,
+      },
+      {
+        tier: 2, type: "MCQ",
+        prompt: 'Boolean("") và Boolean("a") lần lượt là?',
+        options: [
+          "false và true — chuỗi rỗng là falsy, chuỗi có ký tự là truthy",
+          "true và true",
+          "false và false",
+          "Lỗi",
+        ],
+        correctIndex: 0,
+      },
+      {
+        tier: 2, type: "MCQ",
+        prompt: "Toán tử ! (phủ định) làm gì với boolean?",
+        options: [
+          "Đảo giá trị: !true là false, !false là true",
+          "Luôn trả true",
+          "Không đổi gì",
+          "Chuyển sang số",
+        ],
+        correctIndex: 0,
+      },
+      {
+        tier: 3, type: "WRITE_JS",
+        prompt: "Khai báo const daDangNhap = true (kiểu boolean).",
+        requirements: [
+          { type: "construct", construct: "const", message: "Dùng const" },
+          { type: "contains", text: "daDangNhap", message: "Tên biến daDangNhap" },
+          { type: "contains", text: "true", message: "Giá trị true" },
+        ],
+        starterCode: "// const daDangNhap = true;\n",
+      },
+    ],
+  },
+  {
+    name: "null và undefined",
+    topic: "Kiểu dữ liệu",
+    part: PART,
+    description: "Hai kiểu 'rỗng': undefined (chưa gán) và null (cố ý rỗng)",
+    questions: [
+      {
+        tier: 1, type: "MCQ",
+        prompt: "Biến khai báo let x; mà chưa gán có giá trị gì?",
+        options: ["undefined", "null", "0", '""'],
+        correctIndex: 0,
+      },
+      {
+        tier: 1, type: "MCQ",
+        prompt: "null thường dùng để biểu thị điều gì?",
+        options: ["Cố ý gán 'không có giá trị'", "Một số lớn", "Một chuỗi rỗng", "Giá trị true"],
+        correctIndex: 0,
+      },
+      {
+        tier: 1, type: "MCQ",
+        prompt: "Khác biệt cốt lõi giữa undefined và null?",
+        options: [
+          "undefined: chưa gán/hệ thống tự đặt; null: lập trình viên cố ý đặt rỗng",
+          "Hoàn toàn giống nhau",
+          "null là số 0",
+          "undefined là chuỗi",
+        ],
+        correctIndex: 0,
+      },
+      {
+        tier: 2, type: "MCQ",
+        prompt: "Hàm không có lệnh return trả về gì?",
+        options: ["undefined", "null", "0", "false"],
+        correctIndex: 0,
+      },
+      {
+        tier: 2, type: "MCQ",
+        prompt: "null == undefined và null === undefined cho kết quả?",
+        options: [
+          "== trả true (lỏng), === trả false (chặt, khác kiểu)",
+          "Cả hai true",
+          "Cả hai false",
+          "Lỗi",
+        ],
+        correctIndex: 0,
+      },
+      {
+        tier: 2, type: "MCQ",
+        prompt: "Toán tử ?? (nullish coalescing) làm gì trong a ?? b?",
+        options: [
+          "Trả a nếu a KHÁC null/undefined, ngược lại trả b",
+          "Luôn trả a",
+          "Cộng a và b",
+          "Trả b nếu a là 0",
+        ],
+        correctIndex: 0,
+      },
+      {
+        tier: 3, type: "WRITE_JS",
+        prompt: "Khai báo let nguoiDung = null (cố ý chưa có dữ liệu người dùng).",
+        requirements: [
+          { type: "construct", construct: "let", message: "Dùng let" },
+          { type: "contains", text: "nguoiDung", message: "Tên biến nguoiDung" },
+          { type: "contains", text: "null", message: "Gán null" },
+        ],
+        starterCode: "// let nguoiDung = null;\n",
+      },
+    ],
+  },
+  {
+    name: "typeof",
+    topic: "Kiểu dữ liệu",
+    part: PART,
+    description: "Kiểm tra kiểu của một giá trị bằng typeof",
+    questions: [
+      {
+        tier: 1, type: "MCQ",
+        prompt: "Kiểm tra kiểu dữ liệu của biến x dùng gì?",
+        options: ["typeof x", "x.type", "type(x)", "x.typeof()"],
+        correctIndex: 0,
+      },
+      {
+        tier: 1, type: "MCQ",
+        prompt: 'typeof "abc" trả về gì?',
+        options: ['"string"', '"text"', '"abc"', '"char"'],
+        correctIndex: 0,
+      },
+      {
+        tier: 1, type: "MCQ",
+        prompt: "typeof 42 trả về gì?",
+        options: ['"number"', '"int"', '"42"', '"digit"'],
+        correctIndex: 0,
+      },
+      {
+        tier: 2, type: "MCQ",
+        prompt: "typeof null trả về gì (một 'lỗi lịch sử' nổi tiếng của JS)?",
+        options: ['"object" (sai về mặt lý thuyết nhưng tồn tại vì tương thích)', '"null"', '"undefined"', '"empty"'],
+        correctIndex: 0,
+      },
+      {
+        tier: 2, type: "MCQ",
+        prompt: "typeof của một hàm trả về gì?",
+        options: ['"function"', '"object"', '"method"', '"callable"'],
+        correctIndex: 0,
+      },
+      {
+        tier: 2, type: "MCQ",
+        prompt: "typeof [1,2,3] (mảng) trả về gì?",
+        options: [
+          '"object" — mảng cũng là object; kiểm tra mảng dùng Array.isArray()',
+          '"array"',
+          '"list"',
+          '"number"',
+        ],
+        correctIndex: 0,
+      },
+      {
+        tier: 3, type: "WRITE_JS",
+        prompt: "Khai báo const diem = 9 rồi in kiểu của nó: console.log(typeof diem).",
+        requirements: [
+          { type: "contains", text: "diem", message: "Biến diem" },
+          { type: "contains", text: "typeof", message: "Dùng typeof" },
+          { type: "contains", text: "console.log", message: "In ra console" },
+        ],
+        starterCode: "// const diem = 9;\n// console.log(typeof diem);\n",
+      },
+    ],
+  },
+
+  // ===== CHƯƠNG 4: TOÁN TỬ =====
+  {
+    name: "toán tử số học",
+    topic: "Toán tử",
+    part: PART,
+    description: "Cộng trừ nhân chia + - * / và lấy dư %",
+    questions: [
+      {
+        tier: 1, type: "MCQ",
+        prompt: "Toán tử lấy phần dư của phép chia là gì?",
+        options: ["%", "/", "//", "mod"],
+        correctIndex: 0,
+      },
+      {
+        tier: 1, type: "MCQ",
+        prompt: "Kết quả 7 % 2 là bao nhiêu?",
+        options: ["1", "3", "3.5", "0"],
+        correctIndex: 0,
+      },
+      {
+        tier: 1, type: "MCQ",
+        prompt: "Toán tử lũy thừa (2 mũ 3) trong JS hiện đại là gì?",
+        options: ["2 ** 3", "2 ^ 3", "2 pow 3", "2 // 3"],
+        correctIndex: 0,
+      },
+      {
+        tier: 2, type: "MCQ",
+        prompt: "Dùng % để kiểm tra số n chẵn viết thế nào?",
+        options: ["n % 2 === 0", "n / 2 === 0", "n % 2 === 1", "n ** 2 === 0"],
+        correctIndex: 0,
+      },
+      {
+        tier: 2, type: "MCQ",
+        prompt: "Thứ tự ưu tiên: 2 + 3 * 4 cho kết quả?",
+        options: ["14 — nhân trước cộng sau", "20", "24", "9"],
+        correctIndex: 0,
+      },
+      {
+        tier: 2, type: "MCQ",
+        prompt: "Ép thứ tự tính bằng ngoặc: (2 + 3) * 4 cho?",
+        options: ["20", "14", "9", "24"],
+        correctIndex: 0,
+      },
+      {
+        tier: 3, type: "WRITE_JS",
+        prompt: "Tính trung bình cộng: const a = 8, const b = 6, const tb = (a + b) / 2.",
+        requirements: [
+          { type: "contains", text: "tb", message: "Biến tb" },
+          { type: "contains", text: "(a + b)", message: "Cộng a + b trong ngoặc" },
+          { type: "contains", text: "/ 2", message: "Chia cho 2" },
+        ],
+        starterCode: "// const a = 8;\n// const b = 6;\n// const tb = (a + b) / 2;\n",
+      },
+    ],
+  },
+  {
+    name: "so sánh === và ==",
+    topic: "Toán tử",
+    part: PART,
+    description: "So sánh chặt === (khuyên dùng) và lỏng ==",
+    questions: [
+      {
+        tier: 1, type: "MCQ",
+        prompt: "Toán tử so sánh BẰNG được khuyên dùng (so cả kiểu) là gì?",
+        options: ["===", "==", "=", "equals"],
+        correctIndex: 0,
+      },
+      {
+        tier: 1, type: "MCQ",
+        prompt: "Toán tử = (một dấu bằng) làm gì?",
+        options: ["Gán giá trị, KHÔNG phải so sánh", "So sánh bằng", "So sánh chặt", "Khác nhau"],
+        correctIndex: 0,
+      },
+      {
+        tier: 1, type: "MCQ",
+        prompt: "So sánh KHÁC (chặt) viết thế nào?",
+        options: ["!==", "!=", "<>", "not ="],
+        correctIndex: 0,
+      },
+      {
+        tier: 2, type: "MCQ",
+        prompt: '5 === "5" cho kết quả?',
+        options: [
+          "false — === so cả kiểu (number khác string)",
+          "true",
+          "Lỗi",
+          '"5"',
+        ],
+        correctIndex: 0,
+      },
+      {
+        tier: 2, type: "MCQ",
+        prompt: '5 == "5" cho kết quả?',
+        options: [
+          'true — == ép kiểu trước khi so, nên "5" thành 5',
+          "false",
+          "Lỗi",
+          "undefined",
+        ],
+        correctIndex: 0,
+      },
+      {
+        tier: 2, type: "MCQ",
+        prompt: "Vì sao nên dùng === thay vì ==?",
+        options: [
+          "=== rõ ràng, tránh ép kiểu ngầm gây kết quả bất ngờ và bug khó tìm",
+          "== đã bị xóa khỏi JS",
+          "=== chạy nhanh hơn nhiều",
+          "Không khác nhau",
+        ],
+        correctIndex: 0,
+      },
+      {
+        tier: 3, type: "WRITE_JS",
+        prompt: "Khai báo const bằng nhau so sánh chặt: const ketQua = (tuoi === 18). (giả sử tuoi đã có)",
+        requirements: [
+          { type: "contains", text: "ketQua", message: "Biến ketQua" },
+          { type: "contains", text: "===", message: "Dùng so sánh chặt ===" },
+          { type: "contains", text: "18", message: "So với 18" },
+        ],
+        starterCode: "// const tuoi = 18;\n// const ketQua = tuoi === 18;\n",
+      },
+    ],
+  },
+  {
+    name: "toán tử logic",
+    topic: "Toán tử",
+    part: PART,
+    description: "VÀ &&, HOẶC ||, PHỦ ĐỊNH !",
+    questions: [
+      {
+        tier: 1, type: "MCQ",
+        prompt: "Toán tử VÀ (cả hai điều kiện đúng) là gì?",
+        options: ["&&", "||", "!", "and"],
+        correctIndex: 0,
+      },
+      {
+        tier: 1, type: "MCQ",
+        prompt: "Toán tử HOẶC (một trong hai đúng) là gì?",
+        options: ["||", "&&", "!", "or"],
+        correctIndex: 0,
+      },
+      {
+        tier: 1, type: "MCQ",
+        prompt: "true && false cho kết quả?",
+        options: ["false", "true", "Lỗi", "undefined"],
+        correctIndex: 0,
+      },
+      {
+        tier: 2, type: "MCQ",
+        prompt: "Điều kiện 'tuổi từ 18 đến 60' viết thế nào?",
+        options: ["tuoi >= 18 && tuoi <= 60", "tuoi >= 18 || tuoi <= 60", "18 <= tuoi <= 60", "tuoi === 18 && 60"],
+        correctIndex: 0,
+      },
+      {
+        tier: 2, type: "MCQ",
+        prompt: "Short-circuit: false && f() — hàm f có được gọi không?",
+        options: [
+          "Không — && gặp false là dừng ngay, không xét vế sau",
+          "Có, luôn gọi",
+          "Gọi hai lần",
+          "Lỗi",
+        ],
+        correctIndex: 0,
+      },
+      {
+        tier: 2, type: "MCQ",
+        prompt: "a || b với a là giá trị falsy (vd \"\") trả về gì?",
+        options: [
+          "b — || trả vế đầu truthy, nếu a falsy thì trả b (hay dùng đặt giá trị mặc định)",
+          "Luôn a",
+          "true",
+          "false",
+        ],
+        correctIndex: 0,
+      },
+      {
+        tier: 3, type: "WRITE_JS",
+        prompt: "Khai báo const hopLe = (tuoi >= 18 && coCMND) — dùng toán tử && (giả sử tuoi, coCMND đã có).",
+        requirements: [
+          { type: "contains", text: "hopLe", message: "Biến hopLe" },
+          { type: "contains", text: "&&", message: "Dùng &&" },
+          { type: "contains", text: ">= 18", message: "Điều kiện >= 18" },
+        ],
+        starterCode: "// const tuoi = 20;\n// const coCMND = true;\n// const hopLe = tuoi >= 18 && coCMND;\n",
+      },
+    ],
+  },
+
+  // ===== CHƯƠNG 5: CHUỖI & ÉP KIỂU =====
+  {
+    name: "template literal",
+    topic: "Chuỗi & ép kiểu",
+    part: PART,
+    description: "Chèn biến vào chuỗi bằng `${}`",
+    questions: [
+      {
+        tier: 1, type: "MCQ",
+        prompt: "Chèn biến ten vào chuỗi hiện đại viết thế nào?",
+        options: ["`Xin chào ${ten}`", '"Xin chào " + ten + ""', "'Xin chào ${ten}'", '"Xin chào ${ten}"'],
+        correctIndex: 0,
+      },
+      {
+        tier: 1, type: "MCQ",
+        prompt: "Template literal được bọc bằng ký tự nào?",
+        options: ["Dấu backtick `", "Nháy đơn '", "Nháy kép \"", "Ngoặc ()"],
+        correctIndex: 0,
+      },
+      {
+        tier: 1, type: "MCQ",
+        prompt: "Cú pháp chèn biểu thức vào template literal là gì?",
+        options: ["${biểu_thức}", "{{biểu_thức}}", "#{biểu_thức}", "<%= %>"],
+        correctIndex: 0,
+      },
+      {
+        tier: 2, type: "MCQ",
+        prompt: "Template literal có ưu điểm gì ngoài chèn biến?",
+        options: [
+          "Viết chuỗi NHIỀU DÒNG trực tiếp mà không cần \\n",
+          "Chạy nhanh hơn",
+          "Tự dịch ngôn ngữ",
+          "Tự bỏ khoảng trắng",
+        ],
+        correctIndex: 0,
+      },
+      {
+        tier: 2, type: "MCQ",
+        prompt: "Bên trong ${} đặt được gì?",
+        options: [
+          "Mọi biểu thức JS: ${gia * soLuong}, ${ten.toUpperCase()}",
+          "Chỉ tên biến đơn",
+          "Chỉ số",
+          "Chỉ chuỗi",
+        ],
+        correctIndex: 0,
+      },
+      {
+        tier: 2, type: "MCQ",
+        prompt: "So với nối chuỗi bằng +, template literal hơn ở điểm nào?",
+        options: [
+          "Dễ đọc hơn, ít lỗi thiếu dấu cách/dấu +, gọn khi nhiều biến",
+          "Luôn nhanh hơn nhiều",
+          "Tự ép kiểu số",
+          "Không cần khai báo biến",
+        ],
+        correctIndex: 0,
+      },
+      {
+        tier: 3, type: "WRITE_JS",
+        prompt: "Dùng template literal tạo const loi = `Xin chào ${ten}` (giả sử ten đã có).",
+        requirements: [
+          { type: "construct", construct: "template", message: "Dùng template literal (backtick + ${})" },
+          { type: "contains", text: "loi", message: "Biến loi" },
+          { type: "contains", text: "ten", message: "Chèn biến ten" },
+        ],
+        starterCode: "// const ten = \"An\";\n// const loi = `Xin chào ${ten}`;\n",
+      },
+    ],
+  },
+  {
+    name: "method chuỗi",
+    topic: "Chuỗi & ép kiểu",
+    part: PART,
+    description: "toUpperCase, toLowerCase, trim, includes, slice...",
+    questions: [
+      {
+        tier: 1, type: "MCQ",
+        prompt: "Đổi chuỗi s sang CHỮ HOA dùng method nào?",
+        options: ["s.toUpperCase()", "s.upper()", "s.toUpper()", "upperCase(s)"],
+        correctIndex: 0,
+      },
+      {
+        tier: 1, type: "MCQ",
+        prompt: "Bỏ khoảng trắng thừa hai đầu chuỗi dùng gì?",
+        options: ["s.trim()", "s.strip()", "s.clean()", "trim(s)"],
+        correctIndex: 0,
+      },
+      {
+        tier: 1, type: "MCQ",
+        prompt: "Kiểm tra chuỗi s có chứa 'abc' không dùng gì?",
+        options: ['s.includes("abc")', 's.has("abc")', 's.contains("abc")', 'includes(s, "abc")'],
+        correctIndex: 0,
+      },
+      {
+        tier: 2, type: "MCQ",
+        prompt: "Method chuỗi trả về chuỗi MỚI hay sửa chuỗi gốc?",
+        options: [
+          "Trả về chuỗi mới — chuỗi gốc không đổi (immutable)",
+          "Sửa chuỗi gốc tại chỗ",
+          "Xóa chuỗi gốc",
+          "Tùy method",
+        ],
+        correctIndex: 0,
+      },
+      {
+        tier: 2, type: "MCQ",
+        prompt: 'Tách chuỗi "a,b,c" thành mảng ["a","b","c"] dùng gì?',
+        options: ['"a,b,c".split(",")', '"a,b,c".toArray()', '"a,b,c".cut(",")', 'split("a,b,c")'],
+        correctIndex: 0,
+      },
+      {
+        tier: 2, type: "MCQ",
+        prompt: 'replace và replaceAll khác nhau thế nào?',
+        options: [
+          "replace đổi lần xuất hiện ĐẦU TIÊN; replaceAll đổi TẤT CẢ",
+          "Giống hệt nhau",
+          "replaceAll chỉ cho số",
+          "replace đổi tất cả",
+        ],
+        correctIndex: 0,
+      },
+      {
+        tier: 3, type: "WRITE_JS",
+        prompt: "Cho const email = \"  Test@Mail.com  \"; tạo const sach = email.trim().toLowerCase().",
+        requirements: [
+          { type: "contains", text: "sach", message: "Biến sach" },
+          { type: "contains", text: ".trim()", message: "Dùng .trim()" },
+          { type: "contains", text: ".toLowerCase()", message: "Dùng .toLowerCase()" },
+        ],
+        starterCode: "// const email = \"  Test@Mail.com  \";\n// const sach = email.trim().toLowerCase();\n",
+      },
+    ],
+  },
+  {
+    name: "ép kiểu",
+    topic: "Chuỗi & ép kiểu",
+    part: PART,
+    description: "Chuyển đổi số ↔ chuỗi: Number(), String(), parseInt",
+    questions: [
+      {
+        tier: 1, type: "MCQ",
+        prompt: 'Chuyển chuỗi "42" thành số dùng gì?',
+        options: ['Number("42")', 'Int("42")', '"42".toNumber()', 'parse("42")'],
+        correctIndex: 0,
+      },
+      {
+        tier: 1, type: "MCQ",
+        prompt: "Chuyển số 42 thành chuỗi dùng gì?",
+        options: ["String(42) hoặc (42).toString()", "toString(42)", "Str(42)", "42.text()"],
+        correctIndex: 0,
+      },
+      {
+        tier: 1, type: "MCQ",
+        prompt: 'Number("abc") trả về gì?',
+        options: ["NaN (không phải số)", "0", '"abc"', "Lỗi dừng chương trình"],
+        correctIndex: 0,
+      },
+      {
+        tier: 2, type: "MCQ",
+        prompt: 'parseInt("42px") trả về gì?',
+        options: [
+          "42 — đọc số từ đầu chuỗi tới khi gặp ký tự không phải số",
+          "NaN",
+          '"42px"',
+          "0",
+        ],
+        correctIndex: 0,
+      },
+      {
+        tier: 2, type: "MCQ",
+        prompt: "Vì sao giá trị từ ô input (form) cần Number() trước khi tính toán?",
+        options: [
+          "input luôn trả về CHUỖI; không ép kiểu thì '5' + '3' = '53' thay vì 8",
+          "Vì input trả về số sẵn",
+          "Vì input trả về boolean",
+          "Không cần ép bao giờ",
+        ],
+        correctIndex: 0,
+      },
+      {
+        tier: 2, type: "MCQ",
+        prompt: "Cách nhanh ép chuỗi số sang number là gì?",
+        options: [
+          'Toán tử + đứng trước: +"42" === 42',
+          '"42" * "1"',
+          'Cả hai cách trên đều ép sang số',
+          "Không có cách nhanh",
+        ],
+        correctIndex: 2,
+      },
+      {
+        tier: 3, type: "WRITE_JS",
+        prompt: "Cho const oTuoi = \"25\"; tạo const tuoiSo = Number(oTuoi) để chuyển sang số.",
+        requirements: [
+          { type: "contains", text: "tuoiSo", message: "Biến tuoiSo" },
+          { type: "contains", text: "Number(", message: "Dùng Number()" },
+          { type: "contains", text: "oTuoi", message: "Ép từ oTuoi" },
+        ],
+        starterCode: "// const oTuoi = \"25\";\n// const tuoiSo = Number(oTuoi);\n",
+      },
+    ],
+  },
+];

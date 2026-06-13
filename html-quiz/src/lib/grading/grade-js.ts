@@ -48,12 +48,14 @@ const normSpace = (s: string) => s.replace(/\s+/g, " ").trim();
 function checkStatic(req: JsStaticRequirement, raw: string, clean: string): RequirementResult {
   switch (req.type) {
     case "contains": {
-      const ok = normSpace(clean).includes(normSpace(req.text));
+      // Soi code GỐC — text yêu cầu có thể nằm trong chuỗi (vd nội dung console.log)
+      const ok = normSpace(raw).includes(normSpace(req.text));
       return ok
         ? { passed: true, message: req.message ?? `Có dùng \`${req.text}\`` }
         : { passed: false, message: req.message ?? `Cần dùng \`${req.text}\`` };
     }
     case "notContains": {
+      // Soi code đã bỏ comment/chuỗi — không tính từ cấm nằm trong string/comment
       const ok = !normSpace(clean).includes(normSpace(req.text));
       return { passed: ok, message: req.message };
     }

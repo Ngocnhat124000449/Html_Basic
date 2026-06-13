@@ -9,7 +9,8 @@
     "lint": "eslint",
     "test": "vitest run",
     "postinstall": "prisma generate",
-    "seed:css": "tsx prisma/seed-css.ts"
+    "seed:css": "tsx prisma/seed-css.ts",
+    "seed:js": "tsx prisma/seed-js.ts"
   },
   "dependencies": {
     "@prisma/adapter-pg": "^7.8.0",

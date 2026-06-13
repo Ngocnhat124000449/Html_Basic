@@ -16,7 +16,7 @@ export type ClientQuestion = {
 
 export type SessionTag = {
   tagId: string;
-  track: "html" | "css";
+  track: "html" | "css" | "js";
   name: string;
   topic: string;
   description: string;
