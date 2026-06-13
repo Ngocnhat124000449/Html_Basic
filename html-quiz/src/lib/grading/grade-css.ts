@@ -67,8 +67,10 @@ export function parseCss(input: string): CssRule[] {
         const colon = piece.indexOf(":");
         if (colon === -1) continue;
         const prop = normProp(piece.slice(0, colon));
-        const value = normValue(piece.slice(colon + 1));
-        if (prop.length > 0 && value.length > 0) rule.decls.set(prop, value);
+        // Giữ khai báo khi giá trị THÔ không rỗng — content: "" hợp lệ dù
+        // chuẩn hóa (bỏ quote) ra chuỗi rỗng
+        const rawValue = piece.slice(colon + 1).trim();
+        if (prop.length > 0 && rawValue.length > 0) rule.decls.set(prop, normValue(rawValue));
       }
     }
     i = close + 1;
