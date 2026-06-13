@@ -4,8 +4,10 @@ import { auth } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
 import { gradeCode, gradeFillBlank } from "@/lib/grading/grader";
 import { gradeCss } from "@/lib/grading/grade-css";
+import { gradeJsStatic } from "@/lib/grading/grade-js";
 import type { Requirement } from "@/lib/grading/types";
 import type { CssRequirement } from "@/lib/grading/css-types";
+import type { JsRequirement } from "@/lib/grading/js-types";
 
 const schema = z.object({
   questionId: z.string(),
@@ -51,6 +53,10 @@ export async function POST(req: Request) {
     correct = r.passed;
     results = r.results;
     parseError = r.parseError ?? false;
+  } else if (question.type === "WRITE_JS") {
+    const r = gradeJsStatic(String(answer), (question.requirements as JsRequirement[]) ?? []);
+    correct = r.passed;
+    results = r.results;
   } else {
     const r = gradeCode(String(answer), (question.requirements as Requirement[]) ?? []);
     correct = r.passed;
