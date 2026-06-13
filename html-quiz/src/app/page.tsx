@@ -12,7 +12,7 @@ export default async function DashboardPage() {
   const startOfDay = new Date(now);
   startOfDay.setHours(0, 0, 0, 0);
 
-  const [totalTags, progress, newToday, attemptsToday] = await Promise.all([
+  const [totalTags, progress, newToday, attemptsToday, cssTotal, cssProgress] = await Promise.all([
     prisma.tag.count({ where: { track: "html" } }),
     prisma.userTagProgress.findMany({ where: { userId, tag: { track: "html" } } }),
     prisma.userTagProgress.count({
@@ -23,7 +23,16 @@ export default async function DashboardPage() {
       include: { question: { select: { tag: { select: { id: true, name: true } } } } },
       orderBy: { createdAt: "asc" },
     }),
+    prisma.tag.count({ where: { track: "css" } }),
+    prisma.userTagProgress.findMany({ where: { userId, tag: { track: "css" } } }),
   ]);
+
+  // Thống kê khóa CSS cho thẻ khóa học ở hub
+  const cssMastered = cssProgress.filter((p) => p.mastered).length;
+  const cssDue = cssProgress.filter((p) => p.dueAt <= now).length;
+  const cssStarted = cssProgress.length;
+  const cssStartedPct = cssTotal > 0 ? Math.round((cssStarted / cssTotal) * 100) : 0;
+  const cssMasteredPct = cssTotal > 0 ? Math.round((cssMastered / cssTotal) * 100) : 0;
 
   const mastered = progress.filter((p) => p.mastered).length;
   const due = progress.filter((p) => p.dueAt <= now).length;
@@ -67,6 +76,73 @@ export default async function DashboardPage() {
         <h1 className="mt-1 font-display text-3xl font-bold tracking-tight">
           Xin chào, {session.user.name} 👋
         </h1>
+      </div>
+
+      {/* Hub đa khóa học: chọn khóa để học, mỗi khóa có tiến độ riêng */}
+      <section className="animate-rise stagger-1 space-y-3">
+        <h2 className="font-display text-lg font-bold">Khóa học của bạn</h2>
+        <div className="grid gap-3 sm:grid-cols-2">
+          {/* Khóa HTML */}
+          <Link
+            href="/study"
+            className="group rounded-2xl border border-flame-200 bg-flame-50/50 p-5 transition-all hover:-translate-y-0.5 hover:border-flame-400 hover:shadow-md"
+          >
+            <div className="flex items-center justify-between">
+              <span className="font-display text-lg font-bold">HTML</span>
+              <span className="rounded-full bg-flame-100 px-2.5 py-0.5 text-xs font-semibold text-flame-700">
+                {due > 0 ? `${due} đến hạn` : "cơ bản ✓"}
+              </span>
+            </div>
+            <p className="mt-1 text-sm text-ink/60">
+              Nắm vững {mastered}/{totalTags} thẻ ({masteredPct}%)
+            </p>
+            <div className="mt-3 h-2 overflow-hidden rounded-full bg-ink/10">
+              <div
+                className="h-full rounded-full bg-gradient-to-r from-flame-400 to-flame-600"
+                style={{ width: `${Math.max(masteredPct, startedPct)}%` }}
+              />
+            </div>
+            <span className="mt-3 inline-block text-sm font-medium text-flame-600 transition-transform group-hover:translate-x-1">
+              Tiếp tục học →
+            </span>
+          </Link>
+
+          {/* Khóa CSS (Beta) */}
+          <Link
+            href="/css"
+            className="group rounded-2xl border border-sky-200 bg-sky-50/50 p-5 transition-all hover:-translate-y-0.5 hover:border-sky-400 hover:shadow-md"
+          >
+            <div className="flex items-center justify-between">
+              <span className="font-display text-lg font-bold">
+                CSS{" "}
+                <span className="rounded-full bg-sky-100 px-2 py-0.5 align-middle text-xs font-semibold text-sky-700">
+                  Beta
+                </span>
+              </span>
+              <span className="rounded-full bg-sky-100 px-2.5 py-0.5 text-xs font-semibold text-sky-700">
+                {cssDue > 0 ? `${cssDue} đến hạn` : cssStarted > 0 ? "đang học" : "mới"}
+              </span>
+            </div>
+            <p className="mt-1 text-sm text-ink/60">
+              {cssStarted > 0
+                ? `Nắm vững ${cssMastered}/${cssTotal} mục (${cssMasteredPct}%)`
+                : `${cssTotal} mục · học theo phần`}
+            </p>
+            <div className="mt-3 h-2 overflow-hidden rounded-full bg-ink/10">
+              <div
+                className="h-full rounded-full bg-gradient-to-r from-sky-400 to-sky-600"
+                style={{ width: `${Math.max(cssMasteredPct, cssStartedPct)}%` }}
+              />
+            </div>
+            <span className="mt-3 inline-block text-sm font-medium text-sky-700 transition-transform group-hover:translate-x-1">
+              {cssStarted > 0 ? "Tiếp tục học →" : "Bắt đầu →"}
+            </span>
+          </Link>
+        </div>
+      </section>
+
+      <div>
+        <h2 className="mb-3 font-display text-lg font-bold">Tiến độ HTML hôm nay</h2>
       </div>
 
       <div className="grid grid-cols-3 gap-3 sm:gap-4">
@@ -223,26 +299,6 @@ export default async function DashboardPage() {
         className="animate-rise stagger-4 block rounded-2xl border border-ink/10 bg-surface p-4 text-center text-sm font-medium text-ink/70 transition-colors hover:border-flame-300 hover:text-flame-700"
       >
         Xem toàn bộ {totalTags} thẻ HTML →
-      </Link>
-
-      {/* Khóa học CSS — mở cổng Beta */}
-      <Link
-        href="/css"
-        className="animate-rise stagger-4 group block rounded-2xl border border-sky-200 bg-sky-50/60 p-5 transition-all hover:-translate-y-0.5 hover:border-sky-400 hover:shadow-md"
-      >
-        <p className="font-display text-lg font-bold">
-          🎨 Khóa học CSS{" "}
-          <span className="ml-1 rounded-full bg-sky-100 px-2 py-0.5 align-middle text-xs font-semibold text-sky-700">
-            Beta
-          </span>
-        </p>
-        <p className="mt-0.5 text-sm text-ink/60">
-          Học theo phần: Nền tảng → Giao diện → Bố cục → Hiệu ứng · lịch ôn tập riêng, không ảnh
-          hưởng tiến độ HTML
-        </p>
-        <span className="mt-2 inline-block text-sm font-medium text-sky-700 transition-transform group-hover:translate-x-1">
-          Xem lộ trình →
-        </span>
       </Link>
     </div>
   );

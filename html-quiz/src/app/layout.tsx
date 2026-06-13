@@ -26,8 +26,8 @@ const jetbrains = JetBrains_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "HTML Quiz — Học thẻ HTML mỗi ngày",
-  description: "Học thẻ HTML qua trắc nghiệm và gõ code, ôn tập ngắt quãng (SRS)",
+  title: "WebQuiz — Học lập trình web mỗi ngày",
+  description: "Học HTML, CSS qua trắc nghiệm và gõ code, ôn tập ngắt quãng (SRS)",
 };
 
 export default async function RootLayout({
@@ -51,7 +51,7 @@ export default async function RootLayout({
                 &lt;/&gt;
               </span>
               <span className="hidden whitespace-nowrap font-display text-lg font-bold tracking-tight min-[420px]:inline">
-                HTML Quiz
+                WebQuiz
               </span>
             </Link>
             {session && (
