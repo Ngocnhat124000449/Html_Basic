@@ -4,6 +4,7 @@ import { useCallback, useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import { REFLEX_QUESTIONS } from "@/lib/reflex-data";
 import { ATTRIBUTE_REFLEX_QUESTIONS } from "@/lib/attribute-reflex-data";
+import { CSS_REFLEX_QUESTIONS } from "@/lib/css-reflex-data";
 
 const TIME_FAST = 45; // giây — trắc nghiệm, điền thẻ, phản xạ
 const TIME_CODE = 90; // giây — viết thẻ, sửa bug, viết cấu trúc
@@ -33,7 +34,8 @@ type Item =
       tag: string;
       prompt: string;
       explain: string;
-    };
+    }
+  | { kind: "cssreflex"; answer: string; accept?: string[]; prompt: string; explain: string };
 
 type Outcome = {
   correct: boolean;
@@ -58,6 +60,7 @@ const TYPE_BADGE: Record<string, { label: string; cls: string }> = {
   WRITE_CSS: { label: "Viết CSS", cls: "bg-sky-100 text-sky-700" },
   REFLEX: { label: "Phản xạ thẻ", cls: "bg-emerald-100 text-emerald-700" },
   ATTR: { label: "Thuộc tính", cls: "bg-indigo-100 text-indigo-700" },
+  CSSREFLEX: { label: "Phản xạ CSS", cls: "bg-cyan-100 text-cyan-700" },
 };
 
 const norm = (s: string) => s.toLowerCase().replace(/[<>/\s]/g, "");
@@ -74,11 +77,14 @@ const SCOPE_META: Record<Scope, string> = {
   css: "Chỉ CSS",
 };
 
-// "css" = chỉ câu DB của CSS; "html" = câu DB html + phản xạ thẻ/thuộc tính (vốn của HTML)
+// "css" = câu DB css + phản xạ CSS; "html" = câu DB html + phản xạ thẻ/thuộc tính
 function filterScope(p: Item[], scope: Scope): Item[] {
   if (scope === "all") return p;
-  if (scope === "css") return p.filter((it) => it.kind === "db" && it.track === "css");
-  return p.filter((it) => it.kind !== "db" || it.track === "html");
+  if (scope === "css")
+    return p.filter((it) => it.kind === "cssreflex" || (it.kind === "db" && it.track === "css"));
+  return p.filter(
+    (it) => it.kind === "reflex" || it.kind === "attr" || (it.kind === "db" && it.track === "html")
+  );
 }
 
 function shuffle<T>(arr: T[]): T[] {
@@ -128,7 +134,11 @@ export default function PracticeGame() {
           kind: "attr" as const,
           ...q,
         }));
-        setPool([...db, ...reflex, ...attrs]);
+        const cssReflex: Item[] = CSS_REFLEX_QUESTIONS.map((q) => ({
+          kind: "cssreflex" as const,
+          ...q,
+        }));
+        setPool([...db, ...reflex, ...attrs, ...cssReflex]);
       });
   }, []);
 
@@ -178,6 +188,17 @@ export default function PracticeGame() {
           (targets.includes(ni) || (!!item.prefix && ni.startsWith(normAttr(item.attr))));
         applyOutcome(
           { correct, timedOut, answerLabel: item.attr, explain: item.explain },
+          item.prompt
+        );
+        return;
+      }
+
+      if (item.kind === "cssreflex") {
+        const ni = normAttr(input);
+        const targets = [item.answer, ...(item.accept ?? [])].map(normAttr);
+        const correct = !timedOut && ni !== "" && targets.includes(ni);
+        applyOutcome(
+          { correct, timedOut, answerLabel: item.answer, explain: item.explain },
           item.prompt
         );
         return;
@@ -385,7 +406,15 @@ export default function PracticeGame() {
   const timerColor =
     timePct > 50 ? "bg-flame-500" : timePct > 25 ? "bg-amber-500" : "bg-red-500";
   const badge =
-    TYPE_BADGE[item.kind === "db" ? item.type : item.kind === "attr" ? "ATTR" : "REFLEX"];
+    TYPE_BADGE[
+      item.kind === "db"
+        ? item.type
+        : item.kind === "attr"
+          ? "ATTR"
+          : item.kind === "cssreflex"
+            ? "CSSREFLEX"
+            : "REFLEX"
+    ];
   const isMcq = item.kind === "db" && item.type === "MCQ";
   const isMultiline =
     item.kind === "db" && (item.type === "WRITE_STRUCTURE" || item.type === "WRITE_CSS");
@@ -487,7 +516,9 @@ export default function PracticeGame() {
                   ? "Gõ tên thẻ rồi nhấn Enter... (vd: video)"
                   : item.kind === "attr"
                     ? "Gõ tên thuộc tính rồi nhấn Enter... (vd: required)"
-                    : "Gõ câu trả lời rồi nhấn Enter..."
+                    : item.kind === "cssreflex"
+                      ? "Gõ thuộc tính CSS rồi nhấn Enter... (vd: font-weight)"
+                      : "Gõ câu trả lời rồi nhấn Enter..."
               }
               className="mt-5 w-full rounded-xl border-2 border-ink/10 bg-paper p-4 font-mono text-sm transition-colors focus:border-flame-400 focus:outline-none disabled:opacity-60"
               onKeyDown={(e) => {

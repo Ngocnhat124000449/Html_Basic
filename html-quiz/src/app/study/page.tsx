@@ -4,6 +4,10 @@ import { useCallback, useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import type { AnswerResult, SessionTag } from "@/lib/study-types";
 import { TAG_ATTRIBUTES, type AttrImportance } from "@/lib/attribute-data";
+import {
+  findCssPropertyForMuc,
+  type CssValueImportance,
+} from "@/lib/css-value-data";
 
 const TIER_INFO: Record<number, { label: string; cls: string }> = {
   1: { label: "Bậc 1 · Nhận biết", cls: "bg-sky-100 text-sky-700" },
@@ -23,8 +27,15 @@ const MAX_WRONG = 3;
 const tagLabel = (tag: { track: "html" | "css"; name: string }) =>
   tag.track === "css" ? tag.name : `<${tag.name}>`;
 
-// Màn làm quen mục CSS mới: chương + mô tả trước khi vào câu hỏi
+const CSS_VALUE_META: Record<CssValueImportance, { title: string; chip: string }> = {
+  essential: { title: "★ Giá trị quan trọng nhất", chip: "bg-sky-600 text-white" },
+  common: { title: "● Giá trị hay dùng", chip: "bg-violet-600 text-white" },
+  rare: { title: "○ Giá trị ít dùng", chip: "bg-ink/70 text-white" },
+};
+
+// Màn làm quen mục CSS mới: chương + mô tả + giá trị 3 mức (nếu mục là một thuộc tính)
 function CssIntro({ tag, onStart }: { tag: SessionTag; onStart: () => void }) {
+  const propEntry = findCssPropertyForMuc(tag.name);
   return (
     <div className="animate-rise space-y-5 py-8">
       <div className="text-center">
@@ -38,6 +49,40 @@ function CssIntro({ tag, onStart }: { tag: SessionTag; onStart: () => void }) {
         </p>
         <p className="mt-3 text-lg leading-relaxed text-ink/80">{tag.description}</p>
       </div>
+
+      {propEntry && (
+        <div className="rounded-2xl border border-ink/10 bg-surface p-5 text-left">
+          <h2 className="font-display font-bold">
+            Giá trị của <code className="font-mono text-sky-700">{propEntry.prop}</code>
+          </h2>
+          {propEntry.note && <p className="mt-1 text-sm text-ink/60">💡 {propEntry.note}</p>}
+          {(["essential", "common", "rare"] as CssValueImportance[]).map((imp) => {
+            const group = propEntry.values.filter((v) => v.importance === imp);
+            if (group.length === 0) return null;
+            const meta = CSS_VALUE_META[imp];
+            return (
+              <div key={imp} className="mt-4">
+                <p className="text-xs font-semibold uppercase tracking-wide text-ink/50">
+                  {meta.title}
+                </p>
+                <ul className="mt-2 space-y-2">
+                  {group.map((v) => (
+                    <li key={v.value} className="text-sm leading-relaxed">
+                      <code className={`mr-1.5 rounded px-1.5 py-0.5 font-mono text-xs font-bold ${meta.chip}`}>
+                        {v.value}
+                      </code>
+                      {v.desc}
+                      <span className="text-ink/50"> · {v.when}</span>
+                      {v.warn && <span className="text-amber-700"> ⚠️ {v.warn}</span>}
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            );
+          })}
+        </div>
+      )}
+
       <div className="text-center">
         <button
           onClick={onStart}

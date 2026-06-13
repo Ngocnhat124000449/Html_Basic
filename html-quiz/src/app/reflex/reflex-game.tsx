@@ -4,23 +4,39 @@ import { useCallback, useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import { REFLEX_QUESTIONS } from "@/lib/reflex-data";
 import { ATTRIBUTE_REFLEX_QUESTIONS } from "@/lib/attribute-reflex-data";
+import { CSS_REFLEX_QUESTIONS } from "@/lib/css-reflex-data";
 
 const ROUND_SIZE = 10;
 const TIME_PER_QUESTION = 45; // giây
 
-type Mode = "tag" | "attr";
+type Mode = "tag" | "attr" | "css";
 
-// Câu hỏi đã chuẩn hóa cho cả 2 chế độ
+// Câu hỏi đã chuẩn hóa cho cả 3 chế độ
 type RoundItem = {
   prompt: string;
   explain: string;
-  /** Đáp án hiển thị: "video" hoặc "required" */
+  /** Đáp án hiển thị: "video", "required" hoặc "font-weight" */
   answer: string;
   /** Các đáp án chấp nhận (đã gồm answer) */
   targets: string[];
   /** Chấp nhận đáp án bắt đầu bằng answer (data-*) */
   prefix?: boolean;
-  isAttr: boolean;
+  /** Hiển thị đáp án dạng trần (thuộc tính/CSS) thay vì bọc <> như thẻ */
+  plain: boolean;
+};
+
+const MODE_META: Record<Mode, { unit: string; ask: string; placeholder: string }> = {
+  tag: { unit: "Thẻ", ask: "thẻ nào?", placeholder: "Gõ tên thẻ rồi nhấn Enter... (vd: video)" },
+  attr: {
+    unit: "Thuộc tính",
+    ask: "thuộc tính nào?",
+    placeholder: "Gõ tên thuộc tính rồi nhấn Enter... (vd: required)",
+  },
+  css: {
+    unit: "CSS",
+    ask: "thuộc tính CSS nào?",
+    placeholder: "Gõ tên thuộc tính CSS rồi nhấn Enter... (vd: font-weight)",
+  },
 };
 
 // Chuẩn hóa: bỏ <>, quotes, khoảng trắng, *; với thuộc tính lấy phần trước dấu =
@@ -44,23 +60,33 @@ function shuffle<T>(arr: T[]): T[] {
 }
 
 function buildRound(mode: Mode): RoundItem[] {
-  const pool: RoundItem[] =
-    mode === "tag"
-      ? REFLEX_QUESTIONS.map((q) => ({
-          prompt: q.prompt,
-          explain: q.explain,
-          answer: q.tag,
-          targets: [norm(q.tag)],
-          isAttr: false,
-        }))
-      : ATTRIBUTE_REFLEX_QUESTIONS.map((q) => ({
-          prompt: q.prompt,
-          explain: q.explain,
-          answer: q.attr,
-          targets: [q.attr, ...(q.accept ?? [])].map(norm),
-          prefix: q.prefix,
-          isAttr: true,
-        }));
+  let pool: RoundItem[];
+  if (mode === "tag") {
+    pool = REFLEX_QUESTIONS.map((q) => ({
+      prompt: q.prompt,
+      explain: q.explain,
+      answer: q.tag,
+      targets: [norm(q.tag)],
+      plain: false,
+    }));
+  } else if (mode === "attr") {
+    pool = ATTRIBUTE_REFLEX_QUESTIONS.map((q) => ({
+      prompt: q.prompt,
+      explain: q.explain,
+      answer: q.attr,
+      targets: [q.attr, ...(q.accept ?? [])].map(norm),
+      prefix: q.prefix,
+      plain: true,
+    }));
+  } else {
+    pool = CSS_REFLEX_QUESTIONS.map((q) => ({
+      prompt: q.prompt,
+      explain: q.explain,
+      answer: q.answer,
+      targets: [q.answer, ...(q.accept ?? [])].map(norm),
+      plain: true,
+    }));
+  }
 
   const seen = new Set<string>();
   const round: RoundItem[] = [];
@@ -79,7 +105,7 @@ type Phase = "intro" | "playing" | "done";
 function AnswerChip({ item }: { item: RoundItem }) {
   return (
     <code className="rounded bg-ink px-1.5 py-0.5 font-mono text-sm font-bold text-flame-300">
-      {item.isAttr ? item.answer : `<${item.answer}>`}
+      {item.plain ? item.answer : `<${item.answer}>`}
     </code>
   );
 }
@@ -187,24 +213,27 @@ export default function ReflexGame() {
             <span>🧘</span> Chế độ luyện tự do — không ảnh hưởng lịch ôn tập
           </li>
         </ul>
-        <div className="mt-8 grid gap-3 sm:grid-cols-2">
+        <div className="mt-8 grid gap-3 sm:grid-cols-3">
           <button
             onClick={() => start("tag")}
-            className="rounded-2xl bg-flame-500 px-6 py-4 text-white shadow-lg shadow-flame-500/30 transition-all hover:-translate-y-0.5 hover:bg-flame-600 hover:shadow-xl"
+            className="rounded-2xl bg-flame-500 px-5 py-4 text-white shadow-lg shadow-flame-500/30 transition-all hover:-translate-y-0.5 hover:bg-flame-600 hover:shadow-xl"
           >
             <span className="block font-display text-lg font-bold">⚡ Phản xạ thẻ</span>
-            <span className="mt-0.5 block text-sm text-white/80">
-              Tình huống → gõ tên thẻ (60 thẻ)
-            </span>
+            <span className="mt-0.5 block text-sm text-white/80">Tình huống → gõ tên thẻ</span>
           </button>
           <button
             onClick={() => start("attr")}
-            className="rounded-2xl bg-ink px-6 py-4 text-white shadow-lg shadow-ink/30 transition-all hover:-translate-y-0.5 hover:bg-ink/85 hover:shadow-xl"
+            className="rounded-2xl bg-ink px-5 py-4 text-white shadow-lg shadow-ink/30 transition-all hover:-translate-y-0.5 hover:bg-ink/85 hover:shadow-xl"
           >
             <span className="block font-display text-lg font-bold">🧬 Phản xạ thuộc tính</span>
-            <span className="mt-0.5 block text-sm text-white/80">
-              Tình huống → gõ tên thuộc tính
-            </span>
+            <span className="mt-0.5 block text-sm text-white/80">Tình huống → gõ thuộc tính HTML</span>
+          </button>
+          <button
+            onClick={() => start("css")}
+            className="rounded-2xl bg-sky-600 px-5 py-4 text-white shadow-lg shadow-sky-600/30 transition-all hover:-translate-y-0.5 hover:bg-sky-700 hover:shadow-xl"
+          >
+            <span className="block font-display text-lg font-bold">🎨 Phản xạ CSS</span>
+            <span className="mt-0.5 block text-sm text-white/80">Tình huống → gõ thuộc tính CSS</span>
           </button>
         </div>
       </div>
@@ -281,7 +310,7 @@ export default function ReflexGame() {
         <span className="font-medium text-ink/60">
           Câu {idx + 1}/{round.length}
           <span className="ml-2 rounded-full bg-ink/5 px-2 py-0.5 text-xs">
-            {mode === "tag" ? "Thẻ" : "Thuộc tính"}
+            {MODE_META[mode].unit}
           </span>
         </span>
         <span className="font-display font-bold text-flame-600">
@@ -302,7 +331,7 @@ export default function ReflexGame() {
         className="animate-pop rounded-2xl border border-ink/10 bg-surface p-6 shadow-sm"
       >
         <p className="text-xs font-semibold uppercase tracking-wide text-flame-600">
-          Tình huống — {mode === "tag" ? "thẻ nào?" : "thuộc tính nào?"}
+          Tình huống — {MODE_META[mode].ask}
         </p>
         <p className="mt-2 text-lg font-medium leading-relaxed">{q.prompt}</p>
 
@@ -313,11 +342,7 @@ export default function ReflexGame() {
           disabled={!!feedback}
           spellCheck={false}
           autoComplete="off"
-          placeholder={
-            mode === "tag"
-              ? "Gõ tên thẻ rồi nhấn Enter... (vd: video)"
-              : "Gõ tên thuộc tính rồi nhấn Enter... (vd: required)"
-          }
+          placeholder={MODE_META[mode].placeholder}
           className="mt-5 w-full rounded-xl border-2 border-ink/10 bg-paper p-4 font-mono text-sm transition-colors focus:border-flame-400 focus:outline-none disabled:opacity-60"
           onKeyDown={(e) => {
             if (e.key !== "Enter" || feedback || !input.trim()) return;
