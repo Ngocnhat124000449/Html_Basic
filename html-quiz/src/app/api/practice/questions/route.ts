@@ -10,10 +10,10 @@ export async function GET() {
     return NextResponse.json({ error: "Chưa đăng nhập" }, { status: 401 });
   }
 
+  // Cả hai track — client lọc theo phạm vi người dùng chọn (HTML / CSS / tất cả)
   const questions = await prisma.question.findMany({
-    where: { tag: { track: "html" } },
-    include: { tag: { select: { name: true, description: true } } },
-    orderBy: { tag: { order: "asc" } },
+    include: { tag: { select: { name: true, description: true, track: true } } },
+    orderBy: [{ tag: { track: "asc" } }, { tag: { order: "asc" } }],
   });
 
   return NextResponse.json({
@@ -25,6 +25,7 @@ export async function GET() {
       starterCode: q.starterCode,
       tagName: q.tag.name,
       tagDescription: q.tag.description,
+      track: q.tag.track,
     })),
   });
 }

@@ -8,7 +8,9 @@ import { ATTRIBUTE_REFLEX_QUESTIONS } from "@/lib/attribute-reflex-data";
 const TIME_FAST = 45; // giây — trắc nghiệm, điền thẻ, phản xạ
 const TIME_CODE = 90; // giây — viết thẻ, sửa bug, viết cấu trúc
 
-type DbType = "MCQ" | "FILL_BLANK" | "WRITE_TAG" | "FIX_BUG" | "WRITE_STRUCTURE";
+type DbType = "MCQ" | "FILL_BLANK" | "WRITE_TAG" | "FIX_BUG" | "WRITE_STRUCTURE" | "WRITE_CSS";
+type Track = "html" | "css";
+type Scope = "all" | "html" | "css";
 
 type Item =
   | {
@@ -20,6 +22,7 @@ type Item =
       starterCode: string | null;
       tagName: string;
       tagDescription: string;
+      track: Track;
     }
   | { kind: "reflex"; tag: string; prompt: string; explain: string }
   | {
@@ -52,6 +55,7 @@ const TYPE_BADGE: Record<string, { label: string; cls: string }> = {
   WRITE_TAG: { label: "Viết code", cls: "bg-flame-100 text-flame-700" },
   FIX_BUG: { label: "Sửa bug", cls: "bg-rose-100 text-rose-700" },
   WRITE_STRUCTURE: { label: "Viết cấu trúc", cls: "bg-amber-100 text-amber-700" },
+  WRITE_CSS: { label: "Viết CSS", cls: "bg-sky-100 text-sky-700" },
   REFLEX: { label: "Phản xạ thẻ", cls: "bg-emerald-100 text-emerald-700" },
   ATTR: { label: "Thuộc tính", cls: "bg-indigo-100 text-indigo-700" },
 };
@@ -59,6 +63,23 @@ const TYPE_BADGE: Record<string, { label: string; cls: string }> = {
 const norm = (s: string) => s.toLowerCase().replace(/[<>/\s]/g, "");
 // Với thuộc tính: lấy phần trước dấu =, bỏ quotes và *
 const normAttr = (s: string) => s.toLowerCase().split("=")[0].replace(/[<>"'`/\s*]/g, "");
+
+// Nhãn đáp án: thẻ HTML bọc <>, mục CSS hiện tên trần
+const labelFor = (track: Track | undefined, name: string) =>
+  track === "css" ? name : `<${name}>`;
+
+const SCOPE_META: Record<Scope, string> = {
+  all: "HTML + CSS",
+  html: "Chỉ HTML",
+  css: "Chỉ CSS",
+};
+
+// "css" = chỉ câu DB của CSS; "html" = câu DB html + phản xạ thẻ/thuộc tính (vốn của HTML)
+function filterScope(p: Item[], scope: Scope): Item[] {
+  if (scope === "all") return p;
+  if (scope === "css") return p.filter((it) => it.kind === "db" && it.track === "css");
+  return p.filter((it) => it.kind !== "db" || it.track === "html");
+}
 
 function shuffle<T>(arr: T[]): T[] {
   const a = [...arr];
@@ -79,6 +100,7 @@ function timeFor(item: Item): number {
 export default function PracticeGame() {
   const [phase, setPhase] = useState<Phase>("intro");
   const [pool, setPool] = useState<Item[] | null>(null);
+  const [scope, setScope] = useState<Scope>("all");
   const [items, setItems] = useState<Item[]>([]);
   const [ptr, setPtr] = useState(0);
   const [input, setInput] = useState("");
@@ -176,7 +198,7 @@ export default function PracticeGame() {
           {
             correct: !timedOut && !!data.correct,
             timedOut,
-            answerLabel: `<${data.tagName ?? item.tagName}>`,
+            answerLabel: labelFor(data.track ?? item.track, data.tagName ?? item.tagName),
             explain: data.tagDescription ?? item.tagDescription,
             correctIndex: data.correctIndex,
             correctAnswer: data.correctAnswer,
@@ -217,7 +239,7 @@ export default function PracticeGame() {
 
   function start() {
     if (!pool) return;
-    setItems(shuffle(pool));
+    setItems(shuffle(filterScope(pool, scope)));
     setPtr(0);
     setInput("");
     setSelected(null);
@@ -246,17 +268,39 @@ export default function PracticeGame() {
 
   // ===== Màn giới thiệu =====
   if (phase === "intro") {
+    const scopeCount = pool ? filterScope(pool, scope).length : 0;
     return (
       <div className="animate-rise mx-auto max-w-lg py-16 text-center">
         <p className="text-5xl">🎯</p>
         <h1 className="mt-4 font-display text-3xl font-bold tracking-tight">Luyện tổng hợp</h1>
         <p className="mt-3 leading-relaxed text-ink/70">
-          Trộn ngẫu nhiên <strong>mọi dạng câu hỏi</strong> từ 60 thẻ: trắc nghiệm, điền thẻ,
-          viết code, sửa bug, phản xạ thẻ và phản xạ thuộc tính. Chơi đến khi nào bạn muốn dừng.
+          Trộn ngẫu nhiên <strong>mọi dạng câu hỏi</strong>: trắc nghiệm, điền thẻ, viết code/CSS,
+          sửa bug, phản xạ thẻ và thuộc tính. Chơi đến khi nào bạn muốn dừng.
         </p>
+
+        {/* Chọn phạm vi luyện tập */}
+        <div className="mt-6">
+          <p className="mb-2 text-sm font-medium text-ink/60">Phạm vi luyện</p>
+          <div className="inline-flex rounded-full border border-ink/15 bg-surface p-1">
+            {(Object.keys(SCOPE_META) as Scope[]).map((s) => (
+              <button
+                key={s}
+                onClick={() => setScope(s)}
+                className={`rounded-full px-4 py-1.5 text-sm font-medium transition-colors ${
+                  scope === s
+                    ? "bg-flame-500 text-white shadow-sm"
+                    : "text-ink/60 hover:text-flame-700"
+                }`}
+              >
+                {SCOPE_META[s]}
+              </button>
+            ))}
+          </div>
+        </div>
+
         <ul className="mx-auto mt-6 max-w-sm space-y-2 text-left text-sm text-ink/70">
           <li className="flex gap-2">
-            <span>♾️</span> Vô tận — hết ~780 câu sẽ tự xáo lại vòng mới
+            <span>♾️</span> Vô tận — hết {pool ? `${scopeCount} câu` : "câu"} sẽ tự xáo lại vòng mới
           </li>
           <li className="flex gap-2">
             <span>⏱️</span> {TIME_FAST}s câu nhanh · {TIME_CODE}s câu gõ code
@@ -270,7 +314,7 @@ export default function PracticeGame() {
         </ul>
         <button
           onClick={start}
-          disabled={!pool}
+          disabled={!pool || scopeCount === 0}
           className="mt-8 rounded-full bg-flame-500 px-8 py-3 font-display text-lg font-bold text-white shadow-lg shadow-flame-500/30 transition-all hover:-translate-y-0.5 hover:bg-flame-600 hover:shadow-xl disabled:opacity-50"
         >
           {pool ? "Bắt đầu 🎯" : "Đang tải câu hỏi..."}
@@ -343,7 +387,8 @@ export default function PracticeGame() {
   const badge =
     TYPE_BADGE[item.kind === "db" ? item.type : item.kind === "attr" ? "ATTR" : "REFLEX"];
   const isMcq = item.kind === "db" && item.type === "MCQ";
-  const isMultiline = item.kind === "db" && item.type === "WRITE_STRUCTURE";
+  const isMultiline =
+    item.kind === "db" && (item.type === "WRITE_STRUCTURE" || item.type === "WRITE_CSS");
   const canSubmit = isMcq ? selected !== null : input.trim() !== "";
 
   return (
@@ -422,7 +467,11 @@ export default function PracticeGame() {
               disabled={!!feedback}
               rows={5}
               spellCheck={false}
-              placeholder="Gõ code của bạn (nhiều dòng)..."
+              placeholder={
+                item.kind === "db" && item.type === "WRITE_CSS"
+                  ? "Gõ CSS của bạn... (vd: p { color: red; })"
+                  : "Gõ code của bạn (nhiều dòng)..."
+              }
               className="mt-5 w-full rounded-xl border-2 border-ink/10 bg-paper p-4 font-mono text-sm transition-colors focus:border-flame-400 focus:outline-none disabled:opacity-60"
             />
           ) : (

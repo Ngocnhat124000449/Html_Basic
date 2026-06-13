@@ -3,7 +3,9 @@ import { z } from "zod";
 import { auth } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
 import { gradeCode, gradeFillBlank } from "@/lib/grading/grader";
+import { gradeCss } from "@/lib/grading/grade-css";
 import type { Requirement } from "@/lib/grading/types";
+import type { CssRequirement } from "@/lib/grading/css-types";
 
 const schema = z.object({
   questionId: z.string(),
@@ -28,7 +30,7 @@ export async function POST(req: Request) {
 
   const question = await prisma.question.findUnique({
     where: { id: questionId },
-    include: { tag: { select: { name: true, description: true } } },
+    include: { tag: { select: { name: true, description: true, track: true } } },
   });
   if (!question) {
     return NextResponse.json({ error: "Không tìm thấy câu hỏi" }, { status: 404 });
@@ -44,6 +46,11 @@ export async function POST(req: Request) {
     const r = gradeFillBlank(String(answer), question.answer ?? "");
     correct = r.passed;
     results = r.results;
+  } else if (question.type === "WRITE_CSS") {
+    const r = gradeCss(String(answer), (question.requirements as CssRequirement[]) ?? []);
+    correct = r.passed;
+    results = r.results;
+    parseError = r.parseError ?? false;
   } else {
     const r = gradeCode(String(answer), (question.requirements as Requirement[]) ?? []);
     correct = r.passed;
@@ -69,5 +76,6 @@ export async function POST(req: Request) {
     correctAnswer: question.type === "FILL_BLANK" ? question.answer : null,
     tagName: question.tag.name,
     tagDescription: question.tag.description,
+    track: question.tag.track,
   });
 }
