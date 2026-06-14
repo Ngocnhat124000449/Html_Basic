@@ -4,14 +4,22 @@ import { auth } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
 import { gradeCode, gradeFillBlank } from "@/lib/grading/grader";
 import { gradeCss } from "@/lib/grading/grade-css";
-import { gradeJsStatic } from "@/lib/grading/grade-js";
+import { gradeJs } from "@/lib/grading/grade-js";
 import type { Requirement } from "@/lib/grading/types";
 import type { CssRequirement } from "@/lib/grading/css-types";
-import type { JsRequirement } from "@/lib/grading/js-types";
+import type { JsRequirement, JsRunOutput } from "@/lib/grading/js-types";
+
+// Output thô client chạy trong Web Worker gửi về (server KHÔNG tự chạy code).
+const runOutputSchema = z.union([
+  z.object({ value: z.union([z.string(), z.number(), z.boolean(), z.null()]) }),
+  z.object({ logs: z.string() }),
+  z.object({ error: z.string() }),
+]);
 
 const schema = z.object({
   questionId: z.string(),
   answer: z.union([z.string(), z.number()]),
+  runOutputs: z.array(runOutputSchema).optional(),
 });
 
 export async function POST(req: Request) {
@@ -25,7 +33,7 @@ export async function POST(req: Request) {
   if (!parsed.success) {
     return NextResponse.json({ error: "Dữ liệu không hợp lệ" }, { status: 400 });
   }
-  const { questionId, answer } = parsed.data;
+  const { questionId, answer, runOutputs } = parsed.data;
 
   const question = await prisma.question.findUnique({ where: { id: questionId } });
   if (!question) {
@@ -48,8 +56,13 @@ export async function POST(req: Request) {
     results = r.results;
     parseError = r.parseError ?? false;
   } else if (question.type === "WRITE_JS") {
-    // Chỉ chấm phần tĩnh ở server; phần "chạy thật" do client (Web Worker) hoàn tất.
-    const r = gradeJsStatic(String(answer), (question.requirements as JsRequirement[]) ?? []);
+    // Phần tĩnh chấm tại server; phần "chạy thật" so với runOutputs client gửi
+    // (đã chạy trong Web Worker) — server KHÔNG bao giờ tự eval code người học.
+    const r = gradeJs(
+      String(answer),
+      (question.requirements as JsRequirement[]) ?? [],
+      runOutputs as JsRunOutput[] | undefined
+    );
     correct = r.passed;
     results = r.results;
   } else {

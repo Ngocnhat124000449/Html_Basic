@@ -3,6 +3,7 @@ import type { Prisma } from "@/generated/prisma/client";
 import { auth } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
 import type { ClientQuestion, SessionTag } from "@/lib/study-types";
+import { toRunSpecs, type JsRequirement } from "@/lib/grading/js-types";
 
 const NEW_PER_DAY = 5;
 const SESSION_CAP = 10;
@@ -39,6 +40,11 @@ function toClient(tag: TagWithQuestions, isNew: boolean): SessionTag {
         prompt: q.prompt,
         options: (q.options as string[] | null) ?? null,
         starterCode: q.starterCode,
+        // Câu JS có run requirement → gửi spec (đã loại `equals`) để client chạy thử
+        runSpecs:
+          q.type === "WRITE_JS"
+            ? toRunSpecs((q.requirements as JsRequirement[]) ?? [])
+            : null,
       })
     ),
   };

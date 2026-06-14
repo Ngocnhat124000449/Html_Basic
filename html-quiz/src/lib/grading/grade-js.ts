@@ -3,8 +3,11 @@ import {
   isRunRequirement,
   type JsConstruct,
   type JsRequirement,
-  type JsStaticRequirement,
+  type JsRunOutput,
+  type JsRunRequirement,
+  type JsScalar,
 } from "./js-types";
+import type { JsStaticRequirement } from "./js-types";
 
 // Regex CỐ ĐỊNH cho từng cấu trúc — không nhận pattern động (tránh ReDoS).
 // Tất cả đều tuyến tính, không có nhóm lồng có thể bùng nổ.
@@ -75,18 +78,83 @@ function checkStatic(req: JsStaticRequirement, raw: string, clean: string): Requ
   }
 }
 
+// Hiển thị scalar gọn cho thông báo (chuỗi bọc nháy để thấy rõ khoảng trắng)
+function fmt(v: JsScalar): string {
+  return typeof v === "string" ? `"${v}"` : String(v);
+}
+
+// So một run requirement với output thô client gửi về. KHÔNG thực thi gì ở đây.
+function checkRun(req: JsRunRequirement, out: JsRunOutput | undefined): RequirementResult {
+  if (!out) {
+    return { passed: false, message: req.message ?? "Chưa chạy được code để kiểm tra" };
+  }
+  if ("error" in out) {
+    return { passed: false, message: out.error };
+  }
+  if (req.type === "returns") {
+    if (!("value" in out)) {
+      return { passed: false, message: req.message ?? "Hàm chưa trả về giá trị" };
+    }
+    const ok = out.value === req.equals;
+    return ok
+      ? { passed: true, message: req.message ?? `${req.call} trả về ${fmt(req.equals)} ✓` }
+      : {
+          passed: false,
+          message: `${req.call} cần trả về ${fmt(req.equals)}, nhưng nhận ${fmt(out.value)}`,
+        };
+  }
+  // logs
+  if (!("logs" in out)) {
+    return { passed: false, message: req.message ?? "Chưa in ra gì" };
+  }
+  const norm = (s: string) => s.replace(/\r/g, "").trimEnd();
+  const ok = norm(out.logs) === norm(req.equals);
+  return ok
+    ? { passed: true, message: req.message ?? `In ra đúng: ${fmt(req.equals)} ✓` }
+    : { passed: false, message: `Cần in ra ${fmt(req.equals)}, nhưng nhận ${fmt(out.logs)}` };
+}
+
 /**
- * Chấm phần TĨNH của câu WRITE_JS (kiểm tra mẫu). An toàn, không thực thi code.
- * Requirement dạng run (returns/logs) được đánh dấu chờ chạy ở client (Web Worker).
+ * Chấm câu WRITE_JS. Phần TĨNH (contains/notContains/construct) chấm bằng kiểm tra mẫu.
+ * Phần ĐỘNG (returns/logs) so với `runOutputs` mà CLIENT đã chạy trong Web Worker —
+ * server KHÔNG bao giờ thực thi code người học (tránh eval mã không tin cậy).
+ *
+ * `runOutputs` xếp theo đúng thứ tự các run requirement (xem `toRunSpecs`).
+ * Nếu không truyền (vd client cũ / worker hỏng), các run requirement bị coi là chưa đạt.
+ */
+export function gradeJs(
+  code: string,
+  requirements: JsRequirement[],
+  runOutputs?: JsRunOutput[]
+): GradeResult {
+  if (code.trim() === "") {
+    return {
+      passed: false,
+      results: requirements.map(() => ({ passed: false, message: "Bạn chưa viết code" })),
+    };
+  }
+
+  const clean = stripNoise(code);
+  let runIdx = 0;
+  const results = requirements.map((req): RequirementResult => {
+    if (isRunRequirement(req)) {
+      return checkRun(req, runOutputs?.[runIdx++]);
+    }
+    return checkStatic(req, code, clean);
+  });
+
+  return { passed: results.every((r) => r.passed), results };
+}
+
+/**
+ * Chấm chỉ phần TĨNH (run requirement bị coi là chờ chạy). Dùng khi chưa có runOutputs.
+ * Tương đương `gradeJs(code, requirements)` nhưng thông báo rõ "chờ chạy".
  */
 export function gradeJsStatic(code: string, requirements: JsRequirement[]): GradeResult {
   if (code.trim() === "") {
     return {
       passed: false,
-      results: requirements.map(() => ({
-        passed: false,
-        message: "Bạn chưa viết code",
-      })),
+      results: requirements.map(() => ({ passed: false, message: "Bạn chưa viết code" })),
     };
   }
 

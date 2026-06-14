@@ -8,6 +8,7 @@ import {
   findCssPropertyForMuc,
   type CssValueImportance,
 } from "@/lib/css-value-data";
+import { runJsSpecs } from "@/lib/js-runner";
 
 const TIER_INFO: Record<number, { label: string; cls: string }> = {
   1: { label: "Bậc 1 · Nhận biết", cls: "bg-sky-100 text-sky-700" },
@@ -379,10 +380,15 @@ export default function StudyPage() {
     const ans = q.type === "MCQ" ? selected : answer.trim();
     if (ans === null || ans === "") return;
     setSubmitting(true);
+    // Câu JS cần chạy thử: chạy code trong Web Worker (client) rồi gửi output thô lên server
+    const runOutputs =
+      q.type === "WRITE_JS" && q.runSpecs && q.runSpecs.length > 0
+        ? await runJsSpecs(String(ans), q.runSpecs)
+        : undefined;
     const res = await fetch("/api/study/answer", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ questionId: q.id, answer: ans }),
+      body: JSON.stringify({ questionId: q.id, answer: ans, runOutputs }),
     });
     const data: AnswerResult = await res.json();
     setSubmitting(false);

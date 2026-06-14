@@ -1,3 +1,5 @@
+import type { JsRunSpec } from "./grading/js-types";
+
 export type ClientQuestion = {
   id: string;
   tier: number;
@@ -12,6 +14,8 @@ export type ClientQuestion = {
   prompt: string;
   options: string[] | null;
   starterCode: string | null;
+  // Câu WRITE_JS cần chạy thử: spec để client chạy trong Web Worker (không kèm đáp án).
+  runSpecs?: JsRunSpec[] | null;
 };
 
 export type SessionTag = {

@@ -49,3 +49,20 @@ export type JsRequirement = JsStaticRequirement | JsRunRequirement;
 export function isRunRequirement(r: JsRequirement): r is JsRunRequirement {
   return r.type === "returns" || r.type === "logs";
 }
+
+// Mô tả gửi cho client để CHẠY (không kèm `equals` — đáp án ở lại server).
+// Client nạp code người học rồi: returns → eval `call`; logs → chạy code (+`call`) bắt console.log.
+export type JsRunSpec = { kind: "returns" | "logs"; call?: string };
+
+// Kết quả thô client gửi về sau khi chạy (chưa biết đúng/sai — server so với `equals`).
+export type JsRunOutput =
+  | { value: JsScalar } // returns: giá trị trả về (đã chuẩn hóa về scalar)
+  | { logs: string } // logs: output console.log nối bằng \n
+  | { error: string }; // lỗi cú pháp / runtime / timeout
+
+/** Rút các run requirement (theo đúng thứ tự) thành spec an toàn để gửi client. */
+export function toRunSpecs(requirements: JsRequirement[]): JsRunSpec[] {
+  return requirements
+    .filter(isRunRequirement)
+    .map((r) => ({ kind: r.type, call: r.call }));
+}
