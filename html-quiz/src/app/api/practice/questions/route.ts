@@ -1,9 +1,11 @@
 import { NextResponse } from "next/server";
 import { auth } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
+import { toRunSpecs, type JsRequirement } from "@/lib/grading/js-types";
 
 // Trả toàn bộ ngân hàng câu hỏi ở dạng an toàn cho chế độ Luyện tổng hợp.
 // Tuyệt đối không gửi correctIndex / answer / requirements — chấm ở /api/practice/answer.
+// Riêng WRITE_JS gửi kèm runSpecs (đã loại `equals`) để client chạy thử trong Web Worker.
 export async function GET() {
   const session = await auth();
   if (!session?.user?.id) {
@@ -23,6 +25,8 @@ export async function GET() {
       prompt: q.prompt,
       options: (q.options as string[] | null) ?? null,
       starterCode: q.starterCode,
+      runSpecs:
+        q.type === "WRITE_JS" ? toRunSpecs((q.requirements as JsRequirement[]) ?? []) : null,
       tagName: q.tag.name,
       tagDescription: q.tag.description,
       track: q.tag.track,

@@ -5,11 +5,12 @@ import Link from "next/link";
 import { REFLEX_QUESTIONS } from "@/lib/reflex-data";
 import { ATTRIBUTE_REFLEX_QUESTIONS } from "@/lib/attribute-reflex-data";
 import { CSS_REFLEX_QUESTIONS } from "@/lib/css-reflex-data";
+import { JS_REFLEX_QUESTIONS } from "@/lib/js-reflex-data";
 
 const ROUND_SIZE = 10;
 const TIME_PER_QUESTION = 45; // giây
 
-type Mode = "tag" | "attr" | "css";
+type Mode = "tag" | "attr" | "css" | "js";
 
 // Câu hỏi đã chuẩn hóa cho cả 3 chế độ
 type RoundItem = {
@@ -36,6 +37,11 @@ const MODE_META: Record<Mode, { unit: string; ask: string; placeholder: string }
     unit: "CSS",
     ask: "thuộc tính CSS nào?",
     placeholder: "Gõ tên thuộc tính CSS rồi nhấn Enter... (vd: font-weight)",
+  },
+  js: {
+    unit: "JS",
+    ask: "dùng cú pháp/hàm JS nào?",
+    placeholder: "Gõ tên cú pháp/hàm rồi nhấn Enter... (vd: map)",
   },
 };
 
@@ -78,8 +84,16 @@ function buildRound(mode: Mode): RoundItem[] {
       prefix: q.prefix,
       plain: true,
     }));
-  } else {
+  } else if (mode === "css") {
     pool = CSS_REFLEX_QUESTIONS.map((q) => ({
+      prompt: q.prompt,
+      explain: q.explain,
+      answer: q.answer,
+      targets: [q.answer, ...(q.accept ?? [])].map(norm),
+      plain: true,
+    }));
+  } else {
+    pool = JS_REFLEX_QUESTIONS.map((q) => ({
       prompt: q.prompt,
       explain: q.explain,
       answer: q.answer,
@@ -213,7 +227,7 @@ export default function ReflexGame() {
             <span>🧘</span> Chế độ luyện tự do — không ảnh hưởng lịch ôn tập
           </li>
         </ul>
-        <div className="mt-8 grid gap-3 sm:grid-cols-3">
+        <div className="mt-8 grid gap-3 sm:grid-cols-2">
           <button
             onClick={() => start("tag")}
             className="rounded-2xl bg-flame-500 px-5 py-4 text-white shadow-lg shadow-flame-500/30 transition-all hover:-translate-y-0.5 hover:bg-flame-600 hover:shadow-xl"
@@ -234,6 +248,13 @@ export default function ReflexGame() {
           >
             <span className="block font-display text-lg font-bold">🎨 Phản xạ CSS</span>
             <span className="mt-0.5 block text-sm text-white/80">Tình huống → gõ thuộc tính CSS</span>
+          </button>
+          <button
+            onClick={() => start("js")}
+            className="rounded-2xl bg-amber-500 px-5 py-4 text-white shadow-lg shadow-amber-500/30 transition-all hover:-translate-y-0.5 hover:bg-amber-600 hover:shadow-xl"
+          >
+            <span className="block font-display text-lg font-bold">🟨 Phản xạ JS</span>
+            <span className="mt-0.5 block text-sm text-white/80">Nhu cầu → gõ cú pháp/hàm JS</span>
           </button>
         </div>
       </div>

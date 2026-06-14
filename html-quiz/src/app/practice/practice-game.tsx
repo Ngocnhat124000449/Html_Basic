@@ -5,13 +5,23 @@ import Link from "next/link";
 import { REFLEX_QUESTIONS } from "@/lib/reflex-data";
 import { ATTRIBUTE_REFLEX_QUESTIONS } from "@/lib/attribute-reflex-data";
 import { CSS_REFLEX_QUESTIONS } from "@/lib/css-reflex-data";
+import { JS_REFLEX_QUESTIONS } from "@/lib/js-reflex-data";
+import { runJsSpecs } from "@/lib/js-runner";
+import type { JsRunSpec } from "@/lib/grading/js-types";
 
 const TIME_FAST = 45; // giây — trắc nghiệm, điền thẻ, phản xạ
 const TIME_CODE = 90; // giây — viết thẻ, sửa bug, viết cấu trúc
 
-type DbType = "MCQ" | "FILL_BLANK" | "WRITE_TAG" | "FIX_BUG" | "WRITE_STRUCTURE" | "WRITE_CSS";
-type Track = "html" | "css";
-type Scope = "all" | "html" | "css";
+type DbType =
+  | "MCQ"
+  | "FILL_BLANK"
+  | "WRITE_TAG"
+  | "FIX_BUG"
+  | "WRITE_STRUCTURE"
+  | "WRITE_CSS"
+  | "WRITE_JS";
+type Track = "html" | "css" | "js";
+type Scope = "all" | "html" | "css" | "js";
 
 type Item =
   | {
@@ -21,6 +31,7 @@ type Item =
       prompt: string;
       options: string[] | null;
       starterCode: string | null;
+      runSpecs: JsRunSpec[] | null;
       tagName: string;
       tagDescription: string;
       track: Track;
@@ -35,7 +46,8 @@ type Item =
       prompt: string;
       explain: string;
     }
-  | { kind: "cssreflex"; answer: string; accept?: string[]; prompt: string; explain: string };
+  | { kind: "cssreflex"; answer: string; accept?: string[]; prompt: string; explain: string }
+  | { kind: "jsreflex"; answer: string; accept?: string[]; prompt: string; explain: string };
 
 type Outcome = {
   correct: boolean;
@@ -58,30 +70,36 @@ const TYPE_BADGE: Record<string, { label: string; cls: string }> = {
   FIX_BUG: { label: "Sửa bug", cls: "bg-rose-100 text-rose-700" },
   WRITE_STRUCTURE: { label: "Viết cấu trúc", cls: "bg-amber-100 text-amber-700" },
   WRITE_CSS: { label: "Viết CSS", cls: "bg-sky-100 text-sky-700" },
+  WRITE_JS: { label: "Viết JS", cls: "bg-amber-100 text-amber-700" },
   REFLEX: { label: "Phản xạ thẻ", cls: "bg-emerald-100 text-emerald-700" },
   ATTR: { label: "Thuộc tính", cls: "bg-indigo-100 text-indigo-700" },
   CSSREFLEX: { label: "Phản xạ CSS", cls: "bg-cyan-100 text-cyan-700" },
+  JSREFLEX: { label: "Phản xạ JS", cls: "bg-amber-100 text-amber-700" },
 };
 
 const norm = (s: string) => s.toLowerCase().replace(/[<>/\s]/g, "");
-// Với thuộc tính: lấy phần trước dấu =, bỏ quotes và *
+// Với thuộc tính/CSS/JS: lấy phần trước dấu =, bỏ quotes và *
 const normAttr = (s: string) => s.toLowerCase().split("=")[0].replace(/[<>"'`/\s*]/g, "");
 
-// Nhãn đáp án: thẻ HTML bọc <>, mục CSS hiện tên trần
+// Nhãn đáp án: thẻ HTML bọc <>, mục CSS/JS hiện tên trần
 const labelFor = (track: Track | undefined, name: string) =>
-  track === "css" ? name : `<${name}>`;
+  track === "css" || track === "js" ? name : `<${name}>`;
 
 const SCOPE_META: Record<Scope, string> = {
-  all: "HTML + CSS",
+  all: "Tất cả",
   html: "Chỉ HTML",
   css: "Chỉ CSS",
+  js: "Chỉ JS",
 };
 
-// "css" = câu DB css + phản xạ CSS; "html" = câu DB html + phản xạ thẻ/thuộc tính
+// "css" = câu DB css + phản xạ CSS; "js" = câu DB js + phản xạ JS;
+// "html" = câu DB html + phản xạ thẻ/thuộc tính
 function filterScope(p: Item[], scope: Scope): Item[] {
   if (scope === "all") return p;
   if (scope === "css")
     return p.filter((it) => it.kind === "cssreflex" || (it.kind === "db" && it.track === "css"));
+  if (scope === "js")
+    return p.filter((it) => it.kind === "jsreflex" || (it.kind === "db" && it.track === "js"));
   return p.filter(
     (it) => it.kind === "reflex" || it.kind === "attr" || (it.kind === "db" && it.track === "html")
   );
@@ -138,7 +156,11 @@ export default function PracticeGame() {
           kind: "cssreflex" as const,
           ...q,
         }));
-        setPool([...db, ...reflex, ...attrs, ...cssReflex]);
+        const jsReflex: Item[] = JS_REFLEX_QUESTIONS.map((q) => ({
+          kind: "jsreflex" as const,
+          ...q,
+        }));
+        setPool([...db, ...reflex, ...attrs, ...cssReflex, ...jsReflex]);
       });
   }, []);
 
@@ -193,7 +215,7 @@ export default function PracticeGame() {
         return;
       }
 
-      if (item.kind === "cssreflex") {
+      if (item.kind === "cssreflex" || item.kind === "jsreflex") {
         const ni = normAttr(input);
         const targets = [item.answer, ...(item.accept ?? [])].map(normAttr);
         const correct = !timedOut && ni !== "" && targets.includes(ni);
@@ -209,10 +231,15 @@ export default function PracticeGame() {
         item.type === "MCQ" ? (timedOut ? -1 : (selected ?? -1)) : timedOut ? "" : input;
       setSubmitting(true);
       try {
+        // Câu JS cần chạy thử: chạy code trong Web Worker (client) rồi gửi output thô lên server
+        const runOutputs =
+          item.type === "WRITE_JS" && item.runSpecs && item.runSpecs.length > 0 && !timedOut
+            ? await runJsSpecs(String(answer), item.runSpecs)
+            : undefined;
         const res = await fetch("/api/practice/answer", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ questionId: item.id, answer }),
+          body: JSON.stringify({ questionId: item.id, answer, runOutputs }),
         });
         const data = await res.json();
         applyOutcome(
@@ -295,8 +322,9 @@ export default function PracticeGame() {
         <p className="text-5xl">🎯</p>
         <h1 className="mt-4 font-display text-3xl font-bold tracking-tight">Luyện tổng hợp</h1>
         <p className="mt-3 leading-relaxed text-ink/70">
-          Trộn ngẫu nhiên <strong>mọi dạng câu hỏi</strong>: trắc nghiệm, điền thẻ, viết code/CSS,
-          sửa bug, phản xạ thẻ và thuộc tính. Chơi đến khi nào bạn muốn dừng.
+          Trộn ngẫu nhiên <strong>mọi dạng câu hỏi</strong> của HTML, CSS và JS: trắc nghiệm, điền
+          thẻ, viết code/CSS/JS, sửa bug, phản xạ thẻ/thuộc tính/CSS/JS. Chơi đến khi nào bạn muốn
+          dừng.
         </p>
 
         {/* Chọn phạm vi luyện tập */}
@@ -413,11 +441,14 @@ export default function PracticeGame() {
           ? "ATTR"
           : item.kind === "cssreflex"
             ? "CSSREFLEX"
-            : "REFLEX"
+            : item.kind === "jsreflex"
+              ? "JSREFLEX"
+              : "REFLEX"
     ];
   const isMcq = item.kind === "db" && item.type === "MCQ";
   const isMultiline =
-    item.kind === "db" && (item.type === "WRITE_STRUCTURE" || item.type === "WRITE_CSS");
+    item.kind === "db" &&
+    (item.type === "WRITE_STRUCTURE" || item.type === "WRITE_CSS" || item.type === "WRITE_JS");
   const canSubmit = isMcq ? selected !== null : input.trim() !== "";
 
   return (
@@ -499,7 +530,9 @@ export default function PracticeGame() {
               placeholder={
                 item.kind === "db" && item.type === "WRITE_CSS"
                   ? "Gõ CSS của bạn... (vd: p { color: red; })"
-                  : "Gõ code của bạn (nhiều dòng)..."
+                  : item.kind === "db" && item.type === "WRITE_JS"
+                    ? "Gõ code JS của bạn (nhiều dòng)..."
+                    : "Gõ code của bạn (nhiều dòng)..."
               }
               className="mt-5 w-full rounded-xl border-2 border-ink/10 bg-paper p-4 font-mono text-sm transition-colors focus:border-flame-400 focus:outline-none disabled:opacity-60"
             />
@@ -518,7 +551,9 @@ export default function PracticeGame() {
                     ? "Gõ tên thuộc tính rồi nhấn Enter... (vd: required)"
                     : item.kind === "cssreflex"
                       ? "Gõ thuộc tính CSS rồi nhấn Enter... (vd: font-weight)"
-                      : "Gõ câu trả lời rồi nhấn Enter..."
+                      : item.kind === "jsreflex"
+                        ? "Gõ cú pháp/hàm JS rồi nhấn Enter... (vd: map)"
+                        : "Gõ câu trả lời rồi nhấn Enter..."
               }
               className="mt-5 w-full rounded-xl border-2 border-ink/10 bg-paper p-4 font-mono text-sm transition-colors focus:border-flame-400 focus:outline-none disabled:opacity-60"
               onKeyDown={(e) => {
