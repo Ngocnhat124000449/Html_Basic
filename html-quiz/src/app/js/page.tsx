@@ -164,8 +164,8 @@ export default async function JsRoadmapPage() {
       ))}
 
       <p className="text-sm text-ink/50">
-        🚧 Beta: Phần 1 (Nền tảng), Phần 2 (Luồng &amp; Hàm) và Phần 3 (Dữ liệu) đã mở. Phần 4 DOM
-        &amp; Sự kiện, Phần 5 Bất đồng bộ đang được xây dựng và sẽ tự xuất hiện tại đây.
+        🎉 Trọn bộ 5 Phần đã mở: Nền tảng → Luồng &amp; Hàm → Dữ liệu → DOM &amp; Sự kiện → Bất đồng
+        bộ &amp; Hiện đại. Câu bậc 3 viết code được chấm tự động (chạy thử ngay trong trình duyệt).
       </p>
     </div>
   );
