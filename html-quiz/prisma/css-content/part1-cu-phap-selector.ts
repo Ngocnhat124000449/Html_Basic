@@ -327,7 +327,7 @@ export const PART1_CHUONG_1_2: CssSeedTag[] = [
     questions: [
       {
         tier: 1, type: "MCQ",
-        prompt: "Cú pháp chú thích (comment) trong CSS là gì?",
+        prompt: "Muốn ghi chú giải thích trong file CSS (trình duyệt bỏ qua khi chạy). Cú pháp chú thích (comment) trong CSS là gì?",
         options: ["// ghi chú", "<!-- ghi chú -->", "/* ghi chú */", "# ghi chú"],
         correctIndex: 2,
       },
@@ -442,7 +442,7 @@ export const PART1_CHUONG_1_2: CssSeedTag[] = [
       },
       {
         tier: 2, type: "MCQ",
-        prompt: "Khác biệt giữa selector  p  và  .p  là gì?",
+        prompt: "Cùng muốn nhắm vào đoạn văn, viết selector  p  khác  .p  ở điểm nào?",
         options: [
           "Như nhau",
           "p chọn mọi thẻ <p>; .p chọn mọi phần tử có class=\"p\" bất kể tên thẻ",
@@ -703,7 +703,7 @@ export const PART1_CHUONG_1_2: CssSeedTag[] = [
       },
       {
         tier: 1, type: "MCQ",
-        prompt: "Dấu phẩy giữa các selector có nghĩa là gì?",
+        prompt: "Bạn viết  h1, h2, h3  ngăn nhau bằng dấu phẩy. Dấu phẩy đó có nghĩa là gì?",
         options: [
           "Chọn phần tử lồng nhau",
           "Khối khai báo áp dụng cho TỪNG selector một cách độc lập",
@@ -797,7 +797,7 @@ export const PART1_CHUONG_1_2: CssSeedTag[] = [
       },
       {
         tier: 1, type: "MCQ",
-        prompt: "Cú pháp chung của attribute selector là gì?",
+        prompt: "Muốn chọn phần tử theo một thuộc tính HTML có sẵn (vd type). Cú pháp chung của attribute selector là gì?",
         options: [
           "(thuộc-tính=giá-trị)",
           "[thuộc-tính=\"giá-trị\"]",
@@ -886,7 +886,7 @@ export const PART1_CHUONG_1_2: CssSeedTag[] = [
       },
       {
         tier: 2, type: "MCQ",
-        prompt: "Điều kiện để  li:first-child  khớp là gì?",
+        prompt: "Bạn dùng  li:first-child  nhưng nó không tô đúng li mong đợi. Điều kiện để  li:first-child  khớp là gì?",
         options: [
           "li là phần tử li đầu tiên trên trang",
           "li phải là CON ĐẦU TIÊN của cha nó — nếu trước nó còn phần tử khác (dù không phải li) thì không khớp",
@@ -954,7 +954,7 @@ export const PART1_CHUONG_1_2: CssSeedTag[] = [
       },
       {
         tier: 1, type: "MCQ",
-        prompt: "Dấu  *  trong CSS được gọi là gì?",
+        prompt: "Bạn thấy rule  * { margin: 0; }  ở đầu file CSS. Dấu  *  được gọi là gì?",
         options: [
           "Wildcard operator",
           "Universal selector (selector toàn cục)",

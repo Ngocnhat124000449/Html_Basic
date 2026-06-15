@@ -696,7 +696,7 @@ export const tags: SeedTag[] = [
       },
       {
         tier: 2, type: T.MCQ,
-        prompt: "Thứ tự lồng thẻ đúng trong bảng là gì?",
+        prompt: "Dựng bảng dữ liệu bằng các thẻ table, tr, td. Thứ tự lồng đúng từ NGOÀI vào TRONG là gì?",
         options: ["table > td > tr", "table > tr > td", "tr > table > td", "td > tr > table"],
         correctIndex: 1,
       },
@@ -725,7 +725,7 @@ export const tags: SeedTag[] = [
       },
       {
         tier: 2, type: T.MCQ,
-        prompt: "Cấu trúc đầy đủ của một bảng chuẩn theo thứ tự là gì?",
+        prompt: "Dựng bảng giá đầy đủ có chú thích bảng, đầu bảng, thân và chân bảng. Cấu trúc chuẩn theo thứ tự khai báo là gì?",
         options: [
           "caption → thead → tbody → tfoot",
           "thead → caption → tbody",
@@ -2315,7 +2315,7 @@ export const tags: SeedTag[] = [
       },
       {
         tier: 2, type: T.MCQ,
-        prompt: "Quan hệ giữa <dt> và <dd> là gì?",
+        prompt: "Trong danh sách thông số 'CPU — Intel i7', <dt> giữ tên còn <dd> giữ mô tả. Quan hệ giữa <dt> và <dd> là gì?",
         options: ["<dd> là phần mô tả cho thuật ngữ <dt> đứng trước nó", "<dt> nằm trong <dd>", "Hai thẻ không liên quan", "<dd> phải đứng trước <dt>"],
         correctIndex: 0,
       },
@@ -2333,7 +2333,7 @@ export const tags: SeedTag[] = [
       },
       {
         tier: 2, type: T.MCQ,
-        prompt: "Trong dl, quy tắc thứ tự của dt và dd là gì?",
+        prompt: "Viết một danh sách mô tả <dl> cho mục FAQ. Quy tắc thứ tự đặt <dt> và <dd> là gì?",
         options: [
           "dt đứng trước, các dd mô tả nó theo ngay sau",
           "dd trước dt sau",
@@ -2452,7 +2452,7 @@ export const tags: SeedTag[] = [
       },
       {
         tier: 2, type: T.MCQ,
-        prompt: "Bên trong <thead>, cấu trúc đúng là gì?",
+        prompt: "Dựng hàng nhãn cột cho bảng đặt trong <thead>. Bên trong <thead>, cấu trúc đúng là gì?",
         options: [
           "Các <th> đặt trực tiếp",
           "<tr> bọc ngoài, <th> bên trong",
@@ -2493,7 +2493,7 @@ export const tags: SeedTag[] = [
       },
       {
         tier: 2, type: T.MCQ,
-        prompt: "Thứ tự đúng các phần trong bảng là gì?",
+        prompt: "Bảng có đủ ba nhóm thead, tbody, tfoot. Thứ tự khai báo đúng của ba phần này là gì?",
         options: ["tbody → thead → tfoot", "thead → tbody → tfoot", "tfoot → tbody → thead", "Thứ tự nào cũng sai"],
         correctIndex: 1,
       },
@@ -3799,9 +3799,11 @@ async function main() {
   );
 }
 
-main()
-  .catch((e) => {
-    console.error(e);
-    process.exit(1);
-  })
+// Cho phép import `tags` mà KHÔNG chạy seed (vd script đổi tên prompt tại chỗ).
+if (process.env.SEED_IMPORT_ONLY !== "1")
+  main()
+    .catch((e) => {
+      console.error(e);
+      process.exit(1);
+    })
   .finally(() => prisma.$disconnect());

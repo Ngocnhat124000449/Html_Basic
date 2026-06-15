@@ -280,7 +280,7 @@ export const PART3_CHUONG_12_15: CssSeedTag[] = [
       },
       {
         tier: 1, type: "MCQ",
-        prompt: "Giá trị MẶC ĐỊNH của position là gì?",
+        prompt: "Bạn chưa đặt position cho phần tử nào. Giá trị MẶC ĐỊNH của position là gì?",
         options: ["relative", "static (theo luồng tự nhiên, không nhận top/left)", "absolute", "fixed"],
         correctIndex: 1,
       },
@@ -757,7 +757,7 @@ export const PART3_CHUONG_12_15: CssSeedTag[] = [
       },
       {
         tier: 1, type: "MCQ",
-        prompt: "Giá trị MẶC ĐỊNH width: auto của phần tử block nghĩa là gì?",
+        prompt: "Một thẻ div (block) chưa đặt width. Giá trị MẶC ĐỊNH width: auto của nó nghĩa là gì?",
         options: [
           "Rộng bằng nội dung",
           "Rộng chiếm HẾT chiều ngang phần tử cha",

@@ -331,7 +331,7 @@ export const PART2_CHUONG_8_9: CssSeedTag[] = [
       },
       {
         tier: 1, type: "MCQ",
-        prompt: "Giá trị mặc định của cursor trên chữ thường là gì?",
+        prompt: "Rê chuột lên một đoạn chữ thường (chưa đặt cursor). Giá trị mặc định của cursor khi đó là gì?",
         options: ["pointer", "auto — trình duyệt tự chọn (chữ hiện con trỏ I-beam)", "default cố định mũi tên", "text-cursor"],
         correctIndex: 1,
       },
@@ -474,7 +474,7 @@ export const PART2_CHUONG_8_9: CssSeedTag[] = [
       },
       {
         tier: 1, type: "MCQ",
-        prompt: "Giá trị mặc định của overflow là gì?",
+        prompt: "Nội dung tràn khỏi hộp mà bạn chưa đặt overflow. Giá trị mặc định của overflow là gì?",
         options: ["hidden", "visible — nội dung tràn vẫn HIỆN đè ra ngoài hộp", "auto", "scroll"],
         correctIndex: 1,
       },
@@ -628,7 +628,7 @@ export const PART2_CHUONG_8_9: CssSeedTag[] = [
       },
       {
         tier: 1, type: "MCQ",
-        prompt: "Giá trị MẶC ĐỊNH của object-fit (gây méo ảnh) là gì?",
+        prompt: "Ảnh bị kéo méo vì bạn chưa đặt object-fit. Giá trị MẶC ĐỊNH của object-fit (gây méo ảnh) là gì?",
         options: ["cover", "fill — kéo ảnh khít khung bất chấp tỷ lệ", "contain", "none"],
         correctIndex: 1,
       },

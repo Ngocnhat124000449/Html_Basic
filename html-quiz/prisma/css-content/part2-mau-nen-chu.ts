@@ -340,7 +340,7 @@ export const PART2_CHUONG_6_7: CssSeedTag[] = [
       },
       {
         tier: 1, type: "MCQ",
-        prompt: "Giá trị MẶC ĐỊNH của background-position là gì?",
+        prompt: "Bạn đặt background-image nhưng chưa khai báo background-position. Giá trị MẶC ĐỊNH của nó là gì?",
         options: ["center", "0% 0% (góc trên trái)", "bottom", "50% 50%"],
         correctIndex: 1,
       },

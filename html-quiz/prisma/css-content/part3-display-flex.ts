@@ -337,7 +337,7 @@ export const PART3_CHUONG_10_11: CssSeedTag[] = [
       },
       {
         tier: 1, type: "MCQ",
-        prompt: "Giá trị MẶC ĐỊNH của flex-direction là gì?",
+        prompt: "Bạn đặt display: flex nhưng chưa khai báo flex-direction. Giá trị MẶC ĐỊNH của flex-direction là gì?",
         options: ["column", "row (xếp ngang)", "row-reverse", "none"],
         correctIndex: 1,
       },
@@ -512,7 +512,7 @@ export const PART3_CHUONG_10_11: CssSeedTag[] = [
       },
       {
         tier: 2, type: "MCQ",
-        prompt: "Giá trị MẶC ĐỊNH của align-items là stretch — nghĩa là gì?",
+        prompt: "Flex container chưa đặt align-items nên mặc định là stretch. stretch ở đây nghĩa là gì?",
         options: [
           "Các con căn lên đầu",
           "Các con KÉO GIÃN lấp đầy chiều cao trục phụ (nếu không có chiều cao cố định) — vì sao các thẻ cùng hàng tự cao bằng nhau",
@@ -534,7 +534,7 @@ export const PART3_CHUONG_10_11: CssSeedTag[] = [
       },
       {
         tier: 2, type: "MCQ",
-        prompt: "align-self dùng để làm gì?",
+        prompt: "Một item trong hàng flex cần căn KHÁC các item còn lại. align-self dùng để làm gì?",
         options: [
           "Căn toàn bộ container",
           "Ghi đè align-items cho RIÊNG MỘT con — vd cả hàng căn giữa nhưng một con tự căn xuống đáy",
@@ -570,7 +570,7 @@ export const PART3_CHUONG_10_11: CssSeedTag[] = [
       },
       {
         tier: 1, type: "MCQ",
-        prompt: "Giá trị MẶC ĐỊNH của flex-wrap là gì?",
+        prompt: "Các item flex bị ép chật trên một hàng vì bạn chưa đặt flex-wrap. Giá trị MẶC ĐỊNH của flex-wrap là gì?",
         options: [
           "wrap",
           "nowrap — các con ép trên MỘT dòng, co nhỏ lại nếu chật",

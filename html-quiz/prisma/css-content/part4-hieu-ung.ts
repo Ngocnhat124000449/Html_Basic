@@ -262,7 +262,7 @@ export const PART4_CHUONG_16_20: CssSeedTag[] = [
       },
       {
         tier: 1, type: "MCQ",
-        prompt: "Giá trị MẶC ĐỊNH của timing function là gì?",
+        prompt: "Bạn khai báo transition nhưng chưa chỉ định timing function. Giá trị MẶC ĐỊNH của timing function là gì?",
         options: ["linear", "ease (chậm-nhanh-chậm, tự nhiên)", "ease-out", "steps"],
         correctIndex: 1,
       },
@@ -676,7 +676,7 @@ export const PART4_CHUONG_16_20: CssSeedTag[] = [
       },
       {
         tier: 1, type: "MCQ",
-        prompt: "Giá trị mặc định của scroll-behavior là gì?",
+        prompt: "Trang nhảy 'cụp' khi bấm link neo vì chưa đặt scroll-behavior. Giá trị mặc định của scroll-behavior là gì?",
         options: ["smooth", "auto (nhảy tức thì)", "instant", "none"],
         correctIndex: 1,
       },

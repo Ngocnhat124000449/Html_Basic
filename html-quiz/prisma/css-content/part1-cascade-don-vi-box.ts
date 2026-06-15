@@ -24,7 +24,7 @@ export const PART1_CHUONG_3_5: CssSeedTag[] = [
       },
       {
         tier: 1, type: "MCQ",
-        prompt: "'Cascade' trong tên gọi CSS (Cascading Style Sheets) nghĩa là gì?",
+        prompt: "Nhiều rule cùng nhắm một phần tử, CSS phải quyết định cái nào được áp. 'Cascade' trong tên Cascading Style Sheets nghĩa là gì?",
         options: [
           "Hiệu ứng thác nước khi cuộn trang",
           "Cơ chế xếp tầng quyết định khai báo nào được áp dụng khi nhiều rule cùng nhắm một phần tử",
@@ -253,7 +253,7 @@ export const PART1_CHUONG_3_5: CssSeedTag[] = [
     questions: [
       {
         tier: 1, type: "MCQ",
-        prompt: "Cú pháp đúng của !important?",
+        prompt: "Bạn cần ép một style cứng đầu phải thắng. Cú pháp đúng của !important là gì?",
         options: [
           "!important color: red;",
           "color: red !important;",
@@ -275,7 +275,7 @@ export const PART1_CHUONG_3_5: CssSeedTag[] = [
       },
       {
         tier: 1, type: "MCQ",
-        prompt: "!important được viết ở vị trí nào?",
+        prompt: "Trong khai báo  color: red !important  — !important được đặt ở vị trí nào?",
         options: [
           "Trước tên thuộc tính",
           "Sau giá trị, trước dấu chấm phẩy",
@@ -416,7 +416,7 @@ export const PART1_CHUONG_3_5: CssSeedTag[] = [
     questions: [
       {
         tier: 1, type: "MCQ",
-        prompt: "px là loại đơn vị gì?",
+        prompt: "Bạn đặt độ dày viền  border: 1px. px thuộc loại đơn vị nào?",
         options: [
           "Tương đối theo phần tử cha",
           "Tuyệt đối — không thay đổi theo cỡ chữ cha hay viewport",
@@ -495,7 +495,7 @@ export const PART1_CHUONG_3_5: CssSeedTag[] = [
     questions: [
       {
         tier: 1, type: "MCQ",
-        prompt: "Đơn vị rem tính theo cỡ chữ của phần tử nào?",
+        prompt: "Bạn đặt cỡ chữ bằng rem (vd 2rem). Đơn vị rem tính theo cỡ chữ của phần tử nào?",
         options: [
           "Phần tử cha trực tiếp",
           "Phần tử gốc <html> (root em)",
@@ -506,7 +506,7 @@ export const PART1_CHUONG_3_5: CssSeedTag[] = [
       },
       {
         tier: 1, type: "MCQ",
-        prompt: "Đơn vị em (khi dùng cho font-size) tính theo gì?",
+        prompt: "Đặt font-size bằng em cho một phần tử con. Khi đó em tính theo cỡ chữ của ai?",
         options: [
           "Cỡ chữ của phần tử CHA",
           "Cỡ chữ thẻ html",
@@ -585,7 +585,7 @@ export const PART1_CHUONG_3_5: CssSeedTag[] = [
       },
       {
         tier: 1, type: "MCQ",
-        prompt: "% là đơn vị tuyệt đối hay tương đối?",
+        prompt: "Bạn đặt  width: 50%  cho một cột. % là đơn vị tuyệt đối hay tương đối?",
         options: [
           "Tuyệt đối",
           "Tương đối — giá trị thật phụ thuộc phần tử cha",
@@ -657,7 +657,7 @@ export const PART1_CHUONG_3_5: CssSeedTag[] = [
     questions: [
       {
         tier: 1, type: "MCQ",
-        prompt: "100vh tương ứng với gì?",
+        prompt: "Bạn đặt  height: 100vh  cho một section. 100vh tương ứng với gì?",
         options: [
           "100 pixel chiều cao",
           "Toàn bộ chiều cao vùng nhìn (viewport) của trình duyệt",
@@ -668,7 +668,7 @@ export const PART1_CHUONG_3_5: CssSeedTag[] = [
       },
       {
         tier: 1, type: "MCQ",
-        prompt: "vw là viết tắt của gì và 1vw bằng bao nhiêu?",
+        prompt: "Bạn dùng đơn vị vw để đặt chiều rộng theo màn hình. vw là viết tắt của gì và 1vw bằng bao nhiêu?",
         options: [
           "viewport width — 1vw = 1% chiều rộng viewport",
           "view width — 1vw = 1px",
@@ -752,7 +752,7 @@ export const PART1_CHUONG_3_5: CssSeedTag[] = [
       },
       {
         tier: 1, type: "MCQ",
-        prompt: "#fff là cách viết tắt của mã nào?",
+        prompt: "Trong CSS bạn thấy màu  #fff. Đó là cách viết tắt của mã hex nào?",
         options: ["#f0f0f0", "#ffffff", "#fff000", "#0fffff"],
         correctIndex: 1,
       },
@@ -987,7 +987,7 @@ export const PART1_CHUONG_3_5: CssSeedTag[] = [
       },
       {
         tier: 2, type: "MCQ",
-        prompt: "Hiện tượng 'margin collapse' là gì?",
+        prompt: "Hai đoạn văn xếp dọc: trên có margin-bottom, dưới có margin-top, nhưng khoảng cách thật không bằng tổng hai cái. Hiện tượng 'margin collapse' này là gì?",
         options: [
           "Margin bị xóa khi trang thu nhỏ",
           "Margin DỌC của hai khối kề nhau gộp làm một, lấy giá trị LỚN hơn thay vì cộng dồn (40px trên + 20px dưới = 40px, không phải 60px)",
@@ -1128,7 +1128,7 @@ export const PART1_CHUONG_3_5: CssSeedTag[] = [
       },
       {
         tier: 1, type: "MCQ",
-        prompt: "Giá trị MẶC ĐỊNH của box-sizing là gì?",
+        prompt: "Khi bạn chưa đặt box-sizing cho phần tử. Giá trị MẶC ĐỊNH của box-sizing là gì?",
         options: ["border-box", "content-box", "auto", "inherit"],
         correctIndex: 1,
       },
