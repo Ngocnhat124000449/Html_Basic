@@ -206,6 +206,8 @@ export default function StudyPage() {
   const [answer, setAnswer] = useState("");
   const [feedback, setFeedback] = useState<AnswerResult | null>(null);
   const [wrongCount, setWrongCount] = useState(0);
+  // Tổng lượt sai trong CẢ thẻ (để suy grade FSRS); wrongCount chỉ tính theo từng câu
+  const [tagWrong, setTagWrong] = useState(0);
   const [tagFailed, setTagFailed] = useState(false);
   const [summary, setSummary] = useState<{ name: string; passed: boolean }[]>([]);
   const [submitting, setSubmitting] = useState(false);
@@ -368,10 +370,13 @@ export default function StudyPage() {
   const tier = TIER_INFO[q.tier] ?? TIER_INFO[1];
 
   async function completeTag(passed: boolean) {
+    // Suy grade FSRS từ tổng lượt sai: rớt → MAX_WRONG (Again);
+    // đậu → kẹp tối đa MAX_WRONG-1 để thẻ đậu không bao giờ map thành Again.
+    const wrong = passed ? Math.min(tagWrong, MAX_WRONG - 1) : MAX_WRONG;
     await fetch("/api/study/complete-tag", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ tagId: tag.tagId, passed }),
+      body: JSON.stringify({ tagId: tag.tagId, wrongCount: wrong }),
     });
     setSummary((s) => [...s, { name: tag.name, passed }]);
   }
@@ -396,6 +401,7 @@ export default function StudyPage() {
     if (!data.correct) {
       const w = wrongCount + 1;
       setWrongCount(w);
+      setTagWrong((n) => n + 1);
       if (w >= MAX_WRONG) {
         setTagFailed(true);
         await completeTag(false);
@@ -410,6 +416,7 @@ export default function StudyPage() {
     setAnswer("");
     setFeedback(null);
     setWrongCount(0);
+    setTagWrong(0);
     setTagFailed(false);
     setIntroSeen(false);
   }
