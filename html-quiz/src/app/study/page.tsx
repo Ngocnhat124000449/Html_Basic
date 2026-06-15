@@ -1,13 +1,8 @@
 "use client";
 
-import { useCallback, useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import Link from "next/link";
-import type { AnswerResult, SessionTag } from "@/lib/study-types";
-import { TAG_ATTRIBUTES, type AttrImportance } from "@/lib/attribute-data";
-import {
-  findCssPropertyForMuc,
-  type CssValueImportance,
-} from "@/lib/css-value-data";
+import type { AnswerResult, ClientQuestion, SessionTag } from "@/lib/study-types";
 import { runJsSpecs } from "@/lib/js-runner";
 
 const TIER_INFO: Record<number, { label: string; cls: string }> = {
@@ -16,221 +11,55 @@ const TIER_INFO: Record<number, { label: string; cls: string }> = {
   3: { label: "Bậc 3 · Viết được", cls: "bg-flame-100 text-flame-700" },
 };
 
-const ATTR_GROUPS: { importance: AttrImportance; title: string; chip: string }[] = [
-  { importance: "essential", title: "★ Quan trọng nhất", chip: "bg-flame-500 text-white" },
-  { importance: "common", title: "● Hay dùng", chip: "bg-sky-600 text-white" },
-  { importance: "rare", title: "○ Ít dùng nhưng hợp lệ", chip: "bg-ink/70 text-white" },
-];
-
 const MAX_WRONG = 3;
 
 // Nhãn hiển thị: thẻ HTML bọc <>, mục CSS/JS hiện tên trần
 const tagLabel = (tag: { track: "html" | "css" | "js"; name: string }) =>
   tag.track === "html" ? `<${tag.name}>` : tag.name;
 
-const CSS_VALUE_META: Record<CssValueImportance, { title: string; chip: string }> = {
-  essential: { title: "★ Giá trị quan trọng nhất", chip: "bg-sky-600 text-white" },
-  common: { title: "● Giá trị hay dùng", chip: "bg-violet-600 text-white" },
-  rare: { title: "○ Giá trị ít dùng", chip: "bg-ink/70 text-white" },
-};
+// Một câu trong hàng đợi phản xạ — kèm thẻ gốc để chấm gom theo thẻ + lộ tên sau khi trả lời.
+type QueueItem = { tag: SessionTag; q: ClientQuestion };
 
-// Màn làm quen mục CSS mới: chương + mô tả + giá trị 3 mức (nếu mục là một thuộc tính)
-function CssIntro({ tag, onStart }: { tag: SessionTag; onStart: () => void }) {
-  const propEntry = findCssPropertyForMuc(tag.name);
-  return (
-    <div className="animate-rise space-y-5 py-8">
-      <div className="text-center">
-        <span className="rounded-full bg-sky-100 px-3 py-1 text-xs font-semibold text-sky-700">
-          ✦ Mục mới — chương {tag.topic}
-        </span>
-        <p className="mt-4">
-          <code className="rounded-xl bg-ink px-3 py-1.5 font-mono text-2xl font-bold text-sky-300">
-            {tag.name}
-          </code>
-        </p>
-        <p className="mt-3 text-lg leading-relaxed text-ink/80">{tag.description}</p>
-      </div>
-
-      {propEntry && (
-        <div className="rounded-2xl border border-ink/10 bg-surface p-5 text-left">
-          <h2 className="font-display font-bold">
-            Giá trị của <code className="font-mono text-sky-700">{propEntry.prop}</code>
-          </h2>
-          {propEntry.note && <p className="mt-1 text-sm text-ink/60">💡 {propEntry.note}</p>}
-          {(["essential", "common", "rare"] as CssValueImportance[]).map((imp) => {
-            const group = propEntry.values.filter((v) => v.importance === imp);
-            if (group.length === 0) return null;
-            const meta = CSS_VALUE_META[imp];
-            return (
-              <div key={imp} className="mt-4">
-                <p className="text-xs font-semibold uppercase tracking-wide text-ink/50">
-                  {meta.title}
-                </p>
-                <ul className="mt-2 space-y-2">
-                  {group.map((v) => (
-                    <li key={v.value} className="text-sm leading-relaxed">
-                      <code className={`mr-1.5 rounded px-1.5 py-0.5 font-mono text-xs font-bold ${meta.chip}`}>
-                        {v.value}
-                      </code>
-                      {v.desc}
-                      <span className="text-ink/50"> · {v.when}</span>
-                      {v.warn && <span className="text-amber-700"> ⚠️ {v.warn}</span>}
-                    </li>
-                  ))}
-                </ul>
-              </div>
-            );
-          })}
-        </div>
-      )}
-
-      <div className="text-center">
-        <button
-          onClick={onStart}
-          autoFocus
-          className="rounded-full bg-flame-500 px-8 py-3 font-display text-lg font-bold text-white shadow-lg shadow-flame-500/30 transition-all hover:-translate-y-0.5 hover:bg-flame-600 hover:shadow-xl"
-        >
-          Bắt đầu trả lời ✍️
-        </button>
-        <p className="mt-2 text-xs text-ink/40">hoặc nhấn Enter</p>
-      </div>
-    </div>
-  );
-}
-
-// Màn làm quen mục JS mới: chương + mô tả
-function JsIntro({ tag, onStart }: { tag: SessionTag; onStart: () => void }) {
-  return (
-    <div className="animate-rise space-y-5 py-8">
-      <div className="text-center">
-        <span className="rounded-full bg-amber-100 px-3 py-1 text-xs font-semibold text-amber-700">
-          ✦ Mục mới — chương {tag.topic}
-        </span>
-        <p className="mt-4">
-          <code className="rounded-xl bg-ink px-3 py-1.5 font-mono text-2xl font-bold text-amber-300">
-            {tag.name}
-          </code>
-        </p>
-        <p className="mt-3 text-lg leading-relaxed text-ink/80">{tag.description}</p>
-      </div>
-      <div className="text-center">
-        <button
-          onClick={onStart}
-          autoFocus
-          className="rounded-full bg-flame-500 px-8 py-3 font-display text-lg font-bold text-white shadow-lg shadow-flame-500/30 transition-all hover:-translate-y-0.5 hover:bg-flame-600 hover:shadow-xl"
-        >
-          Bắt đầu trả lời ✍️
-        </button>
-        <p className="mt-2 text-xs text-ink/40">hoặc nhấn Enter</p>
-      </div>
-    </div>
-  );
-}
-
-// Màn làm quen thẻ mới: mô tả + đủ 3 nhóm thuộc tính trước khi vào câu hỏi
-function TagIntro({ tag, onStart }: { tag: SessionTag; onStart: () => void }) {
-  const entry = TAG_ATTRIBUTES.find((t) => t.tag === tag.name);
-  return (
-    <div className="animate-rise space-y-5 py-8">
-      <div className="text-center">
-        <span className="rounded-full bg-flame-100 px-3 py-1 text-xs font-semibold text-flame-700">
-          ✦ Thẻ mới — làm quen trước khi trả lời
-        </span>
-        <p className="mt-4">
-          <code className="rounded-xl bg-ink px-3 py-1.5 font-mono text-2xl font-bold text-flame-300">
-            &lt;{tag.name}&gt;
-          </code>
-        </p>
-        <p className="mt-3 text-lg leading-relaxed text-ink/80">{tag.description}</p>
-      </div>
-
-      <div className="rounded-2xl border border-ink/10 bg-surface p-5">
-        <h2 className="font-display font-bold">Thuộc tính của &lt;{tag.name}&gt;</h2>
-        {entry?.note && <p className="mt-1 text-sm text-ink/60">💡 {entry.note}</p>}
-        {ATTR_GROUPS.map(({ importance, title, chip }) => {
-          const group = entry?.attrs.filter((a) => a.importance === importance) ?? [];
-          if (group.length === 0) return null;
-          return (
-            <div key={importance} className="mt-4">
-              <p className="text-xs font-semibold uppercase tracking-wide text-ink/50">{title}</p>
-              <ul className="mt-2 space-y-2.5">
-                {group.map((a) => (
-                  <li key={a.name} className="text-sm leading-relaxed">
-                    <code
-                      className={`mr-1.5 rounded px-1.5 py-0.5 font-mono text-xs font-bold ${chip}`}
-                    >
-                      {a.name}
-                    </code>
-                    {a.desc}
-                    <span className="text-ink/50"> · {a.when}</span>
-                    <code className="mt-1 block w-fit max-w-full overflow-x-auto rounded bg-ink px-2 py-1 font-mono text-xs text-flame-100">
-                      {a.example}
-                    </code>
-                  </li>
-                ))}
-              </ul>
-            </div>
-          );
-        })}
-        <p className="mt-4 text-xs text-ink/50">
-          Xem đầy đủ kèm thuộc tính chung tại{" "}
-          <Link
-            href={`/tags/${tag.name}`}
-            target="_blank"
-            className="font-medium text-flame-600 hover:underline"
-          >
-            trang chi tiết thẻ ↗
-          </Link>
-        </p>
-      </div>
-
-      <div className="text-center">
-        <button
-          onClick={onStart}
-          autoFocus
-          className="rounded-full bg-flame-500 px-8 py-3 font-display text-lg font-bold text-white shadow-lg shadow-flame-500/30 transition-all hover:-translate-y-0.5 hover:bg-flame-600 hover:shadow-xl"
-        >
-          Bắt đầu trả lời ✍️
-        </button>
-        <p className="mt-2 text-xs text-ink/40">hoặc nhấn Enter</p>
-      </div>
-    </div>
-  );
+// Gom phẳng mọi câu của mọi thẻ rồi xáo trộn (Fisher–Yates) — không ôn theo thẻ.
+function buildQueue(tags: SessionTag[]): QueueItem[] {
+  const items: QueueItem[] = [];
+  for (const tag of tags) for (const q of tag.questions) items.push({ tag, q });
+  for (let i = items.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [items[i], items[j]] = [items[j], items[i]];
+  }
+  return items;
 }
 
 export default function StudyPage() {
   const [tags, setTags] = useState<SessionTag[] | null>(null);
-  const [tagIdx, setTagIdx] = useState(0);
-  const [qIdx, setQIdx] = useState(0);
+  const [pos, setPos] = useState(0);
   const [selected, setSelected] = useState<number | null>(null);
   const [answer, setAnswer] = useState("");
   const [feedback, setFeedback] = useState<AnswerResult | null>(null);
-  const [wrongCount, setWrongCount] = useState(0);
-  // Tổng lượt sai trong CẢ thẻ (để suy grade FSRS); wrongCount chỉ tính theo từng câu
-  const [tagWrong, setTagWrong] = useState(0);
-  const [tagFailed, setTagFailed] = useState(false);
-  const [summary, setSummary] = useState<{ name: string; passed: boolean }[]>([]);
+  // Tổng lượt sai theo từng thẻ — cuối phiên suy grade FSRS mức thẻ.
+  const [wrongByTag, setWrongByTag] = useState<Record<string, number>>({});
   const [submitting, setSubmitting] = useState(false);
-  // Đã xem màn làm quen của thẻ mới hiện tại chưa
-  const [introSeen, setIntroSeen] = useState(false);
-  // Track của phiên học: html (mặc định) | css | js — đọc từ ?track= trên URL
+  const [finished, setFinished] = useState(false);
+  const [summary, setSummary] = useState<{ name: string; passed: boolean }[]>([]);
   const [track, setTrack] = useState<"html" | "css" | "js">("html");
   const inputRef = useRef<HTMLInputElement | null>(null);
   const textareaRef = useRef<HTMLTextAreaElement | null>(null);
 
-  // Tải phiên học (gọi từ nút bấm); extra=true bỏ giới hạn ngày để học vượt
+  // Xáo trộn 1 lần mỗi khi tải phiên mới (tags là mảng mới sau mỗi fetch).
+  const queue = useMemo(() => (tags ? buildQueue(tags) : []), [tags]);
+
+  // Tải phiên học; extra=true bỏ giới hạn ngày để học vượt
   const loadSession = useCallback(
     (extra: boolean) => {
       setTags(null);
-      setTagIdx(0);
-      setQIdx(0);
+      setPos(0);
       setSelected(null);
       setAnswer("");
       setFeedback(null);
-      setWrongCount(0);
-      setTagFailed(false);
+      setWrongByTag({});
+      setFinished(false);
       setSummary([]);
-      setIntroSeen(false);
       const qs = new URLSearchParams();
       if (extra) qs.set("extra", "1");
       if (track !== "html") qs.set("track", track);
@@ -241,7 +70,7 @@ export default function StudyPage() {
     [track]
   );
 
-  // Phiên đầu tiên: đọc ?extra & ?track từ URL, chỉ setState trong callback async
+  // Phiên đầu tiên: đọc ?extra & ?track từ URL
   useEffect(() => {
     const params = new URLSearchParams(window.location.search);
     const extra = params.get("extra") === "1";
@@ -269,7 +98,31 @@ export default function StudyPage() {
       inputRef.current?.focus();
       textareaRef.current?.focus();
     }
-  }, [feedback, qIdx, tagIdx]);
+  }, [feedback, pos]);
+
+  const unit = track === "html" ? "thẻ" : "mục";
+  const homeHref = track === "css" ? "/css" : track === "js" ? "/js" : "/html";
+
+  // Chốt phiên: gom lượt sai theo thẻ → batch lên server, dựng tổng kết.
+  const finishSession = useCallback(
+    async (wrong: Record<string, number>) => {
+      if (!tags) return;
+      const results = tags.map((t) => ({
+        tagId: t.tagId,
+        wrongCount: Math.min(wrong[t.tagId] ?? 0, MAX_WRONG),
+      }));
+      setSummary(
+        tags.map((t) => ({ name: t.name, passed: (wrong[t.tagId] ?? 0) < MAX_WRONG }))
+      );
+      setFinished(true);
+      await fetch("/api/study/complete-session", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ results }),
+      });
+    },
+    [tags]
+  );
 
   if (tags === null) {
     return (
@@ -280,9 +133,6 @@ export default function StudyPage() {
       </div>
     );
   }
-
-  const unit = track === "html" ? "thẻ" : "mục";
-  const homeHref = track === "css" ? "/css" : track === "js" ? "/js" : "/html";
 
   if (tags.length === 0) {
     return (
@@ -310,13 +160,13 @@ export default function StudyPage() {
     );
   }
 
-  if (tagIdx >= tags.length) {
+  if (finished) {
     const passedCount = summary.filter((s) => s.passed).length;
     return (
       <div className="animate-rise space-y-6 py-12">
         <div className="text-center">
           <p className="text-4xl">🏁</p>
-          <h1 className="mt-3 font-display text-3xl font-bold">Kết thúc phiên học</h1>
+          <h1 className="mt-3 font-display text-3xl font-bold">Kết thúc phiên ôn</h1>
           <p className="mt-2 text-ink/60">
             Vượt qua <strong className="text-flame-600">{passedCount}</strong>/{summary.length}{" "}
             {unit}
@@ -327,9 +177,7 @@ export default function StudyPage() {
             <li
               key={s.name}
               className={`animate-rise flex items-center justify-between rounded-xl border p-3.5 ${
-                s.passed
-                  ? "border-emerald-200 bg-emerald-50"
-                  : "border-amber-200 bg-amber-50"
+                s.passed ? "border-emerald-200 bg-emerald-50" : "border-amber-200 bg-amber-50"
               }`}
               style={{ animationDelay: `${i * 0.06}s` }}
             >
@@ -362,24 +210,15 @@ export default function StudyPage() {
     );
   }
 
-  const tag = tags[tagIdx];
-  const q = tag.questions[qIdx];
+  const item = queue[pos];
+  const tag = item.tag;
+  const q = item.q;
   const isCode = q.type !== "MCQ";
   const isMultiline =
     q.type === "WRITE_STRUCTURE" || q.type === "WRITE_CSS" || q.type === "WRITE_JS";
   const tier = TIER_INFO[q.tier] ?? TIER_INFO[1];
-
-  async function completeTag(passed: boolean) {
-    // Suy grade FSRS từ tổng lượt sai: rớt → MAX_WRONG (Again);
-    // đậu → kẹp tối đa MAX_WRONG-1 để thẻ đậu không bao giờ map thành Again.
-    const wrong = passed ? Math.min(tagWrong, MAX_WRONG - 1) : MAX_WRONG;
-    await fetch("/api/study/complete-tag", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ tagId: tag.tagId, wrongCount: wrong }),
-    });
-    setSummary((s) => [...s, { name: tag.name, passed }]);
-  }
+  const sessionPct = (pos / queue.length) * 100;
+  const totalWrong = Object.values(wrongByTag).reduce((s, n) => s + n, 0);
 
   async function submit() {
     const ans = q.type === "MCQ" ? selected : answer.trim();
@@ -399,68 +238,30 @@ export default function StudyPage() {
     setSubmitting(false);
     setFeedback(data);
     if (!data.correct) {
-      const w = wrongCount + 1;
-      setWrongCount(w);
-      setTagWrong((n) => n + 1);
-      if (w >= MAX_WRONG) {
-        setTagFailed(true);
-        await completeTag(false);
-      }
+      setWrongByTag((prev) => ({ ...prev, [tag.tagId]: (prev[tag.tagId] ?? 0) + 1 }));
     }
   }
 
-  function goNextTag() {
-    setTagIdx((i) => i + 1);
-    setQIdx(0);
+  // Chế độ phản xạ: mỗi câu một lượt, đúng/sai đều sang câu kế.
+  async function next() {
+    if (pos + 1 >= queue.length) {
+      // wrongByTag đã cập nhật ở submit (render trước) nên dùng trực tiếp.
+      await finishSession(wrongByTag);
+      return;
+    }
+    setPos((p) => p + 1);
     setSelected(null);
     setAnswer("");
     setFeedback(null);
-    setWrongCount(0);
-    setTagWrong(0);
-    setTagFailed(false);
-    setIntroSeen(false);
   }
-
-  async function next() {
-    if (tagFailed) {
-      goNextTag();
-      return;
-    }
-    if (feedback?.correct) {
-      if (qIdx + 1 < tag.questions.length) {
-        setQIdx(qIdx + 1);
-        setSelected(null);
-        setAnswer("");
-        setFeedback(null);
-        setWrongCount(0);
-      } else {
-        await completeTag(true);
-        goNextTag();
-      }
-    } else {
-      // sai nhưng chưa quá MAX_WRONG: làm lại câu này, giữ wrongCount
-      setFeedback(null);
-      setSelected(null);
-      setAnswer("");
-    }
-  }
-
-  // Thẻ/mục mới: làm quen trước khi vào câu hỏi
-  if (tag.isNew && !introSeen) {
-    if (tag.track === "css") return <CssIntro tag={tag} onStart={() => setIntroSeen(true)} />;
-    if (tag.track === "js") return <JsIntro tag={tag} onStart={() => setIntroSeen(true)} />;
-    return <TagIntro tag={tag} onStart={() => setIntroSeen(true)} />;
-  }
-
-  const sessionPct = ((tagIdx + qIdx / tag.questions.length) / tags.length) * 100;
 
   return (
     <div className="space-y-4 py-8">
-      {/* Thanh tiến độ phiên học */}
+      {/* Thanh tiến độ phiên phản xạ */}
       <div className="space-y-2">
         <div className="flex items-center justify-between text-sm">
           <span className="font-medium text-ink/60">
-            {track === "html" ? "Thẻ" : "Mục"} {tagIdx + 1}/{tags.length}
+            Câu {pos + 1}/{queue.length}
           </span>
           <span className={`rounded-full px-2.5 py-1 text-xs font-semibold ${tier.cls}`}>
             {tier.label}
@@ -474,46 +275,20 @@ export default function StudyPage() {
         </div>
       </div>
 
-      {/* Thông tin thẻ đang học */}
-      <div className="flex items-center justify-between">
-        <div className="flex items-center gap-2">
-          <code className="rounded-lg bg-ink px-2.5 py-1 font-mono text-sm font-bold text-flame-300">
-            {tagLabel(tag)}
-          </code>
-          {tag.isNew && (
-            <span className="rounded-full bg-flame-100 px-2.5 py-0.5 text-xs font-semibold text-flame-700">
-              ✦ Mới
-            </span>
-          )}
-          <span className="hidden text-xs text-ink/50 sm:inline">{tag.description}</span>
-        </div>
-        {/* Lượt sai còn lại */}
-        <div className="flex gap-1" title={`Còn ${MAX_WRONG - wrongCount} lượt sai`}>
-          {Array.from({ length: MAX_WRONG }).map((_, i) => (
-            <span
-              key={i}
-              className={`text-sm ${i < MAX_WRONG - wrongCount ? "" : "opacity-25 grayscale"}`}
-            >
-              ❤️
-            </span>
-          ))}
-        </div>
-      </div>
-
-      {/* Chấm tiến độ 3 câu trong thẻ */}
-      <div className="flex gap-1.5">
-        {tag.questions.map((_, i) => (
-          <span
-            key={i}
-            className={`h-1.5 flex-1 rounded-full transition-colors ${
-              i < qIdx ? "bg-emerald-400" : i === qIdx ? "bg-flame-500" : "bg-ink/10"
-            }`}
-          />
-        ))}
+      {/* Hàng trạng thái: chế độ + lượt sai (KHÔNG lộ thẻ trước khi trả lời) */}
+      <div className="flex items-center justify-between text-xs">
+        <span className="rounded-full bg-violet-100 px-2.5 py-1 font-semibold text-violet-700">
+          🔀 Ôn trộn · thẻ nào đây?
+        </span>
+        {totalWrong > 0 && (
+          <span className="text-ink/50">
+            {totalWrong} lượt sai · {summary.length || tags.length} {unit}
+          </span>
+        )}
       </div>
 
       <div
-        key={`${tagIdx}-${qIdx}`}
+        key={pos}
         className="animate-pop rounded-2xl border border-ink/10 bg-surface p-6 shadow-sm"
       >
         <p className="text-lg font-medium leading-relaxed">{q.prompt}</p>
@@ -526,29 +301,41 @@ export default function StudyPage() {
 
         {q.type === "MCQ" && q.options && (
           <div className="mt-5 space-y-2.5">
-            {q.options.map((opt, i) => (
-              <button
-                key={i}
-                onClick={() => !feedback && setSelected(i)}
-                disabled={!!feedback}
-                className={`group flex w-full items-center gap-3 rounded-xl border-2 px-4 py-3 text-left transition-all ${
-                  selected === i
-                    ? "border-flame-500 bg-flame-50 shadow-sm"
-                    : "border-ink/10 hover:border-flame-200 hover:bg-flame-50/50"
-                } disabled:cursor-not-allowed`}
-              >
-                <span
-                  className={`flex h-7 w-7 shrink-0 items-center justify-center rounded-lg font-mono text-sm font-bold transition-colors ${
-                    selected === i
-                      ? "bg-flame-500 text-white"
-                      : "bg-ink/5 text-ink/60 group-hover:bg-flame-100 group-hover:text-flame-700"
-                  }`}
+            {q.options.map((opt, i) => {
+              const isAnswer = feedback != null && feedback.correctIndex === i;
+              const isWrongPick = feedback != null && selected === i && !feedback.correct;
+              return (
+                <button
+                  key={i}
+                  onClick={() => !feedback && setSelected(i)}
+                  disabled={!!feedback}
+                  className={`group flex w-full items-center gap-3 rounded-xl border-2 px-4 py-3 text-left transition-all ${
+                    isAnswer
+                      ? "border-emerald-500 bg-emerald-50"
+                      : isWrongPick
+                        ? "border-red-400 bg-red-50"
+                        : selected === i
+                          ? "border-flame-500 bg-flame-50 shadow-sm"
+                          : "border-ink/10 hover:border-flame-200 hover:bg-flame-50/50"
+                  } disabled:cursor-not-allowed`}
                 >
-                  {String.fromCharCode(65 + i)}
-                </span>
-                <span>{opt}</span>
-              </button>
-            ))}
+                  <span
+                    className={`flex h-7 w-7 shrink-0 items-center justify-center rounded-lg font-mono text-sm font-bold transition-colors ${
+                      isAnswer
+                        ? "bg-emerald-500 text-white"
+                        : isWrongPick
+                          ? "bg-red-400 text-white"
+                          : selected === i
+                            ? "bg-flame-500 text-white"
+                            : "bg-ink/5 text-ink/60 group-hover:bg-flame-100 group-hover:text-flame-700"
+                    }`}
+                  >
+                    {String.fromCharCode(65 + i)}
+                  </span>
+                  <span>{opt}</span>
+                </button>
+              );
+            })}
           </div>
         )}
 
@@ -596,19 +383,21 @@ export default function StudyPage() {
               : "animate-shake border-red-300 bg-red-50"
           }`}
         >
-          <p className="font-semibold">
-            {feedback.correct ? (
-              <span className="text-emerald-800">✓ Chính xác!</span>
-            ) : tagFailed ? (
-              <span className="text-red-800">
-                ✗ Sai {MAX_WRONG} lần — thẻ này sẽ quay lại hàng đợi hôm nay
-              </span>
-            ) : (
-              <span className="text-red-800">
-                ✗ Chưa đúng (lần {wrongCount}/{MAX_WRONG}) — thử lại nhé
-              </span>
-            )}
-          </p>
+          {/* Lộ thẻ sau khi trả lời — luyện nhận diện */}
+          <div className="flex flex-wrap items-center gap-2">
+            <p className="font-semibold">
+              {feedback.correct ? (
+                <span className="text-emerald-800">✓ Chính xác!</span>
+              ) : (
+                <span className="text-red-800">✗ Chưa đúng</span>
+              )}
+            </p>
+            <span className="text-sm text-ink/50">— thuộc</span>
+            <code className="rounded-lg bg-ink px-2.5 py-1 font-mono text-sm font-bold text-flame-300">
+              {tagLabel(tag)}
+            </code>
+            <span className="hidden text-xs text-ink/50 sm:inline">{tag.description}</span>
+          </div>
 
           {feedback.results && (
             <ul className="mt-3 space-y-1.5 text-sm">
@@ -628,18 +417,10 @@ export default function StudyPage() {
             onClick={next}
             autoFocus
             className={`mt-4 rounded-xl px-6 py-2.5 font-semibold text-white transition-colors ${
-              feedback.correct
-                ? "bg-emerald-600 hover:bg-emerald-700"
-                : "bg-ink hover:bg-ink/80"
+              feedback.correct ? "bg-emerald-600 hover:bg-emerald-700" : "bg-ink hover:bg-ink/80"
             }`}
           >
-            {tagFailed
-              ? "Thẻ tiếp theo →"
-              : feedback.correct
-                ? qIdx + 1 < tag.questions.length
-                  ? "Câu tiếp theo →"
-                  : "Hoàn thành thẻ ✓"
-                : "Làm lại ↻"}
+            {pos + 1 >= queue.length ? "Xem kết quả 🏁" : "Câu tiếp theo →"}
           </button>
           <span className="ml-3 text-xs text-ink/40">hoặc nhấn Enter</span>
         </div>

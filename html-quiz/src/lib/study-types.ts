@@ -32,4 +32,6 @@ export type AnswerResult = {
   correct: boolean;
   parseError?: boolean;
   results?: { passed: boolean; message: string }[];
+  // Chỉ số đáp án đúng của MCQ (chế độ phản xạ tô đáp án khi sai).
+  correctIndex?: number | null;
 };

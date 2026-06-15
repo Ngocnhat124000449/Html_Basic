@@ -82,5 +82,8 @@ export async function POST(req: Request) {
     },
   });
 
-  return NextResponse.json({ correct, results, parseError });
+  // Lộ đáp án đúng cho MCQ — chế độ phản xạ chấm một lượt nên cần tô đáp án khi sai.
+  const correctIndex = question.type === "MCQ" ? question.correctIndex : undefined;
+
+  return NextResponse.json({ correct, results, parseError, correctIndex });
 }
