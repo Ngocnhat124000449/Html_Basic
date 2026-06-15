@@ -15,6 +15,7 @@ model User {
   createdAt    DateTime          @default(now())
   progress     UserTagProgress[]
   attempts     Attempt[]
+  reviewLogs   ReviewLog[]
 }
 
 model Tag {
@@ -29,8 +30,29 @@ model Tag {
   order       Int
   questions   Question[]
   progress    UserTagProgress[]
+  reviewLogs  ReviewLog[]
 
   @@unique([track, name])
+}
+
+// Nhật ký mỗi lần ôn (P2) — lưu để sau này chạy optimizer FSRS per-khóa.
+model ReviewLog {
+  id            String   @id @default(cuid())
+  userId        String
+  user          User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  tagId         String
+  tag           Tag      @relation(fields: [tagId], references: [id], onDelete: Cascade)
+  rating        Int // 1 Again, 2 Hard, 3 Good, 4 Easy
+  state         Int // state TRƯỚC khi ôn
+  stability     Float
+  difficulty    Float
+  elapsedDays   Int
+  scheduledDays Int
+  due           DateTime
+  reviewedAt    DateTime @default(now())
+
+  @@index([userId, tagId])
+  @@index([reviewedAt])
 }
 
 enum QuestionType {

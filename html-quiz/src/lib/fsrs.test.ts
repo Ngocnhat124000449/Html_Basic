@@ -5,6 +5,8 @@ import {
   toCard,
   fromCard,
   nextFromWrong,
+  nextWithLog,
+  retrievability,
   MAX_WRONG,
 } from "./fsrs";
 
@@ -85,5 +87,35 @@ describe("FSRS — round-trip toCard/fromCard", () => {
     const next = nextFromWrong(matured, 1, NOW); // Good
     const freshGood = nextFromWrong(null, 1, NOW);
     expect(next.dueAt.getTime()).toBeGreaterThan(freshGood.dueAt.getTime());
+  });
+});
+
+describe("FSRS — P2: nhật ký & retrievability", () => {
+  it("nextWithLog trả log với rating khớp grade và đủ trường", () => {
+    const { fields, log } = nextWithLog(null, 1, NOW); // Good = 3
+    expect(log.rating).toBe(Rating.Good);
+    expect(typeof log.stability).toBe("number");
+    expect(typeof log.difficulty).toBe("number");
+    expect(log.due).toBeInstanceOf(Date); // due TRƯỚC khi ôn (mốc tính elapsed), khác card.due mới
+    expect(log.reviewedAt).toBeInstanceOf(Date);
+    expect(fields.dueAt).toBeInstanceOf(Date);
+  });
+
+  it("retrievability: thẻ chưa ôn = 0; thẻ đã ôn nằm trong (0,1]", () => {
+    expect(retrievability(null, NOW)).toBe(0);
+    expect(retrievability({ stability: 0 }, NOW)).toBe(0);
+    const row = {
+      stability: 10,
+      difficulty: 5,
+      reps: 2,
+      state: 2,
+      scheduledDays: 10,
+      lapses: 0,
+      dueAt: new Date(NOW.getTime() + 5 * 24 * 60 * 60 * 1000),
+      lastReviewedAt: new Date(NOW.getTime() - 5 * 24 * 60 * 60 * 1000),
+    };
+    const r = retrievability(row, NOW);
+    expect(r).toBeGreaterThan(0);
+    expect(r).toBeLessThanOrEqual(1);
   });
 });

@@ -2,6 +2,10 @@ import Link from "next/link";
 import { redirect } from "next/navigation";
 import { auth } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
+import { retrievability } from "@/lib/fsrs";
+
+const DAY_MS = 24 * 60 * 60 * 1000;
+const LEECH_LAPSES = 8;
 
 export default async function HomePage() {
   const session = await auth();
@@ -17,6 +21,30 @@ export default async function HomePage() {
     prisma.tag.count({ where: { track: "js" } }),
     prisma.userTagProgress.findMany({ where: { userId, tag: { track: "js" } } }),
   ]);
+
+  // P2 — dự báo lịch ôn 7 ngày tới + độ nhớ trung bình + thẻ hay quên (mọi khóa)
+  const allProgress = [...htmlProgress, ...cssProgress, ...jsProgress];
+  const startToday = new Date(now);
+  startToday.setHours(0, 0, 0, 0);
+  const forecast = Array.from({ length: 7 }, () => 0);
+  for (const p of allProgress) {
+    const off = Math.floor((p.dueAt.getTime() - startToday.getTime()) / DAY_MS);
+    if (off <= 0) forecast[0]++;
+    else if (off < 7) forecast[off]++;
+  }
+  const reviewed = allProgress.filter((p) => p.stability > 0);
+  const avgRetention = reviewed.length
+    ? Math.round((reviewed.reduce((s, p) => s + retrievability(p, now), 0) / reviewed.length) * 100)
+    : null;
+  const leeches = allProgress.filter((p) => p.lapses >= LEECH_LAPSES).length;
+  const dueToday = forecast[0];
+  const maxForecast = Math.max(...forecast, 1);
+  const dayLabel = (i: number) => {
+    if (i === 0) return "Hôm nay";
+    if (i === 1) return "Mai";
+    const d = new Date(startToday.getTime() + i * DAY_MS);
+    return `${d.getDate()}/${d.getMonth() + 1}`;
+  };
 
   const courses = [
     {
@@ -131,6 +159,54 @@ export default async function HomePage() {
           );
         })}
       </div>
+
+      {/* P2 — Lịch ôn tập theo đường cong lãng quên (FSRS) */}
+      <section className="animate-rise stagger-2 rounded-3xl border border-ink/10 bg-surface p-6">
+        <div className="flex flex-wrap items-center justify-between gap-3">
+          <h2 className="font-display text-xl font-bold">📅 Lịch ôn tập</h2>
+          <div className="flex flex-wrap gap-2 text-xs">
+            <span className="rounded-full bg-amber-100 px-2.5 py-1 font-semibold text-amber-700">
+              {dueToday} thẻ đến hạn hôm nay
+            </span>
+            {avgRetention !== null && (
+              <span className="rounded-full bg-emerald-100 px-2.5 py-1 font-semibold text-emerald-700">
+                độ nhớ trung bình {avgRetention}%
+              </span>
+            )}
+            {leeches > 0 && (
+              <span className="rounded-full bg-red-100 px-2.5 py-1 font-semibold text-red-700">
+                {leeches} thẻ hay quên
+              </span>
+            )}
+          </div>
+        </div>
+
+        <div className="mt-6 flex items-end gap-2">
+          {forecast.map((n, i) => (
+            <div key={i} className="flex flex-1 flex-col items-center gap-1.5">
+              <span className="text-xs font-semibold text-ink/70">{n}</span>
+              <div className="flex h-24 w-full items-end">
+                <div
+                  className={`w-full rounded-t-md transition-all ${i === 0 ? "bg-amber-400" : "bg-sky-300"}`}
+                  style={{ height: `${Math.max((n / maxForecast) * 100, n > 0 ? 8 : 2)}%` }}
+                />
+              </div>
+              <span className="text-[11px] text-ink/50">{dayLabel(i)}</span>
+            </div>
+          ))}
+        </div>
+
+        {dueToday > 0 ? (
+          <Link
+            href="/study"
+            className="mt-5 inline-block font-medium text-flame-600 transition-transform hover:translate-x-1"
+          >
+            Ôn ngay {dueToday} thẻ đến hạn →
+          </Link>
+        ) : (
+          <p className="mt-5 text-sm text-ink/50">🎉 Hôm nay không còn thẻ đến hạn — quay lại sau nhé.</p>
+        )}
+      </section>
 
       <p className="animate-rise stagger-3 text-center text-sm text-ink/40">
         🚧 Thêm khóa học mới (JavaScript, React...) sẽ xuất hiện tại đây.

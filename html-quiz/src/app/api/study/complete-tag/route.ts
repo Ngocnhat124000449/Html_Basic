@@ -2,7 +2,7 @@ import { NextResponse } from "next/server";
 import { z } from "zod";
 import { auth } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
-import { nextFromWrong, MAX_WRONG } from "@/lib/fsrs";
+import { nextWithLog, MAX_WRONG } from "@/lib/fsrs";
 
 const schema = z.object({
   tagId: z.string(),
@@ -33,7 +33,7 @@ export async function POST(req: Request) {
     where: { userId_tagId: { userId, tagId } },
   });
   // FSRS lên lịch lần ôn kế tiếp từ state hiện tại + số lượt sai trong phiên.
-  const next = nextFromWrong(existing, wrongCount, new Date());
+  const { fields: next, log } = nextWithLog(existing, wrongCount, new Date());
 
   const data = {
     stability: next.stability,
@@ -51,6 +51,22 @@ export async function POST(req: Request) {
     where: { userId_tagId: { userId, tagId } },
     update: data,
     create: { userId, tagId, ...data },
+  });
+
+  // Nhật ký ôn (P2) — để dành cho optimizer FSRS sau này.
+  await prisma.reviewLog.create({
+    data: {
+      userId,
+      tagId,
+      rating: log.rating,
+      state: log.state,
+      stability: log.stability,
+      difficulty: log.difficulty,
+      elapsedDays: log.elapsedDays,
+      scheduledDays: log.scheduledDays,
+      due: log.due,
+      reviewedAt: log.reviewedAt,
+    },
   });
 
   return NextResponse.json({ ok: true, mastered: next.mastered });

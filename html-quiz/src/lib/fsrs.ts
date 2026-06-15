@@ -79,3 +79,47 @@ export function nextFromWrong(
 ): CardFields & { mastered: boolean } {
   return fromCard(schedule(toCard(row), ratingFromWrong(wrongCount), now));
 }
+
+// Bản ghi nhật ký ôn (ReviewLog) để lưu DB.
+export type ReviewLogFields = {
+  rating: number;
+  state: number;
+  stability: number;
+  difficulty: number;
+  elapsedDays: number;
+  scheduledDays: number;
+  due: Date;
+  reviewedAt: Date;
+};
+
+// Như nextFromWrong nhưng trả kèm nhật ký để lưu ReviewLog (P2).
+export function nextWithLog(
+  row: Partial<CardFields> | null | undefined,
+  wrongCount: number,
+  now: Date
+): { fields: CardFields & { mastered: boolean }; log: ReviewLogFields } {
+  const res = scheduler.next(toCard(row), now, ratingFromWrong(wrongCount));
+  return {
+    fields: fromCard(res.card),
+    log: {
+      rating: res.log.rating,
+      state: res.log.state,
+      stability: res.log.stability,
+      difficulty: res.log.difficulty,
+      elapsedDays: res.log.elapsed_days,
+      scheduledDays: res.log.scheduled_days,
+      due: res.log.due,
+      reviewedAt: res.log.review,
+    },
+  };
+}
+
+// Xác suất nhớ lại (retrievability) tại now theo đường cong lãng quên FSRS.
+// Thẻ chưa ôn (stability<=0) trả về 0. Dùng cho thống kê dashboard.
+export function retrievability(
+  row: Partial<CardFields> | null | undefined,
+  now: Date
+): number {
+  if (!row || !row.stability || row.stability <= 0) return 0;
+  return scheduler.get_retrievability(toCard(row), now, false) as number;
+}
