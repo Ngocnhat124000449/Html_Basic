@@ -14,19 +14,19 @@ export const PART1_NEN_TANG: JsSeedTag[] = [
     questions: [
       {
         tier: 1, type: "MCQ",
-        prompt: "Nhúng một file JS ngoài tên app.js vào trang HTML dùng thẻ nào?",
+        prompt: "Bạn viết xong file app.js và muốn trang web chạy nó. Nhúng file JS ngoài này vào HTML bằng thẻ nào?",
         options: ['<script src="app.js"></script>', '<js src="app.js">', '<link src="app.js">', '<script href="app.js">'],
         correctIndex: 0,
       },
       {
         tier: 1, type: "MCQ",
-        prompt: "Viết JS trực tiếp trong HTML thì đặt code vào đâu?",
+        prompt: "Chỉ cần vài dòng JS nên bạn muốn viết thẳng trong file HTML (không tách file riêng). Phải đặt code vào đâu?",
         options: ["Bên trong cặp thẻ <script>...</script>", "Trong thuộc tính style", "Trong thẻ <css>", "Trong <head> dưới dạng văn bản"],
         correctIndex: 0,
       },
       {
         tier: 1, type: "MCQ",
-        prompt: "Vì sao thẻ <script> thường đặt ở CUỐI <body>?",
+        prompt: "JS chạy lúc trang mới mở thì báo 'không tìm thấy nút bấm'. Vì sao đặt <script> ở CUỐI <body> lại tránh được lỗi này?",
         options: [
           "Để HTML tải xong trước, JS mới chạy và thấy được các phần tử",
           "Vì <script> không chạy được trong <head>",
@@ -37,7 +37,7 @@ export const PART1_NEN_TANG: JsSeedTag[] = [
       },
       {
         tier: 2, type: "MCQ",
-        prompt: "Thuộc tính defer trên <script src> có tác dụng gì?",
+        prompt: "Bạn muốn để <script src> trong <head> mà vẫn chắc chắn code chỉ chạy sau khi trang dựng xong. Thuộc tính defer giúp điều đó thế nào?",
         options: [
           "Hoãn chạy script tới khi HTML phân tích xong, giữ đúng thứ tự — cho phép đặt script trong <head> an toàn",
           "Tải script nhanh gấp đôi",
@@ -48,7 +48,7 @@ export const PART1_NEN_TANG: JsSeedTag[] = [
       },
       {
         tier: 2, type: "MCQ",
-        prompt: "Khác nhau giữa defer và async trên thẻ script?",
+        prompt: "Hai script cần chạy đúng thứ tự A rồi B. Đặt defer hay async trên thẻ script — hai cái khác nhau thế nào?",
         options: [
           "defer chạy sau khi HTML xong và giữ thứ tự; async chạy ngay khi tải xong, không đảm bảo thứ tự",
           "Hoàn toàn giống nhau",
@@ -59,7 +59,7 @@ export const PART1_NEN_TANG: JsSeedTag[] = [
       },
       {
         tier: 2, type: "MCQ",
-        prompt: "Một file JS ngoài đặt được nhiều lần trên nhiều trang có lợi gì so với viết inline?",
+        prompt: "Nhiều trang trong web dùng chung một file app.js. Tách ra file JS ngoài (thay vì viết inline mỗi trang) có lợi gì?",
         options: [
           "Trình duyệt cache lại dùng chung, sửa logic chỉ cần một file",
           "Chạy nhanh hơn gấp 10 lần",
@@ -88,25 +88,25 @@ export const PART1_NEN_TANG: JsSeedTag[] = [
     questions: [
       {
         tier: 1, type: "MCQ",
-        prompt: "Lệnh nào in một giá trị ra console của trình duyệt?",
+        prompt: "Đang nghi biến diem sai giá trị, bạn muốn in nó ra để kiểm tra. Lệnh nào in một giá trị ra console của trình duyệt?",
         options: ["console.log(x)", "print(x)", "echo x", "log.console(x)"],
         correctIndex: 0,
       },
       {
         tier: 1, type: "MCQ",
-        prompt: "Mở console của trình duyệt để xem kết quả console.log bằng cách nào?",
+        prompt: "Đã viết console.log nhưng nhìn lên trang chẳng thấy gì. Mở console trình duyệt để xem kết quả bằng cách nào?",
         options: ["Mở DevTools (F12) → tab Console", "Xem trong tab Network", "Bấm chuột phải → Lưu", "Xem mã nguồn trang"],
         correctIndex: 0,
       },
       {
         tier: 1, type: "MCQ",
-        prompt: "console.log nhận được bao nhiêu giá trị một lần?",
+        prompt: "Muốn in cùng lúc cả tên lẫn tuổi cho dễ đối chiếu. console.log nhận được bao nhiêu giá trị một lần?",
         options: ["Nhiều giá trị, cách nhau dấu phẩy: console.log(a, b, c)", "Chỉ đúng 1", "Tối đa 2", "Chỉ chuỗi"],
         correctIndex: 0,
       },
       {
         tier: 2, type: "MCQ",
-        prompt: "Ngoài console.log, console.error khác gì?",
+        prompt: "Muốn một thông báo lỗi nổi bật giữa đống log để dễ thấy. console.error khác console.log ở chỗ nào?",
         options: [
           "In dưới dạng thông báo lỗi (thường màu đỏ, kèm stack) — hợp để báo lỗi",
           "Dừng chương trình",
@@ -117,7 +117,7 @@ export const PART1_NEN_TANG: JsSeedTag[] = [
       },
       {
         tier: 2, type: "MCQ",
-        prompt: "console.log có làm thay đổi giá trị biến hay giao diện trang không?",
+        prompt: "Bạn lo việc rải console.log lúc kiểm tra sẽ làm hỏng dữ liệu. Nó có thay đổi giá trị biến hay giao diện trang không?",
         options: [
           "Không — nó chỉ in để xem, là công cụ gỡ lỗi, không ảnh hưởng dữ liệu/UI",
           "Có, nó cập nhật DOM",
@@ -158,19 +158,19 @@ export const PART1_NEN_TANG: JsSeedTag[] = [
     questions: [
       {
         tier: 1, type: "MCQ",
-        prompt: "Comment một dòng trong JS viết thế nào?",
+        prompt: "Bạn muốn ghi một dòng chú thích để giải thích code (máy bỏ qua khi chạy). Comment một dòng trong JS viết thế nào?",
         options: ["// ghi chú", "/* ghi chú", "# ghi chú", "<!-- ghi chú -->"],
         correctIndex: 0,
       },
       {
         tier: 1, type: "MCQ",
-        prompt: "Comment nhiều dòng trong JS dùng cú pháp nào?",
+        prompt: "Cần ghi chú một đoạn giải thích dài vài dòng phía trên hàm. Comment nhiều dòng trong JS dùng cú pháp nào?",
         options: ["/* ... */", "// ... //", "<!-- ... -->", "''' ... '''"],
         correctIndex: 0,
       },
       {
         tier: 1, type: "MCQ",
-        prompt: "Mỗi câu lệnh JS thường kết thúc bằng ký tự nào?",
+        prompt: "Viết xong một câu lệnh JS, theo thói quen tốt bạn kết thúc dòng bằng ký tự nào?",
         options: ["Dấu chấm phẩy ;", "Dấu chấm .", "Dấu phẩy ,", "Dấu hai chấm :"],
         correctIndex: 0,
       },
@@ -198,7 +198,7 @@ export const PART1_NEN_TANG: JsSeedTag[] = [
       },
       {
         tier: 2, type: "MCQ",
-        prompt: "JS phân biệt chữ hoa/thường (case-sensitive) — điều nào đúng?",
+        prompt: "Bạn đặt biến tuoi nhưng chỗ khác lỡ gõ Tuoi. JS phân biệt chữ hoa/thường (case-sensitive) — điều nào đúng?",
         options: [
           "tuoi và Tuoi là HAI biến khác nhau",
           "tuoi và Tuoi là một",
@@ -242,13 +242,13 @@ export const PART1_NEN_TANG: JsSeedTag[] = [
       },
       {
         tier: 1, type: "MCQ",
-        prompt: "let có cho phép khai báo biến mà CHƯA gán giá trị không?",
+        prompt: "Bạn muốn khai báo trước biến ketQua rồi lát nữa mới gán. let có cho khai báo mà CHƯA gán giá trị không?",
         options: ["Có: let x; (giá trị là undefined)", "Không, bắt buộc gán", "Chỉ với số", "Chỉ trong hàm"],
         correctIndex: 0,
       },
       {
         tier: 2, type: "MCQ",
-        prompt: "Phạm vi (scope) của biến let là gì?",
+        prompt: "Một biến khai báo bằng let bên trong khối { } của if có dùng được ở ngoài khối đó không — phạm vi (scope) của let là gì?",
         options: [
           "Block scope — chỉ tồn tại trong cặp { } gần nhất chứa nó",
           "Toàn cục mọi nơi",
@@ -259,7 +259,7 @@ export const PART1_NEN_TANG: JsSeedTag[] = [
       },
       {
         tier: 2, type: "MCQ",
-        prompt: "Khai báo lại CÙNG tên biến bằng let hai lần trong cùng scope thì sao?",
+        prompt: "Lỡ viết let diem hai lần trong cùng một khối, chuyện gì xảy ra?",
         options: [
           "Lỗi: 'already been declared' — let không cho khai báo trùng trong cùng scope",
           "Ghi đè bình thường",
@@ -305,7 +305,7 @@ export const PART1_NEN_TANG: JsSeedTag[] = [
       },
       {
         tier: 1, type: "MCQ",
-        prompt: "const có bắt buộc gán giá trị ngay khi khai báo không?",
+        prompt: "Bạn viết const PI rồi định gán giá trị ở dòng sau. const có bắt buộc gán giá trị ngay khi khai báo không?",
         options: ["Có — const PI = 3.14; phải gán ngay", "Không, gán sau cũng được", "Chỉ với số", "Tùy trình duyệt"],
         correctIndex: 0,
       },
@@ -339,7 +339,7 @@ export const PART1_NEN_TANG: JsSeedTag[] = [
       },
       {
         tier: 2, type: "MCQ",
-        prompt: "const cũng là block scope như let. Điều nào đúng?",
+        prompt: "Khai báo một const bên trong khối { } — nó có 'rò' ra dùng được ngoài khối không? Điều nào đúng?",
         options: [
           "const chỉ tồn tại trong { } chứa nó, không bị 'rò' ra ngoài",
           "const là toàn cục",
@@ -380,7 +380,7 @@ export const PART1_NEN_TANG: JsSeedTag[] = [
       },
       {
         tier: 1, type: "MCQ",
-        prompt: "var có scope gì khác let?",
+        prompt: "Cùng khai báo trong một khối { }, biến var và biến let khác nhau về phạm vi (scope) thế nào?",
         options: [
           "var là function scope (rò ra ngoài block { }); let là block scope",
           "Giống hệt let",
@@ -402,7 +402,7 @@ export const PART1_NEN_TANG: JsSeedTag[] = [
       },
       {
         tier: 2, type: "MCQ",
-        prompt: "Khai báo trùng tên bằng var hai lần trong cùng scope thì sao?",
+        prompt: "Trong một file dài, bạn lỡ khai báo trùng tên bằng var hai lần. Chuyện gì xảy ra?",
         options: [
           "Không báo lỗi, lần sau ghi đè lần trước — nguồn bug âm thầm",
           "Lỗi ngay như let",
@@ -450,13 +450,13 @@ export const PART1_NEN_TANG: JsSeedTag[] = [
       },
       {
         tier: 1, type: "MCQ",
-        prompt: "Chuỗi trong JS bọc được bằng những ký tự nào?",
+        prompt: "Muốn lưu đoạn văn bản 'Xin chào' vào một biến. Chuỗi trong JS bọc được bằng những ký tự nào?",
         options: ["Nháy đơn '', nháy kép \"\", hoặc backtick ``", "Chỉ nháy kép", "Chỉ nháy đơn", "Dấu ngoặc ()"],
         correctIndex: 0,
       },
       {
         tier: 1, type: "MCQ",
-        prompt: "Lấy độ dài chuỗi s dùng gì?",
+        prompt: "Muốn kiểm tra mật khẩu người dùng nhập có đủ dài không, cần biết số ký tự của chuỗi s. Dùng gì?",
         options: ["s.length", "s.size()", "length(s)", "s.count"],
         correctIndex: 0,
       },
@@ -515,7 +515,7 @@ export const PART1_NEN_TANG: JsSeedTag[] = [
       },
       {
         tier: 1, type: "MCQ",
-        prompt: "JS có phân biệt số nguyên và số thực thành hai kiểu riêng không?",
+        prompt: "Trong JS, số nguyên 5 và số thực 3.14 có thuộc về hai kiểu riêng biệt không?",
         options: ["Không — cả hai đều là kiểu number", "Có: int và float", "Có: integer và double", "Chỉ có số nguyên"],
         correctIndex: 0,
       },
@@ -527,7 +527,7 @@ export const PART1_NEN_TANG: JsSeedTag[] = [
       },
       {
         tier: 2, type: "MCQ",
-        prompt: "Giá trị NaN nghĩa là gì?",
+        prompt: "Tính Number(\"abc\") ra một giá trị lạ là NaN thay vì con số. NaN nghĩa là gì?",
         options: [
           "Not a Number — kết quả của phép số không hợp lệ, vd Number(\"abc\")",
           "Số 0",
@@ -538,7 +538,7 @@ export const PART1_NEN_TANG: JsSeedTag[] = [
       },
       {
         tier: 2, type: "MCQ",
-        prompt: "Làm tròn xuống số nguyên gần nhất dùng gì?",
+        prompt: "Tính ra 3.9 trang sản phẩm nhưng muốn làm tròn XUỐNG còn 3. Dùng gì?",
         options: ["Math.floor(x)", "Math.round.down(x)", "x.int()", "floor x"],
         correctIndex: 0,
       },
@@ -586,7 +586,7 @@ export const PART1_NEN_TANG: JsSeedTag[] = [
       },
       {
         tier: 1, type: "MCQ",
-        prompt: "Boolean thường dùng để làm gì?",
+        prompt: "Biến daDangNhap lưu trạng thái đăng nhập đúng/sai. Kiểu boolean thường dùng để làm gì?",
         options: ["Quyết định luồng if/else và điều kiện", "Lưu văn bản", "Tính tổng", "Đặt màu"],
         correctIndex: 0,
       },
@@ -649,7 +649,7 @@ export const PART1_NEN_TANG: JsSeedTag[] = [
       },
       {
         tier: 1, type: "MCQ",
-        prompt: "null thường dùng để biểu thị điều gì?",
+        prompt: "Chưa có ai đăng nhập nên bạn gán nguoiDung = null. null thường dùng để biểu thị điều gì?",
         options: ["Cố ý gán 'không có giá trị'", "Một số lớn", "Một chuỗi rỗng", "Giá trị true"],
         correctIndex: 0,
       },
@@ -666,7 +666,7 @@ export const PART1_NEN_TANG: JsSeedTag[] = [
       },
       {
         tier: 2, type: "MCQ",
-        prompt: "Hàm không có lệnh return trả về gì?",
+        prompt: "Một hàm chỉ in ra màn hình mà không có lệnh return. Gọi hàm đó nhận lại giá trị gì?",
         options: ["undefined", "null", "0", "false"],
         correctIndex: 0,
       },
@@ -712,7 +712,7 @@ export const PART1_NEN_TANG: JsSeedTag[] = [
     questions: [
       {
         tier: 1, type: "MCQ",
-        prompt: "Kiểm tra kiểu dữ liệu của biến x dùng gì?",
+        prompt: "Không chắc biến x đang là số hay chuỗi, bạn muốn biết kiểu của nó. Dùng gì?",
         options: ["typeof x", "x.type", "type(x)", "x.typeof()"],
         correctIndex: 0,
       },
@@ -773,7 +773,7 @@ export const PART1_NEN_TANG: JsSeedTag[] = [
     questions: [
       {
         tier: 1, type: "MCQ",
-        prompt: "Toán tử lấy phần dư của phép chia là gì?",
+        prompt: "Muốn lấy phần dư của phép chia (vd để xét số chẵn/lẻ). Dùng toán tử nào?",
         options: ["%", "/", "//", "mod"],
         correctIndex: 0,
       },
@@ -1037,7 +1037,7 @@ export const PART1_NEN_TANG: JsSeedTag[] = [
       },
       {
         tier: 1, type: "MCQ",
-        prompt: "Bỏ khoảng trắng thừa hai đầu chuỗi dùng gì?",
+        prompt: "Người dùng nhập \"  An  \" có khoảng trắng thừa hai đầu. Muốn bỏ chúng đi dùng method nào?",
         options: ["s.trim()", "s.strip()", "s.clean()", "trim(s)"],
         correctIndex: 0,
       },

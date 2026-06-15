@@ -17,7 +17,7 @@ export const PART5_BAT_DONG_BO: JsSeedTag[] = [
     questions: [
       {
         tier: 1, type: "MCQ",
-        prompt: "Callback là gì?",
+        prompt: "Bạn đưa một hàm cho setTimeout để nó 'gọi lại' khi tới giờ. Hàm được truyền kiểu đó gọi là gì?",
         options: ["Một HÀM được truyền vào hàm khác để gọi lại", "Một biến số", "Một vòng lặp", "Một class"],
         correctIndex: 0,
       },
@@ -131,7 +131,7 @@ export const PART5_BAT_DONG_BO: JsSeedTag[] = [
     questions: [
       {
         tier: 1, type: "MCQ",
-        prompt: "Tạo một Promise mới dùng cú pháp nào?",
+        prompt: "Muốn biểu diễn một kết quả 'sẽ có trong tương lai' (vd tải xong dữ liệu). Tạo một Promise mới dùng cú pháp nào?",
         options: ["new Promise((resolve, reject) => ...)", "Promise.create()", "new Promise[]", "promise()"],
         correctIndex: 0,
       },

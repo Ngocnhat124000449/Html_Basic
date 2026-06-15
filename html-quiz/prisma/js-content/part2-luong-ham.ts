@@ -16,19 +16,19 @@ export const PART2_LUONG_HAM: JsSeedTag[] = [
     questions: [
       {
         tier: 1, type: "MCQ",
-        prompt: "Cú pháp câu điều kiện cơ bản trong JS là gì?",
+        prompt: "Form đăng nhập cần: nếu nhập đúng thì cho vào trang. Câu điều kiện cơ bản trong JS viết theo cú pháp nào?",
         options: ["if (điều_kiện) { ... }", "if điều_kiện then ...", "when (đk) { ... }", "if [đk] { ... }"],
         correctIndex: 0,
       },
       {
         tier: 1, type: "MCQ",
-        prompt: "Khối else chạy khi nào?",
+        prompt: "Đăng nhập: mật khẩu đúng thì vào trang, ngược lại báo lỗi. Phần 'ngược lại' là khối else — nó chạy khi nào?",
         options: ["Khi điều kiện của if là false", "Luôn chạy", "Khi if đúng", "Không bao giờ chạy"],
         correctIndex: 0,
       },
       {
         tier: 1, type: "MCQ",
-        prompt: "Biểu thức trong if (...) sau khi đánh giá nên cho ra kiểu gì?",
+        prompt: "Bạn viết if (tuoi >= 18). Biểu thức bên trong if (...) sau khi đánh giá nên cho ra kiểu gì?",
         options: ["boolean (true/false)", "luôn là số", "luôn là chuỗi", "một mảng"],
         correctIndex: 0,
       },
@@ -90,7 +90,7 @@ export const PART2_LUONG_HAM: JsSeedTag[] = [
     questions: [
       {
         tier: 1, type: "MCQ",
-        prompt: "Kiểm tra nhiều trường hợp loại trừ nhau dùng cấu trúc nào?",
+        prompt: "Xếp loại học lực Giỏi / Khá / Trung bình theo nhiều mức điểm loại trừ nhau. Dùng cấu trúc nào?",
         options: [
           "Chuỗi if / else if / else",
           "Nhiều if rời rạc luôn tốt hơn",
@@ -101,13 +101,13 @@ export const PART2_LUONG_HAM: JsSeedTag[] = [
       },
       {
         tier: 1, type: "MCQ",
-        prompt: "Trong chuỗi if / else if / else, bao nhiêu nhánh được chạy?",
+        prompt: "Một điểm số đi qua chuỗi if / else if / else. Cuối cùng có bao nhiêu nhánh thực sự được chạy?",
         options: ["Tối đa MỘT — nhánh đúng đầu tiên", "Tất cả nhánh đúng", "Luôn đúng 2 nhánh", "Không nhánh nào"],
         correctIndex: 0,
       },
       {
         tier: 1, type: "MCQ",
-        prompt: "Khối else (không kèm if) đặt ở đâu trong chuỗi?",
+        prompt: "Trong chuỗi rẽ nhánh, khối else (không kèm if) để 'bắt' mọi trường hợp còn lại nên đặt ở đâu?",
         options: ["Cuối cùng, bắt mọi trường hợp còn lại", "Đầu tiên", "Ở giữa", "Lặp lại nhiều lần"],
         correctIndex: 0,
       },
@@ -170,7 +170,7 @@ export const PART2_LUONG_HAM: JsSeedTag[] = [
     questions: [
       {
         tier: 1, type: "MCQ",
-        prompt: "Cú pháp toán tử 3 ngôi (ternary) là gì?",
+        prompt: "Muốn gán nhanh một biến theo điều kiện chỉ trong một dòng. Cú pháp toán tử 3 ngôi (ternary) là gì?",
         options: ["dk ? a : b", "dk ? a , b", "if dk a else b", "dk => a : b"],
         correctIndex: 0,
       },
@@ -249,7 +249,7 @@ export const PART2_LUONG_HAM: JsSeedTag[] = [
     questions: [
       {
         tier: 1, type: "MCQ",
-        prompt: "switch dùng để làm gì?",
+        prompt: "Hiển thị tên thứ theo mã 'T2', 'T3', 'T4'... So MỘT giá trị với nhiều trường hợp cụ thể — switch dùng để làm gì?",
         options: [
           "So MỘT giá trị với nhiều case cụ thể",
           "Lặp lại nhiều lần",
@@ -260,13 +260,13 @@ export const PART2_LUONG_HAM: JsSeedTag[] = [
       },
       {
         tier: 1, type: "MCQ",
-        prompt: "Mỗi case trong switch thường kết thúc bằng từ khóa nào (nếu không return)?",
+        prompt: "Để một case trong switch khỏi 'chạy lan' xuống case bên dưới, nó (nếu không return) thường kết thúc bằng từ khóa nào?",
         options: ["break", "stop", "end", "exit"],
         correctIndex: 0,
       },
       {
         tier: 1, type: "MCQ",
-        prompt: "default trong switch tương ứng với gì trong if?",
+        prompt: "Trong switch, nhánh 'bắt' mọi trường hợp còn lại là default. Nó tương ứng với gì trong if?",
         options: ["else — chạy khi không case nào khớp", "if đầu tiên", "break", "case 0"],
         correctIndex: 0,
       },
@@ -325,7 +325,7 @@ export const PART2_LUONG_HAM: JsSeedTag[] = [
     questions: [
       {
         tier: 1, type: "MCQ",
-        prompt: "Cú pháp vòng for cơ bản là gì?",
+        prompt: "Muốn lặp đúng 10 lần để in 10 dòng số thứ tự. Cú pháp vòng for cơ bản là gì?",
         options: [
           "for (let i = 0; i < n; i++) { ... }",
           "for i in n { ... }",
@@ -347,7 +347,7 @@ export const PART2_LUONG_HAM: JsSeedTag[] = [
       },
       {
         tier: 1, type: "MCQ",
-        prompt: "i++ nghĩa là gì?",
+        prompt: "Cuối mỗi vòng lặp bạn viết i++ để biến đếm nhích lên. i++ nghĩa là gì?",
         options: ["Tăng i lên 1", "Giảm i đi 1", "Nhân i với 2", "Gán i = 1"],
         correctIndex: 0,
       },
@@ -395,19 +395,19 @@ export const PART2_LUONG_HAM: JsSeedTag[] = [
     questions: [
       {
         tier: 1, type: "MCQ",
-        prompt: "Cú pháp vòng while là gì?",
+        prompt: "Lặp lại tới khi người dùng nhập đúng mật khẩu (chưa biết trước mấy lần). Cú pháp vòng while là gì?",
         options: ["while (điều_kiện) { ... }", "while: ...", "loop while ...", "while [đk] ..."],
         correctIndex: 0,
       },
       {
         tier: 1, type: "MCQ",
-        prompt: "Thân while chạy khi nào?",
+        prompt: "Bạn đặt while (conLai > 0). Thân vòng while chạy khi nào?",
         options: ["Khi điều kiện còn true", "Khi điều kiện false", "Đúng 1 lần", "Không bao giờ"],
         correctIndex: 0,
       },
       {
         tier: 1, type: "MCQ",
-        prompt: "Để while có thể dừng, trong thân cần làm gì?",
+        prompt: "Vòng while cứ chạy mãi không dừng. Để nó dừng được, trong thân vòng cần làm gì?",
         options: [
           "Cập nhật biến để điều kiện cuối cùng thành false",
           "Không cần làm gì",
@@ -473,13 +473,13 @@ export const PART2_LUONG_HAM: JsSeedTag[] = [
     questions: [
       {
         tier: 1, type: "MCQ",
-        prompt: "break trong vòng lặp làm gì?",
+        prompt: "Đang duyệt danh sách, vừa tìm thấy món cần nên muốn dừng tìm luôn. break trong vòng lặp làm gì?",
         options: ["Thoát khỏi vòng lặp ngay lập tức", "Bỏ qua 1 vòng", "Khởi động lại vòng lặp", "Không làm gì"],
         correctIndex: 0,
       },
       {
         tier: 1, type: "MCQ",
-        prompt: "continue làm gì?",
+        prompt: "Đang duyệt danh sách, gặp món hết hàng muốn bỏ qua và xét ngay món tiếp theo. continue làm gì?",
         options: [
           "Bỏ qua phần còn lại của vòng hiện tại, sang vòng kế tiếp",
           "Thoát hẳn vòng lặp",
@@ -556,13 +556,13 @@ export const PART2_LUONG_HAM: JsSeedTag[] = [
       },
       {
         tier: 1, type: "MCQ",
-        prompt: "for...of duyệt qua cái gì của mảng?",
+        prompt: "Bạn viết for (const x of arr). Mỗi vòng, x nhận được cái gì của mảng?",
         options: ["Giá trị từng phần tử", "Chỉ số (index)", "Độ dài mảng", "Tên thuộc tính"],
         correctIndex: 0,
       },
       {
         tier: 1, type: "MCQ",
-        prompt: "for...of dùng được với chuỗi không?",
+        prompt: "Muốn duyệt qua từng ký tự của một chuỗi để xử lý. for...of dùng được với chuỗi không?",
         options: ["Có — duyệt từng ký tự", "Không dùng được", "Chỉ với mảng số", "Chỉ với object"],
         correctIndex: 0,
       },
@@ -637,7 +637,7 @@ export const PART2_LUONG_HAM: JsSeedTag[] = [
       },
       {
         tier: 1, type: "MCQ",
-        prompt: "Lợi ích chính của hàm là gì?",
+        prompt: "Cùng đoạn code tính tiền được dùng ở nhiều nơi. Gói nó vào một hàm thì lợi ích chính là gì?",
         options: [
           "Đóng gói code để TÁI SỬ DỤNG nhiều lần",
           "Làm chương trình chạy nhanh hơn",
@@ -648,7 +648,7 @@ export const PART2_LUONG_HAM: JsSeedTag[] = [
       },
       {
         tier: 2, type: "MCQ",
-        prompt: "Hàm khai báo bằng function (function declaration) có hoisting không?",
+        prompt: "Bạn lỡ gọi tinhTong() ở dòng TRÊN chỗ khai báo nó bằng function. Nhờ hoisting, việc đó có chạy được không?",
         options: [
           "Có — gọi được cả trước dòng khai báo",
           "Không bao giờ",
@@ -659,7 +659,7 @@ export const PART2_LUONG_HAM: JsSeedTag[] = [
       },
       {
         tier: 2, type: "MCQ",
-        prompt: "Hàm không có lệnh return thì trả về gì?",
+        prompt: "Hàm chỉ console.log một thông báo mà quên viết return. Gọi nó nhận lại giá trị gì?",
         options: ["undefined", "null", "0", "chuỗi rỗng"],
         correctIndex: 0,
       },
@@ -697,7 +697,7 @@ export const PART2_LUONG_HAM: JsSeedTag[] = [
     questions: [
       {
         tier: 1, type: "MCQ",
-        prompt: "Tham số của hàm được khai báo ở đâu?",
+        prompt: "Muốn hàm cong nhận vào hai số a và b để cộng. Tham số của hàm được khai báo ở đâu?",
         options: [
           "Trong dấu () khi định nghĩa: function f(a, b)",
           "Trong thân hàm",
@@ -708,7 +708,7 @@ export const PART2_LUONG_HAM: JsSeedTag[] = [
       },
       {
         tier: 1, type: "MCQ",
-        prompt: "Lệnh return làm gì?",
+        prompt: "Hàm tính xong tổng và cần đưa kết quả ra ngoài cho nơi gọi dùng tiếp. Lệnh return làm gì?",
         options: [
           "Trả giá trị ra cho nơi gọi và kết thúc hàm",
           "Chỉ in giá trị ra console",
@@ -867,7 +867,7 @@ export const PART2_LUONG_HAM: JsSeedTag[] = [
       },
       {
         tier: 1, type: "MCQ",
-        prompt: "Tham số mặc định giúp ích gì?",
+        prompt: "Hàm chao(ten) khi gọi mà quên truyền ten sẽ bị undefined. Tham số mặc định giúp ích gì?",
         options: [
           "Tránh undefined khi thiếu đối số",
           "Bắt buộc phải truyền đủ",

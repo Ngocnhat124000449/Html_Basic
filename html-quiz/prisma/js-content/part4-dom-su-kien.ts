@@ -15,7 +15,7 @@ export const PART4_DOM_SU_KIEN: JsSeedTag[] = [
     questions: [
       {
         tier: 1, type: "MCQ",
-        prompt: "Chọn phần tử ĐẦU TIÊN khớp một CSS selector dùng gì?",
+        prompt: "Bấm nút 'Ẩn', bạn cần lấy hộp thông báo trên trang (theo CSS selector) để thao tác. Chọn phần tử ĐẦU TIÊN khớp selector dùng gì?",
         options: ["document.querySelector(sel)", "document.select(sel)", "document.find(sel)", "document.get(sel)"],
         correctIndex: 0,
       },
@@ -70,7 +70,7 @@ export const PART4_DOM_SU_KIEN: JsSeedTag[] = [
     questions: [
       {
         tier: 1, type: "MCQ",
-        prompt: "Chọn TẤT CẢ phần tử khớp selector dùng gì?",
+        prompt: "Muốn tô đậm TẤT CẢ ô .card đang có trên trang. Chọn tất cả phần tử khớp selector dùng gì?",
         options: ["document.querySelectorAll(sel)", "document.querySelector(sel)", "document.all(sel)", "document.selectAll(sel)"],
         correctIndex: 0,
       },
@@ -82,7 +82,7 @@ export const PART4_DOM_SU_KIEN: JsSeedTag[] = [
       },
       {
         tier: 1, type: "MCQ",
-        prompt: "Đếm số phần tử querySelectorAll tìm được dùng gì?",
+        prompt: "Muốn biết danh sách đang có bao nhiêu thẻ <li>. Sau querySelectorAll, đếm số phần tử tìm được dùng gì?",
         options: [".length", ".count", ".size()", ".total"],
         correctIndex: 0,
       },
@@ -131,7 +131,7 @@ export const PART4_DOM_SU_KIEN: JsSeedTag[] = [
     questions: [
       {
         tier: 1, type: "MCQ",
-        prompt: "Chọn phần tử theo id dùng gì?",
+        prompt: "Ô nhập họ tên có id là 'hoTen'. Muốn lấy đúng nó theo id dùng gì?",
         options: ["document.getElementById(id)", 'document.getElementById("#id")', "document.id(id)", "document.byId(id)"],
         correctIndex: 0,
       },
@@ -193,13 +193,13 @@ export const PART4_DOM_SU_KIEN: JsSeedTag[] = [
     questions: [
       {
         tier: 1, type: "MCQ",
-        prompt: "Đổi phần CHỮ (text) hiển thị của phần tử dùng thuộc tính nào?",
+        prompt: "Muốn đổi dòng chữ trong thẻ tiêu đề thành 'Xin chào'. Đổi phần CHỮ hiển thị của phần tử dùng thuộc tính nào?",
         options: ["el.textContent = ...", "el.text = ...", "el.value = ...", "el.label = ..."],
         correctIndex: 0,
       },
       {
         tier: 1, type: "MCQ",
-        prompt: "Đọc chữ hiện tại của phần tử dùng gì?",
+        prompt: "Muốn đọc xem nhãn đang hiển thị chữ gì. Đọc chữ hiện tại của phần tử dùng gì?",
         options: ["el.textContent", "el.read()", "el.getText()", "el.chu"],
         correctIndex: 0,
       },
@@ -253,7 +253,7 @@ export const PART4_DOM_SU_KIEN: JsSeedTag[] = [
     questions: [
       {
         tier: 1, type: "MCQ",
-        prompt: "Đặt nội dung HTML bên trong phần tử dùng gì?",
+        prompt: "Muốn chèn đoạn '<b>Hi</b>' để chữ in đậm THẬT bên trong phần tử. Đặt nội dung HTML bên trong phần tử dùng gì?",
         options: ['el.innerHTML = "<b>Hi</b>"', 'el.textContent = "<b>Hi</b>"', "el.html = ...", "el.setHTML = ..."],
         correctIndex: 0,
       },
@@ -265,7 +265,7 @@ export const PART4_DOM_SU_KIEN: JsSeedTag[] = [
       },
       {
         tier: 1, type: "MCQ",
-        prompt: "Đọc HTML hiện có bên trong phần tử dùng gì?",
+        prompt: "Muốn lấy ra chuỗi HTML đang nằm bên trong một phần tử. Đọc HTML hiện có bên trong phần tử dùng gì?",
         options: ["el.innerHTML", "el.outer", "el.getHTML()", "el.content"],
         correctIndex: 0,
       },
@@ -318,7 +318,7 @@ export const PART4_DOM_SU_KIEN: JsSeedTag[] = [
       },
       {
         tier: 1, type: "MCQ",
-        prompt: "Đặt sẵn giá trị cho ô input dùng gì?",
+        prompt: "Muốn điền sẵn email cũ vào ô input cho người dùng sửa. Đặt sẵn giá trị cho ô input dùng gì?",
         options: ['input.value = "..."', 'input.set("...")', 'input.textContent = "..."', "input.default = ..."],
         correctIndex: 0,
       },
@@ -374,13 +374,13 @@ export const PART4_DOM_SU_KIEN: JsSeedTag[] = [
     questions: [
       {
         tier: 1, type: "MCQ",
-        prompt: "Thêm một class cho phần tử dùng gì?",
+        prompt: "Bấm vào một mục để 'kích hoạt' nó — cần thêm class 'active' cho phần tử. Dùng gì?",
         options: ['el.classList.add("active")', 'el.class = "active"', 'el.addClass("active")', 'el.classList = "active"'],
         correctIndex: 0,
       },
       {
         tier: 1, type: "MCQ",
-        prompt: "Bỏ một class dùng gì?",
+        prompt: "Muốn tắt trạng thái sáng của mục — bỏ class 'active' khỏi phần tử. Dùng gì?",
         options: ['el.classList.remove("active")', 'el.classList.delete("active")', 'el.removeClass("active")', "el.class.remove"],
         correctIndex: 0,
       },
@@ -554,7 +554,7 @@ export const PART4_DOM_SU_KIEN: JsSeedTag[] = [
       },
       {
         tier: 1, type: "MCQ",
-        prompt: "Phần tử đã kích hoạt sự kiện lấy bằng gì?",
+        prompt: "Trong handler click, muốn biết người dùng vừa bấm vào phần tử nào. Lấy phần tử đã kích hoạt sự kiện bằng gì?",
         options: ["e.target", "e.this", "e.element", "e.node"],
         correctIndex: 0,
       },

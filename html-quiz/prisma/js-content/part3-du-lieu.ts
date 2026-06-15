@@ -15,7 +15,7 @@ export const PART3_DU_LIEU: JsSeedTag[] = [
     questions: [
       {
         tier: 1, type: "MCQ",
-        prompt: "Tạo một mảng rỗng viết thế nào?",
+        prompt: "Muốn chuẩn bị một giỏ hàng chưa có món nào. Tạo một mảng rỗng viết thế nào?",
         options: ["const a = []", "const a = {}", "const a = ()", "const a = new Array{}"],
         correctIndex: 0,
       },
@@ -27,7 +27,7 @@ export const PART3_DU_LIEU: JsSeedTag[] = [
       },
       {
         tier: 1, type: "MCQ",
-        prompt: "Lấy số phần tử của mảng a dùng gì?",
+        prompt: "Muốn biết giỏ hàng a đang có bao nhiêu món. Lấy số phần tử của mảng dùng gì?",
         options: ["a.length", "a.size()", "length(a)", "a.count"],
         correctIndex: 0,
       },
@@ -77,13 +77,13 @@ export const PART3_DU_LIEU: JsSeedTag[] = [
     questions: [
       {
         tier: 1, type: "MCQ",
-        prompt: "Thêm một phần tử vào CUỐI mảng dùng method nào?",
+        prompt: "Người dùng bấm 'Thêm vào giỏ', cần đưa món mới vào CUỐI mảng giỏ hàng. Dùng method nào?",
         options: ["arr.push(x)", "arr.add(x)", "arr.append(x)", "arr.last(x)"],
         correctIndex: 0,
       },
       {
         tier: 1, type: "MCQ",
-        prompt: "Lấy ra và XÓA phần tử cuối mảng dùng gì?",
+        prompt: "Muốn lấy ra và bỏ luôn món vừa thêm (ở cuối) khỏi giỏ hàng. Dùng method nào?",
         options: ["arr.pop()", "arr.removeLast()", "arr.shift()", "arr.delete()"],
         correctIndex: 0,
       },
@@ -144,13 +144,13 @@ export const PART3_DU_LIEU: JsSeedTag[] = [
     questions: [
       {
         tier: 1, type: "MCQ",
-        prompt: "Thêm một phần tử vào ĐẦU mảng dùng method nào?",
+        prompt: "Muốn chèn thông báo mới nhất lên ĐẦU danh sách. Thêm một phần tử vào đầu mảng dùng method nào?",
         options: ["arr.unshift(x)", "arr.push(x)", "arr.shift(x)", "arr.first(x)"],
         correctIndex: 0,
       },
       {
         tier: 1, type: "MCQ",
-        prompt: "Lấy ra và XÓA phần tử ĐẦU mảng dùng gì?",
+        prompt: "Hàng đợi: xử lý xong người ĐẦU tiên thì lấy ra và bỏ khỏi mảng. Dùng method nào?",
         options: ["arr.shift()", "arr.pop()", "arr.unshift()", "arr.removeFirst()"],
         correctIndex: 0,
       },
@@ -211,13 +211,13 @@ export const PART3_DU_LIEU: JsSeedTag[] = [
     questions: [
       {
         tier: 1, type: "MCQ",
-        prompt: "Kiểm tra mảng arr có chứa giá trị x không (trả true/false) dùng gì?",
+        prompt: "Kiểm tra danh sách yêu thích có chứa sản phẩm x chưa (trả true/false). Dùng gì?",
         options: ["arr.includes(x)", "arr.has(x)", "arr.contains(x)", "arr.exists(x)"],
         correctIndex: 0,
       },
       {
         tier: 1, type: "MCQ",
-        prompt: "Tìm CHỈ SỐ của x trong mảng dùng gì?",
+        prompt: "Muốn biết sản phẩm x đang nằm ở VỊ TRÍ nào (chỉ số) trong mảng. Dùng gì?",
         options: ["arr.indexOf(x)", "arr.find(x)", "arr.position(x)", "arr.key(x)"],
         correctIndex: 0,
       },
@@ -342,13 +342,13 @@ export const PART3_DU_LIEU: JsSeedTag[] = [
     questions: [
       {
         tier: 1, type: "MCQ",
-        prompt: "Tạo mảng mới với mỗi phần tử được biến đổi dùng method nào?",
+        prompt: "Có mảng giá gốc, muốn tạo mảng MỚI giá đã giảm 10% cho từng món. Dùng method nào?",
         options: ["arr.map(x => ...)", "arr.forEach(x => ...)", "arr.change(x => ...)", "arr.transform(x => ...)"],
         correctIndex: 0,
       },
       {
         tier: 1, type: "MCQ",
-        prompt: "map trả về gì?",
+        prompt: "Chạy arr.map(...) xong, ta nhận lại được gì?",
         options: ["Một MẢNG MỚI cùng độ dài", "undefined", "Một số", "Mảng gốc đã sửa"],
         correctIndex: 0,
       },
@@ -404,7 +404,7 @@ export const PART3_DU_LIEU: JsSeedTag[] = [
     questions: [
       {
         tier: 1, type: "MCQ",
-        prompt: "Lọc các phần tử thỏa điều kiện ra mảng mới dùng method nào?",
+        prompt: "Từ danh sách sản phẩm, muốn lấy MẢNG MỚI chỉ gồm món còn hàng. Dùng method nào?",
         options: ["arr.filter(x => điều_kiện)", "arr.map(x => điều_kiện)", "arr.select(x => ...)", "arr.where(x => ...)"],
         correctIndex: 0,
       },
@@ -471,7 +471,7 @@ export const PART3_DU_LIEU: JsSeedTag[] = [
     questions: [
       {
         tier: 1, type: "MCQ",
-        prompt: "Gộp cả mảng thành một giá trị (vd tính tổng) dùng method nào?",
+        prompt: "Cộng tổng tiền của mọi món trong giỏ về MỘT con số. Gộp cả mảng thành một giá trị dùng method nào?",
         options: ["arr.reduce((tong, x) => tong + x, 0)", "arr.sum()", "arr.total()", "arr.merge()"],
         correctIndex: 0,
       },
@@ -543,7 +543,7 @@ export const PART3_DU_LIEU: JsSeedTag[] = [
     questions: [
       {
         tier: 1, type: "MCQ",
-        prompt: "Lấy phần tử ĐẦU TIÊN thỏa điều kiện dùng method nào?",
+        prompt: "Muốn lấy người dùng ĐẦU TIÊN có tuoi > 18 trong danh sách. Dùng method nào?",
         options: ["arr.find(x => điều_kiện)", "arr.filter(x => ...)", "arr.search(x => ...)", "arr.get(x => ...)"],
         correctIndex: 0,
       },
@@ -615,7 +615,7 @@ export const PART3_DU_LIEU: JsSeedTag[] = [
     questions: [
       {
         tier: 1, type: "MCQ",
-        prompt: "Sắp xếp mảng dùng method nào?",
+        prompt: "Muốn sắp xếp danh sách điểm từ thấp đến cao để hiển thị. Sắp xếp mảng dùng method nào?",
         options: ["arr.sort()", "arr.order()", "arr.arrange()", "sort(arr)"],
         correctIndex: 0,
       },
@@ -1053,7 +1053,7 @@ export const PART3_DU_LIEU: JsSeedTag[] = [
     questions: [
       {
         tier: 1, type: "MCQ",
-        prompt: "Chuyển một object thành chuỗi JSON dùng gì?",
+        prompt: "Muốn lưu object giỏ hàng vào localStorage (chỉ nhận chuỗi). Chuyển object thành chuỗi JSON dùng gì?",
         options: ["JSON.stringify(obj)", "obj.toJSON()", "String(obj)", "JSON.toString(obj)"],
         correctIndex: 0,
       },
@@ -1130,7 +1130,7 @@ export const PART3_DU_LIEU: JsSeedTag[] = [
     questions: [
       {
         tier: 1, type: "MCQ",
-        prompt: "Chuyển một chuỗi JSON trở lại object dùng gì?",
+        prompt: "Đọc lại chuỗi JSON từ localStorage và muốn dùng nó như object. Chuyển chuỗi JSON trở lại object dùng gì?",
         options: ["JSON.parse(chuoi)", "JSON.toObject(chuoi)", "Object(chuoi)", "parse(chuoi)"],
         correctIndex: 0,
       },

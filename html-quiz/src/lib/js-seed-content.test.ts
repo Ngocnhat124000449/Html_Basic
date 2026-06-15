@@ -76,6 +76,16 @@ describe("Nội dung seed JS", () => {
     }
   });
 
+  it("đề MCQ là CÂU HỎI rõ ràng (kết thúc bằng ? và đủ dài để mô tả ngữ cảnh)", () => {
+    for (const t of JS_TAGS) {
+      for (const q of t.questions.filter((q) => q.type === "MCQ")) {
+        const p = q.prompt.trim();
+        expect(p.endsWith("?"), `${t.name}: đề MCQ phải là câu hỏi (kết thúc "?"): ${p}`).toBe(true);
+        expect(p.length, `${t.name}: đề MCQ quá ngắn/trừu tượng: ${p}`).toBeGreaterThanOrEqual(15);
+      }
+    }
+  });
+
   it("MCQ có 4 lựa chọn + correctIndex hợp lệ", () => {
     for (const t of JS_TAGS) {
       for (const q of t.questions.filter((q) => q.type === "MCQ")) {
