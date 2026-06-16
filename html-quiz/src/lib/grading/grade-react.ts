@@ -2,7 +2,8 @@ import type { GradeResult, RequirementResult } from "./types";
 import { gradeJsStatic } from "./grade-js";
 import type { JsStaticRequirement } from "./js-types";
 import {
-  isRenderRequirement,
+  isRunRequirement,
+  type ReactInteractRequirement,
   type ReactRenderRequirement,
   type ReactRenderOutput,
   type ReactRequirement,
@@ -14,6 +15,7 @@ const normHtml = (s: string) => s.replace(/\s+/g, " ").trim();
 function checkRender(req: ReactRenderRequirement, out: ReactRenderOutput | undefined): RequirementResult {
   if (!out) return { passed: false, message: req.message ?? "Chưa render được component" };
   if ("error" in out) return { passed: false, message: out.error };
+  if (!("html" in out)) return { passed: false, message: req.message ?? "Không nhận được HTML" };
   const html = out.html;
 
   if (req.htmlEquals !== undefined) {
@@ -31,12 +33,32 @@ function checkRender(req: ReactRenderRequirement, out: ReactRenderOutput | undef
   return { passed: true, message: req.message ?? "Render OK" };
 }
 
+// So một interact requirement với output thô (text hiển thị sau khi chạy actions).
+function checkInteract(req: ReactInteractRequirement, out: ReactRenderOutput | undefined): RequirementResult {
+  if (!out) return { passed: false, message: req.message ?? "Chưa chạy được tương tác" };
+  if ("error" in out) return { passed: false, message: out.error };
+  if (!("text" in out)) return { passed: false, message: req.message ?? "Không đọc được nội dung" };
+  const text = out.text;
+
+  if (req.textEquals !== undefined) {
+    const ok = normHtml(text) === normHtml(req.textEquals);
+    return ok
+      ? { passed: true, message: req.message ?? `Hiển thị đúng: ${req.textEquals}` }
+      : { passed: false, message: `Cần hiển thị "${req.textEquals}", nhưng nhận "${text}"` };
+  }
+  if (req.textContains !== undefined) {
+    const ok = normHtml(text).includes(normHtml(req.textContains));
+    return ok
+      ? { passed: true, message: req.message ?? `Có hiển thị: ${req.textContains}` }
+      : { passed: false, message: `Cần hiển thị chứa "${req.textContains}", nhưng nhận "${text}"` };
+  }
+  return { passed: true, message: req.message ?? "Tương tác OK" };
+}
+
 /**
- * Chấm câu WRITE_JSX. Phần TĨNH (contains/notContains/construct) chấm bằng kiểm tra mẫu
- * trên mã nguồn. Phần RENDER so với `renderOutputs` mà CLIENT đã render trong Web Worker —
- * server KHÔNG bao giờ transpile/render code người học.
- *
- * `renderOutputs` xếp theo đúng thứ tự các render requirement (xem `toReactSpecs`).
+ * Chấm câu WRITE_JSX. Phần TĨNH chấm trên mã nguồn. Phần RENDER/INTERACT so với
+ * `renderOutputs` mà CLIENT đã chạy trong Web Worker — server KHÔNG tự render/chạy.
+ * `renderOutputs` xếp theo đúng thứ tự các run requirement (xem `toReactSpecs`).
  */
 export function gradeReact(
   code: string,
@@ -50,10 +72,11 @@ export function gradeReact(
     };
   }
 
-  let renderIdx = 0;
+  let runIdx = 0;
   const results = requirements.map((req): RequirementResult => {
-    if (isRenderRequirement(req)) {
-      return checkRender(req, renderOutputs?.[renderIdx++]);
+    if (isRunRequirement(req)) {
+      const out = renderOutputs?.[runIdx++];
+      return req.type === "renders" ? checkRender(req, out) : checkInteract(req, out);
     }
     // Tĩnh — tái dùng bộ chấm của WRITE_JS cho từng requirement.
     return gradeJsStatic(code, [req as JsStaticRequirement]).results[0];
@@ -62,8 +85,8 @@ export function gradeReact(
   return { passed: results.every((r) => r.passed), results };
 }
 
-/** Chấm chỉ phần TĨNH (render requirement coi như chờ render). Dùng cho test nội dung. */
+/** Chấm chỉ phần TĨNH (render/interact coi như chờ chạy). Dùng cho test nội dung. */
 export function gradeReactStatic(code: string, requirements: ReactRequirement[]): GradeResult {
-  const staticReqs = requirements.filter((r) => !isRenderRequirement(r)) as JsStaticRequirement[];
+  const staticReqs = requirements.filter((r) => !isRunRequirement(r)) as JsStaticRequirement[];
   return gradeJsStatic(code, staticReqs);
 }

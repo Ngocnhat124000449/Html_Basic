@@ -1,5 +1,5 @@
 import type { JsRunSpec } from "./grading/js-types";
-import type { ReactRenderSpec } from "./grading/react-types";
+import type { ReactSpec } from "./grading/react-types";
 
 export type ClientQuestion = {
   id: string;
@@ -19,8 +19,8 @@ export type ClientQuestion = {
   starterCode: string | null;
   // Câu WRITE_JS cần chạy thử: spec để client chạy trong Web Worker (không kèm đáp án).
   runSpecs?: JsRunSpec[] | null;
-  // Câu WRITE_JSX cần render thử: spec để client render trong Web Worker (không kèm đáp án).
-  reactSpecs?: ReactRenderSpec[] | null;
+  // Câu WRITE_JSX cần render/tương tác thử: spec để client chạy trong Web Worker (không kèm đáp án).
+  reactSpecs?: ReactSpec[] | null;
 };
 
 export type SessionTag = {

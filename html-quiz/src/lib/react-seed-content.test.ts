@@ -1,7 +1,12 @@
 import { describe, expect, it } from "vitest";
 import { REACT_TAGS } from "../../prisma/react-content";
 import { gradeReactStatic } from "./grading/grade-react";
-import { isRenderRequirement, type ReactRequirement } from "./grading/react-types";
+import {
+  isInteractRequirement,
+  isRenderRequirement,
+  isRunRequirement,
+  type ReactRequirement,
+} from "./grading/react-types";
 import type { JsConstruct } from "./grading/js-types";
 
 // Đoạn code mẫu kích hoạt mỗi construct — dựng đáp án tổng hợp để tự kiểm phần tĩnh.
@@ -42,8 +47,8 @@ const textOf = (q: { prompt: string; starterCode?: string }) =>
   `${q.prompt}\n${q.starterCode ?? ""}`;
 
 describe("Nội dung seed React", () => {
-  it("có đúng 4 mục", () => {
-    expect(REACT_TAGS.length).toBe(4);
+  it("có đúng 8 mục", () => {
+    expect(REACT_TAGS.length).toBe(8);
   });
 
   it("tên mục không trùng", () => {
@@ -100,14 +105,14 @@ describe("Nội dung seed React", () => {
     }
   });
 
-  it("câu WRITE_JSX có requirements, starterCode và >=1 ca render", () => {
+  it("câu WRITE_JSX có requirements, starterCode và >=1 ca chạy (render/interact)", () => {
     for (const t of REACT_TAGS) {
       const q = t.questions.find((q) => q.type === "WRITE_JSX")!;
       const reqs = (q.requirements ?? []) as ReactRequirement[];
       expect(reqs.length, `${t.name}: thiếu requirements`).toBeGreaterThan(0);
       expect((q.starterCode ?? "").length, `${t.name}: thiếu starterCode`).toBeGreaterThan(0);
-      const renderReqs = reqs.filter(isRenderRequirement);
-      expect(renderReqs.length, `${t.name}: cần >=1 ca render`).toBeGreaterThanOrEqual(1);
+      const runReqs = reqs.filter(isRunRequirement);
+      expect(runReqs.length, `${t.name}: cần >=1 ca chạy`).toBeGreaterThanOrEqual(1);
     }
   });
 
@@ -123,20 +128,36 @@ describe("Nội dung seed React", () => {
     }
   });
 
-  it("đề tự chứa: HTML kỳ vọng và giá trị prop của ca render phải hiện trong đề", () => {
+  it("đề tự chứa: HTML/text kỳ vọng, prop và giá trị gõ của ca chạy phải hiện trong đề", () => {
     for (const t of REACT_TAGS) {
       const q = t.questions.find((q) => q.type === "WRITE_JSX")!;
       const text = textOf(q);
       for (const req of (q.requirements ?? []) as ReactRequirement[]) {
-        if (!isRenderRequirement(req)) continue;
-        if (req.htmlEquals !== undefined) {
-          expect(text.includes(req.htmlEquals), `${t.name}: HTML "${req.htmlEquals}" phải có trong đề`).toBe(true);
-        }
-        if (req.htmlContains !== undefined) {
-          expect(text.includes(req.htmlContains), `${t.name}: HTML "${req.htmlContains}" phải có trong đề`).toBe(true);
-        }
-        for (const v of Object.values(req.props ?? {})) {
-          expect(text.includes(String(v)), `${t.name}: giá trị prop "${String(v)}" phải có trong đề`).toBe(true);
+        if (isRenderRequirement(req)) {
+          if (req.htmlEquals !== undefined) {
+            expect(text.includes(req.htmlEquals), `${t.name}: HTML "${req.htmlEquals}" phải có trong đề`).toBe(true);
+          }
+          if (req.htmlContains !== undefined) {
+            expect(text.includes(req.htmlContains), `${t.name}: HTML "${req.htmlContains}" phải có trong đề`).toBe(true);
+          }
+          for (const v of Object.values(req.props ?? {})) {
+            expect(text.includes(String(v)), `${t.name}: giá trị prop "${String(v)}" phải có trong đề`).toBe(true);
+          }
+        } else if (isInteractRequirement(req)) {
+          if (req.textEquals !== undefined) {
+            expect(text.includes(req.textEquals), `${t.name}: text "${req.textEquals}" phải có trong đề`).toBe(true);
+          }
+          if (req.textContains !== undefined) {
+            expect(text.includes(req.textContains), `${t.name}: text "${req.textContains}" phải có trong đề`).toBe(true);
+          }
+          for (const v of Object.values(req.props ?? {})) {
+            expect(text.includes(String(v)), `${t.name}: giá trị prop "${String(v)}" phải có trong đề`).toBe(true);
+          }
+          for (const a of req.actions) {
+            if ("change" in a) {
+              expect(text.includes(a.value), `${t.name}: giá trị gõ "${a.value}" phải có trong đề`).toBe(true);
+            }
+          }
         }
       }
     }

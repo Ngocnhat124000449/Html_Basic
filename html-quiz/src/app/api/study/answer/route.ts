@@ -23,6 +23,7 @@ const runOutputSchema = z.union([
 // Output thô client render JSX trong Web Worker gửi về (server KHÔNG tự render).
 const renderOutputSchema = z.union([
   z.object({ html: z.string() }),
+  z.object({ text: z.string() }),
   z.object({ error: z.string() }),
 ]);
 

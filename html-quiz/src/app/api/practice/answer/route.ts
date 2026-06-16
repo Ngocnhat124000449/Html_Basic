@@ -22,6 +22,7 @@ const runOutputSchema = z.union([
 
 const renderOutputSchema = z.union([
   z.object({ html: z.string() }),
+  z.object({ text: z.string() }),
   z.object({ error: z.string() }),
 ]);
 
