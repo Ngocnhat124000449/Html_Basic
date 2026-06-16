@@ -24,6 +24,8 @@ export default async function HomePage() {
     dsaProgress,
     gitTotal,
     gitProgress,
+    reactTotal,
+    reactProgress,
   ] = await Promise.all([
     prisma.tag.count({ where: { track: "html" } }),
     prisma.userTagProgress.findMany({ where: { userId, tag: { track: "html" } } }),
@@ -35,6 +37,8 @@ export default async function HomePage() {
     prisma.userTagProgress.findMany({ where: { userId, tag: { track: "dsa" } } }),
     prisma.tag.count({ where: { track: "git" } }),
     prisma.userTagProgress.findMany({ where: { userId, tag: { track: "git" } } }),
+    prisma.tag.count({ where: { track: "react" } }),
+    prisma.userTagProgress.findMany({ where: { userId, tag: { track: "react" } } }),
   ]);
 
   // P2 — dự báo lịch ôn 7 ngày tới + độ nhớ trung bình + thẻ hay quên (mọi khóa)
@@ -44,6 +48,7 @@ export default async function HomePage() {
     ...jsProgress,
     ...dsaProgress,
     ...gitProgress,
+    ...reactProgress,
   ];
   const startToday = new Date(now);
   startToday.setHours(0, 0, 0, 0);
@@ -155,6 +160,24 @@ export default async function HomePage() {
         bar: "from-emerald-400 to-emerald-600",
         chip: "bg-emerald-100 text-emerald-700",
         cta: "text-emerald-700",
+      },
+      beta: true,
+    },
+    {
+      href: "/react",
+      name: "React",
+      icon: "⚛️",
+      desc: "Component, JSX, props — dựng UI hiện đại",
+      total: reactTotal,
+      unit: "mục",
+      mastered: reactProgress.filter((p) => p.mastered).length,
+      due: reactProgress.filter((p) => p.dueAt <= now).length,
+      started: reactProgress.length,
+      accent: {
+        card: "border-cyan-200 bg-cyan-50/50 hover:border-cyan-400",
+        bar: "from-cyan-400 to-cyan-600",
+        chip: "bg-cyan-100 text-cyan-700",
+        cta: "text-cyan-700",
       },
       beta: true,
     },

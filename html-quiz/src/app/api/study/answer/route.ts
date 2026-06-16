@@ -6,10 +6,12 @@ import { gradeCode, gradeFillBlank } from "@/lib/grading/grader";
 import { gradeCss } from "@/lib/grading/grade-css";
 import { gradeJs } from "@/lib/grading/grade-js";
 import { gradeCmd } from "@/lib/grading/grade-cmd";
+import { gradeReact } from "@/lib/grading/grade-react";
 import type { Requirement } from "@/lib/grading/types";
 import type { CssRequirement } from "@/lib/grading/css-types";
 import type { JsRequirement, JsRunOutput } from "@/lib/grading/js-types";
 import type { CmdRequirement } from "@/lib/grading/cmd-types";
+import type { ReactRequirement, ReactRenderOutput } from "@/lib/grading/react-types";
 
 // Output thô client chạy trong Web Worker gửi về (server KHÔNG tự chạy code).
 const runOutputSchema = z.union([
@@ -18,10 +20,17 @@ const runOutputSchema = z.union([
   z.object({ error: z.string() }),
 ]);
 
+// Output thô client render JSX trong Web Worker gửi về (server KHÔNG tự render).
+const renderOutputSchema = z.union([
+  z.object({ html: z.string() }),
+  z.object({ error: z.string() }),
+]);
+
 const schema = z.object({
   questionId: z.string(),
   answer: z.union([z.string(), z.number()]),
   runOutputs: z.array(runOutputSchema).optional(),
+  renderOutputs: z.array(renderOutputSchema).optional(),
 });
 
 export async function POST(req: Request) {
@@ -35,7 +44,7 @@ export async function POST(req: Request) {
   if (!parsed.success) {
     return NextResponse.json({ error: "Dữ liệu không hợp lệ" }, { status: 400 });
   }
-  const { questionId, answer, runOutputs } = parsed.data;
+  const { questionId, answer, runOutputs, renderOutputs } = parsed.data;
 
   const question = await prisma.question.findUnique({ where: { id: questionId } });
   if (!question) {
@@ -73,6 +82,16 @@ export async function POST(req: Request) {
     correct = r.passed;
     results = r.results;
     parseError = r.parseError ?? false;
+  } else if (question.type === "WRITE_JSX") {
+    // Phần tĩnh chấm tại server; phần render so với renderOutputs client gửi
+    // (đã transpile + render trong Web Worker) — server KHÔNG bao giờ tự render code người học.
+    const r = gradeReact(
+      String(answer),
+      (question.requirements as ReactRequirement[]) ?? [],
+      renderOutputs as ReactRenderOutput[] | undefined
+    );
+    correct = r.passed;
+    results = r.results;
   } else {
     const r = gradeCode(String(answer), (question.requirements as Requirement[]) ?? []);
     correct = r.passed;

@@ -4,6 +4,7 @@ import { auth } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
 import type { ClientQuestion, SessionTag } from "@/lib/study-types";
 import { toRunSpecs, type JsRequirement } from "@/lib/grading/js-types";
+import { toReactSpecs, type ReactRequirement } from "@/lib/grading/react-types";
 
 const NEW_PER_DAY = 5;
 const SESSION_CAP = 10;
@@ -36,7 +37,9 @@ function toClient(tag: TagWithQuestions, isNew: boolean): SessionTag {
             ? "dsa"
             : tag.track === "git"
               ? "git"
-              : "html",
+              : tag.track === "react"
+                ? "react"
+                : "html",
     name: tag.name,
     topic: tag.topic,
     description: tag.description,
@@ -53,6 +56,11 @@ function toClient(tag: TagWithQuestions, isNew: boolean): SessionTag {
         runSpecs:
           q.type === "WRITE_JS"
             ? toRunSpecs((q.requirements as JsRequirement[]) ?? [])
+            : null,
+        // Câu JSX có render requirement → gửi spec (đã loại HTML kỳ vọng) để client render thử
+        reactSpecs:
+          q.type === "WRITE_JSX"
+            ? toReactSpecs((q.requirements as ReactRequirement[]) ?? [])
             : null,
       })
     ),
@@ -75,7 +83,8 @@ export async function GET(req: Request) {
     trackParam === "css" ||
     trackParam === "js" ||
     trackParam === "dsa" ||
-    trackParam === "git"
+    trackParam === "git" ||
+    trackParam === "react"
       ? trackParam
       : "html";
 

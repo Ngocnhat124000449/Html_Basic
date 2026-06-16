@@ -4,6 +4,7 @@ import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import Link from "next/link";
 import type { AnswerResult, ClientQuestion, SessionTag } from "@/lib/study-types";
 import { runJsSpecs } from "@/lib/js-runner";
+import { runReactSpecs } from "@/lib/react-runner";
 
 const TIER_INFO: Record<number, { label: string; cls: string }> = {
   1: { label: "Bậc 1 · Nhận biết", cls: "bg-sky-100 text-sky-700" },
@@ -14,7 +15,7 @@ const TIER_INFO: Record<number, { label: string; cls: string }> = {
 const MAX_WRONG = 3;
 
 // Nhãn hiển thị: thẻ HTML bọc <>, mục CSS/JS hiện tên trần
-const tagLabel = (tag: { track: "html" | "css" | "js" | "dsa" | "git"; name: string }) =>
+const tagLabel = (tag: { track: "html" | "css" | "js" | "dsa" | "git" | "react"; name: string }) =>
   tag.track === "html" ? `<${tag.name}>` : tag.name;
 
 // Một câu trong hàng đợi phản xạ — kèm thẻ gốc để chấm gom theo thẻ + lộ tên sau khi trả lời.
@@ -42,7 +43,7 @@ export default function StudyPage() {
   const [submitting, setSubmitting] = useState(false);
   const [finished, setFinished] = useState(false);
   const [summary, setSummary] = useState<{ name: string; passed: boolean }[]>([]);
-  const [track, setTrack] = useState<"html" | "css" | "js" | "dsa" | "git">("html");
+  const [track, setTrack] = useState<"html" | "css" | "js" | "dsa" | "git" | "react">("html");
   const inputRef = useRef<HTMLInputElement | null>(null);
   const textareaRef = useRef<HTMLTextAreaElement | null>(null);
 
@@ -76,7 +77,9 @@ export default function StudyPage() {
     const extra = params.get("extra") === "1";
     const tp = params.get("track");
     const trk =
-      tp === "css" || tp === "js" || tp === "dsa" || tp === "git" ? tp : "html";
+      tp === "css" || tp === "js" || tp === "dsa" || tp === "git" || tp === "react"
+        ? tp
+        : "html";
     const qs = new URLSearchParams();
     if (extra) qs.set("extra", "1");
     if (trk !== "html") qs.set("track", trk);
@@ -111,7 +114,9 @@ export default function StudyPage() {
           ? "/dsa"
           : track === "git"
             ? "/git"
-            : "/html";
+            : track === "react"
+              ? "/react"
+              : "/html";
 
   // Chốt phiên: gom lượt sai theo thẻ → batch lên server, dựng tổng kết.
   const finishSession = useCallback(
@@ -228,7 +233,8 @@ export default function StudyPage() {
     q.type === "WRITE_STRUCTURE" ||
     q.type === "WRITE_CSS" ||
     q.type === "WRITE_JS" ||
-    q.type === "WRITE_CMD";
+    q.type === "WRITE_CMD" ||
+    q.type === "WRITE_JSX";
   const tier = TIER_INFO[q.tier] ?? TIER_INFO[1];
   const sessionPct = (pos / queue.length) * 100;
   const totalWrong = Object.values(wrongByTag).reduce((s, n) => s + n, 0);
@@ -242,10 +248,15 @@ export default function StudyPage() {
       q.type === "WRITE_JS" && q.runSpecs && q.runSpecs.length > 0
         ? await runJsSpecs(String(ans), q.runSpecs)
         : undefined;
+    // Câu JSX cần render thử: transpile + render trong Web Worker rồi gửi HTML thô lên server
+    const renderOutputs =
+      q.type === "WRITE_JSX" && q.reactSpecs && q.reactSpecs.length > 0
+        ? await runReactSpecs(String(ans), q.reactSpecs)
+        : undefined;
     const res = await fetch("/api/study/answer", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ questionId: q.id, answer: ans, runOutputs }),
+      body: JSON.stringify({ questionId: q.id, answer: ans, runOutputs, renderOutputs }),
     });
     const data: AnswerResult = await res.json();
     setSubmitting(false);
