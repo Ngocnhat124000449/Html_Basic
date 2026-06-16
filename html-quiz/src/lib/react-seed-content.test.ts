@@ -46,9 +46,17 @@ function buildSampleAnswer(reqs: ReactRequirement[]): string {
 const textOf = (q: { prompt: string; starterCode?: string }) =>
   `${q.prompt}\n${q.starterCode ?? ""}`;
 
+// Gom các lá chuỗi/số trong giá trị prop (bỏ qua boolean/null) để kiểm tự chứa.
+function leafValues(v: unknown): (string | number)[] {
+  if (typeof v === "string" || typeof v === "number") return [v];
+  if (Array.isArray(v)) return v.flatMap(leafValues);
+  if (v && typeof v === "object") return Object.values(v).flatMap(leafValues);
+  return [];
+}
+
 describe("Nội dung seed React", () => {
-  it("có đúng 8 mục", () => {
-    expect(REACT_TAGS.length).toBe(8);
+  it("có đúng 12 mục", () => {
+    expect(REACT_TAGS.length).toBe(12);
   });
 
   it("tên mục không trùng", () => {
@@ -140,7 +148,7 @@ describe("Nội dung seed React", () => {
           if (req.htmlContains !== undefined) {
             expect(text.includes(req.htmlContains), `${t.name}: HTML "${req.htmlContains}" phải có trong đề`).toBe(true);
           }
-          for (const v of Object.values(req.props ?? {})) {
+          for (const v of leafValues(req.props ?? {})) {
             expect(text.includes(String(v)), `${t.name}: giá trị prop "${String(v)}" phải có trong đề`).toBe(true);
           }
         } else if (isInteractRequirement(req)) {
@@ -150,7 +158,7 @@ describe("Nội dung seed React", () => {
           if (req.textContains !== undefined) {
             expect(text.includes(req.textContains), `${t.name}: text "${req.textContains}" phải có trong đề`).toBe(true);
           }
-          for (const v of Object.values(req.props ?? {})) {
+          for (const v of leafValues(req.props ?? {})) {
             expect(text.includes(String(v)), `${t.name}: giá trị prop "${String(v)}" phải có trong đề`).toBe(true);
           }
           for (const a of req.actions) {

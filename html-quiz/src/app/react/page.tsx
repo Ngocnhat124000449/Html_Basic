@@ -15,6 +15,7 @@ const STATUS_LABEL: Record<Status, { text: string; cls: string }> = {
 const PART_ICON: Record<string, string> = {
   "Nền tảng React": "⚛️",
   "State & Tương tác": "🎛️",
+  "Effect, Danh sách & Điều kiện": "📋",
 };
 
 export default async function ReactRoadmapPage() {
@@ -74,8 +75,8 @@ export default async function ReactRoadmapPage() {
           </span>
         </div>
         <p className="mt-2 max-w-2xl leading-relaxed text-ink/60">
-          Học theo <strong>phần, theo thứ tự</strong>: component &amp; JSX → props → ghép component →
-          state → sự kiện → form. Câu bậc 3 render và TƯƠNG TÁC component THẬT để kiểm tra kết quả.
+          Học theo <strong>phần, theo thứ tự</strong>: component &amp; JSX → props → state → sự kiện →
+          danh sách → effect → Todo. Câu bậc 3 render và TƯƠNG TÁC component THẬT để kiểm tra kết quả.
           Mỗi ngày 5 mục mới + ôn lại theo lịch.
         </p>
         <div className="mt-4 flex flex-wrap items-center gap-3">
@@ -162,8 +163,8 @@ export default async function ReactRoadmapPage() {
       ))}
 
       <p className="text-sm text-ink/50">
-        🎉 Phần 1-2: Nền tảng React → State &amp; Tương tác. Câu bậc 3 được chấm tự động bằng cách
-        render và mô phỏng tương tác (bấm nút, gõ phím) với component của bạn ngay trong trình duyệt.
+        🎉 Phần 1-3: Nền tảng → State &amp; Tương tác → Effect, Danh sách &amp; Điều kiện (milestone
+        Todo). Câu bậc 3 chấm tự động bằng cách render và mô phỏng tương tác với component của bạn.
       </p>
     </div>
   );

@@ -10,11 +10,15 @@ import type { JsStaticRequirement } from "./js-types";
 
 export type ReactScalar = string | number | boolean | null;
 
+// Giá trị prop bất kỳ (JSON-serializable) — cho phép mảng/object để truyền danh sách.
+export type ReactPropValue = ReactScalar | ReactPropValue[] | { [k: string]: ReactPropValue };
+export type ReactProps = Record<string, ReactPropValue>;
+
 // Render component `component` với `props`, so output HTML tĩnh (renderToStaticMarkup).
 export type ReactRenderRequirement = {
   type: "renders";
   component: string;
-  props?: Record<string, ReactScalar>;
+  props?: ReactProps;
   htmlEquals?: string;
   htmlContains?: string;
   message?: string;
@@ -29,7 +33,7 @@ export type ReactInteractAction =
 export type ReactInteractRequirement = {
   type: "interacts";
   component: string;
-  props?: Record<string, ReactScalar>;
+  props?: ReactProps;
   actions: ReactInteractAction[];
   textEquals?: string;
   textContains?: string;
@@ -51,11 +55,11 @@ export function isRunRequirement(r: ReactRequirement): r is ReactRunRequirement 
 
 // Spec gửi client để CHẠY (không kèm htmlEquals/textEquals — đáp án ở lại server).
 export type ReactSpec =
-  | { kind: "render"; component: string; props?: Record<string, ReactScalar> }
+  | { kind: "render"; component: string; props?: ReactProps }
   | {
       kind: "interact";
       component: string;
-      props?: Record<string, ReactScalar>;
+      props?: ReactProps;
       actions: ReactInteractAction[];
     };
 
