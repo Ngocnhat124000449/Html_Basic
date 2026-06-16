@@ -20,7 +20,7 @@ type DbType =
   | "WRITE_STRUCTURE"
   | "WRITE_CSS"
   | "WRITE_JS";
-type Track = "html" | "css" | "js";
+type Track = "html" | "css" | "js" | "dsa";
 type Scope = "all" | "html" | "css" | "js";
 
 type Item =
@@ -83,7 +83,7 @@ const normAttr = (s: string) => s.toLowerCase().split("=")[0].replace(/[<>"'`/\s
 
 // Nhãn đáp án: thẻ HTML bọc <>, mục CSS/JS hiện tên trần
 const labelFor = (track: Track | undefined, name: string) =>
-  track === "css" || track === "js" ? name : `<${name}>`;
+  track === "css" || track === "js" || track === "dsa" ? name : `<${name}>`;
 
 const SCOPE_META: Record<Scope, string> = {
   all: "Tất cả",

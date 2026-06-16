@@ -13,17 +13,28 @@ export default async function HomePage() {
   const userId = session.user.id;
   const now = new Date();
 
-  const [htmlTotal, htmlProgress, cssTotal, cssProgress, jsTotal, jsProgress] = await Promise.all([
+  const [
+    htmlTotal,
+    htmlProgress,
+    cssTotal,
+    cssProgress,
+    jsTotal,
+    jsProgress,
+    dsaTotal,
+    dsaProgress,
+  ] = await Promise.all([
     prisma.tag.count({ where: { track: "html" } }),
     prisma.userTagProgress.findMany({ where: { userId, tag: { track: "html" } } }),
     prisma.tag.count({ where: { track: "css" } }),
     prisma.userTagProgress.findMany({ where: { userId, tag: { track: "css" } } }),
     prisma.tag.count({ where: { track: "js" } }),
     prisma.userTagProgress.findMany({ where: { userId, tag: { track: "js" } } }),
+    prisma.tag.count({ where: { track: "dsa" } }),
+    prisma.userTagProgress.findMany({ where: { userId, tag: { track: "dsa" } } }),
   ]);
 
   // P2 — dự báo lịch ôn 7 ngày tới + độ nhớ trung bình + thẻ hay quên (mọi khóa)
-  const allProgress = [...htmlProgress, ...cssProgress, ...jsProgress];
+  const allProgress = [...htmlProgress, ...cssProgress, ...jsProgress, ...dsaProgress];
   const startToday = new Date(now);
   startToday.setHours(0, 0, 0, 0);
   const forecast = Array.from({ length: 7 }, () => 0);
@@ -101,6 +112,24 @@ export default async function HomePage() {
       },
       beta: true,
     },
+    {
+      href: "/dsa",
+      name: "Cấu trúc DL & Giải thuật",
+      icon: "🧮",
+      desc: "Mảng, stack, queue, tìm kiếm, sắp xếp, Big-O",
+      total: dsaTotal,
+      unit: "mục",
+      mastered: dsaProgress.filter((p) => p.mastered).length,
+      due: dsaProgress.filter((p) => p.dueAt <= now).length,
+      started: dsaProgress.length,
+      accent: {
+        card: "border-violet-200 bg-violet-50/50 hover:border-violet-400",
+        bar: "from-violet-400 to-violet-600",
+        chip: "bg-violet-100 text-violet-700",
+        cta: "text-violet-700",
+      },
+      beta: true,
+    },
   ];
 
   return (
@@ -112,7 +141,7 @@ export default async function HomePage() {
         <p className="mt-2 text-ink/60">Chọn khóa học để bắt đầu</p>
       </div>
 
-      <div className="grid gap-4 sm:grid-cols-3">
+      <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
         {courses.map((c, i) => {
           const pct = c.total > 0 ? Math.round((c.mastered / c.total) * 100) : 0;
           const startedPct = c.total > 0 ? Math.round((c.started / c.total) * 100) : 0;
