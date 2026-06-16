@@ -19,6 +19,8 @@ const PART_ICON: Record<string, string> = {
   "DOM & Sự kiện": "🖱️",
   "Bất đồng bộ & Hiện đại": "⚡",
   "Trực quan hóa": "📊",
+  "Clean Code": "🧹",
+  "Hoàn thiện & Xuất dữ liệu": "📤",
 };
 
 export default async function JsRoadmapPage() {
@@ -79,7 +81,8 @@ export default async function JsRoadmapPage() {
         </div>
         <p className="mt-2 max-w-2xl leading-relaxed text-ink/60">
           JS học theo <strong>phần, theo thứ tự</strong>: nền tảng → luồng &amp; hàm → dữ liệu →
-          DOM → bất đồng bộ → trực quan hóa. Mỗi ngày 5 mục mới + ôn lại theo lịch.
+          DOM → bất đồng bộ → trực quan hóa → clean code → hoàn thiện. Mỗi ngày 5 mục mới + ôn lại
+          theo lịch.
         </p>
         <div className="mt-4 flex flex-wrap items-center gap-3">
           <Link
@@ -165,9 +168,9 @@ export default async function JsRoadmapPage() {
       ))}
 
       <p className="text-sm text-ink/50">
-        🎉 Trọn bộ 6 Phần đã mở: Nền tảng → Luồng &amp; Hàm → Dữ liệu → DOM &amp; Sự kiện → Bất đồng
-        bộ &amp; Hiện đại → Trực quan hóa (Chart.js). Câu bậc 3 viết code được chấm tự động (chạy thử
-        ngay trong trình duyệt).
+        🎉 Trọn bộ 8 Phần đã mở: Nền tảng → Luồng &amp; Hàm → Dữ liệu → DOM &amp; Sự kiện → Bất đồng
+        bộ &amp; Hiện đại → Trực quan hóa (Chart.js) → Clean Code → Hoàn thiện &amp; Xuất dữ liệu. Câu
+        bậc 3 viết code được chấm tự động (chạy thử ngay trong trình duyệt).
       </p>
     </div>
   );
