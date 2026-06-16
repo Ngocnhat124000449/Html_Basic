@@ -16,6 +16,17 @@ export const PART3_EFFECT_DANH_SACH: ReactSeedTag[] = [
     questions: [
       {
         tier: 1, type: "MCQ",
+        prompt: "Bạn có mảng 10 sản phẩm và muốn hiển thị mỗi sản phẩm thành một card trên trang. Dùng gì để sinh ra 10 card đó?",
+        options: [
+          ".map() trên mảng sản phẩm",
+          "Một vòng for ngoài JSX",
+          "Copy đoạn JSX 10 lần",
+          "Một biến đếm",
+        ],
+        correctIndex: 0,
+      },
+      {
+        tier: 1, type: "MCQ",
         prompt: "Để render một mảng dữ liệu thành nhiều phần tử JSX, bạn dùng gì?",
         options: ["Phương thức .map()", "Vòng for trong JSX", "Câu lệnh print", "Thẻ <loop>"],
         correctIndex: 0,
@@ -93,6 +104,17 @@ export const PART3_EFFECT_DANH_SACH: ReactSeedTag[] = [
     part: PART,
     description: "Hiển thị khác nhau tùy điều kiện bằng && và ? :",
     questions: [
+      {
+        tier: 1, type: "MCQ",
+        prompt: "Khi giỏ hàng trống, bạn muốn hiện dòng 'Giỏ hàng trống' thay vì danh sách sản phẩm. Kỹ thuật nào phù hợp?",
+        options: [
+          "Render có điều kiện",
+          "Xóa hẳn component giỏ hàng",
+          "Đổi màu nền bằng CSS",
+          "Tải lại trang",
+        ],
+        correctIndex: 0,
+      },
       {
         tier: 1, type: "MCQ",
         prompt: "Render có điều kiện trong React nghĩa là gì?",
@@ -178,6 +200,17 @@ export const PART3_EFFECT_DANH_SACH: ReactSeedTag[] = [
     part: PART,
     description: "Chạy hiệu ứng phụ sau khi render (mount, deps)",
     questions: [
+      {
+        tier: 1, type: "MCQ",
+        prompt: "Khi trang danh sách sản phẩm vừa mở, bạn muốn tự động gọi API lấy dữ liệu một lần. Đặt lời gọi đó ở đâu?",
+        options: [
+          "Trong useEffect với mảng phụ thuộc []",
+          "Ngay giữa thân hàm render",
+          "Trong một onClick",
+          "Trong file CSS",
+        ],
+        correctIndex: 0,
+      },
       {
         tier: 1, type: "MCQ",
         prompt: "useEffect dùng để làm gì trong React?",
@@ -267,6 +300,17 @@ export const PART3_EFFECT_DANH_SACH: ReactSeedTag[] = [
     part: PART,
     description: "Ghép input + nút + danh sách thành app Todo nhỏ",
     questions: [
+      {
+        tier: 1, type: "MCQ",
+        prompt: "App 'Danh sách việc cần làm' gồm ô nhập, nút Thêm và vùng hiển thị các việc. Đây là sự kết hợp của những kỹ thuật nào?",
+        options: [
+          "State (mảng + ô nhập) + sự kiện + render danh sách",
+          "Chỉ CSS",
+          "Chỉ một thẻ <ul> tĩnh",
+          "Chỉ useEffect",
+        ],
+        correctIndex: 0,
+      },
       {
         tier: 1, type: "MCQ",
         prompt: "Một app Todo cơ bản cần quản lý gì bằng state?",

@@ -28,12 +28,12 @@ describe("nội dung seed", () => {
     expect(violations, violations.join("\n")).toEqual([]);
   });
 
-  it("mỗi thẻ có 3 biến thể bậc 1, 3 biến thể bậc 2, 1 câu bậc 3", () => {
+  it("mỗi thẻ có ≥3 biến thể bậc 1, ≥3 biến thể bậc 2, 1 câu bậc 3", () => {
     for (const t of tags) {
       const byTier: Record<number, number> = {};
       for (const q of t.questions) byTier[q.tier] = (byTier[q.tier] ?? 0) + 1;
-      expect(byTier[1], `<${t.name}> bậc 1`).toBe(3);
-      expect(byTier[2], `<${t.name}> bậc 2`).toBe(3);
+      expect(byTier[1], `<${t.name}> bậc 1`).toBeGreaterThanOrEqual(3);
+      expect(byTier[2], `<${t.name}> bậc 2`).toBeGreaterThanOrEqual(3);
       expect(byTier[3], `<${t.name}> bậc 3`).toBe(1);
     }
   });

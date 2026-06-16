@@ -15,6 +15,17 @@ export const PART2_GIAI_THUAT: DsaSeedTag[] = [
     questions: [
       {
         tier: 1, type: "MCQ",
+        prompt: "Danh sách bạn bè CHƯA sắp xếp, bạn cần kiểm tra xem 'An' có trong đó không. Cách tìm đơn giản nhất là gì?",
+        options: [
+          "Duyệt lần lượt từng phần tử (tìm kiếm tuyến tính)",
+          "Chia đôi liên tục (nhị phân)",
+          "Sắp xếp trước rồi bỏ qua",
+          "Không thể tìm được",
+        ],
+        correctIndex: 0,
+      },
+      {
+        tier: 1, type: "MCQ",
         prompt: "Tìm kiếm tuyến tính (linear search) hoạt động thế nào?",
         options: [
           "Duyệt lần lượt từng phần tử cho tới khi gặp",
@@ -80,6 +91,17 @@ export const PART2_GIAI_THUAT: DsaSeedTag[] = [
     part: PART,
     description: "Chia đôi liên tục trên mảng đã sắp xếp",
     questions: [
+      {
+        tier: 1, type: "MCQ",
+        prompt: "Danh bạ ĐÃ sắp xếp theo tên có 1 triệu mục, cần tìm 'Lan' thật nhanh. Thuật toán nào phù hợp nhất?",
+        options: [
+          "Tìm kiếm nhị phân",
+          "Duyệt từng mục từ đầu",
+          "Xáo trộn rồi tìm",
+          "Đếm tổng số mục",
+        ],
+        correctIndex: 0,
+      },
       {
         tier: 1, type: "MCQ",
         prompt: "Tìm kiếm nhị phân (binary search) ĐÒI HỎI điều gì ở mảng?",
@@ -150,6 +172,17 @@ export const PART2_GIAI_THUAT: DsaSeedTag[] = [
     questions: [
       {
         tier: 1, type: "MCQ",
+        prompt: "Bảng điểm học sinh cần hiển thị từ CAO xuống THẤP. Thao tác nào cần làm với mảng điểm?",
+        options: [
+          "Sắp xếp (sort) giảm dần",
+          "Đảo ngẫu nhiên",
+          "Chỉ lấy phần tử đầu",
+          "Gom các điểm trùng",
+        ],
+        correctIndex: 0,
+      },
+      {
+        tier: 1, type: "MCQ",
         prompt: "Bubble sort (sắp xếp nổi bọt) sắp xếp bằng cách nào?",
         options: [
           "Đổi chỗ các cặp kề nhau sai thứ tự, lặp nhiều lượt",
@@ -215,6 +248,17 @@ export const PART2_GIAI_THUAT: DsaSeedTag[] = [
     part: PART,
     description: "Hàm tự gọi lại chính nó",
     questions: [
+      {
+        tier: 1, type: "MCQ",
+        prompt: "Để duyệt cây thư mục lồng nhau nhiều cấp (thư mục trong thư mục), kỹ thuật tự nhiên nhất là gì?",
+        options: [
+          "Đệ quy (hàm tự gọi lại chính nó)",
+          "Một vòng for duy nhất",
+          "Dùng Set",
+          "Sắp xếp danh sách",
+        ],
+        correctIndex: 0,
+      },
       {
         tier: 1, type: "MCQ",
         prompt: "Đệ quy (recursion) là gì?",

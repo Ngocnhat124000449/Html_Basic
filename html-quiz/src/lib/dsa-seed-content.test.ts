@@ -59,13 +59,13 @@ describe("Nội dung seed DSA", () => {
     }
   });
 
-  it("mỗi mục đúng 3 MCQ bậc 1 + 3 MCQ bậc 2 + 1 WRITE_JS bậc 3", () => {
+  it("mỗi mục có ≥3 MCQ bậc 1 + ≥3 MCQ bậc 2 + 1 WRITE_JS bậc 3", () => {
     for (const t of DSA_TAGS) {
       const t1 = t.questions.filter((q) => q.tier === 1);
       const t2 = t.questions.filter((q) => q.tier === 2);
       const t3 = t.questions.filter((q) => q.tier === 3);
-      expect(t1.length, `${t.name} bậc1`).toBe(3);
-      expect(t2.length, `${t.name} bậc2`).toBe(3);
+      expect(t1.length, `${t.name} bậc1`).toBeGreaterThanOrEqual(3);
+      expect(t2.length, `${t.name} bậc2`).toBeGreaterThanOrEqual(3);
       expect(t3.length, `${t.name} bậc3`).toBe(1);
       expect(t1.every((q) => q.type === "MCQ"), t.name).toBe(true);
       expect(t2.every((q) => q.type === "MCQ"), t.name).toBe(true);

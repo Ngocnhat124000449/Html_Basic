@@ -16,6 +16,17 @@ export const PART1_GIT: GitSeedTag[] = [
     questions: [
       {
         tier: 1, type: "MCQ",
+        prompt: "Sửa xong tính năng giỏ hàng, bạn muốn lưu một mốc kèm ghi chú 'thêm giỏ hàng'. Lệnh nào tạo mốc có ghi chú đó?",
+        options: [
+          'git commit -m "thêm giỏ hàng"',
+          'git save "thêm giỏ hàng"',
+          'git add -m "thêm giỏ hàng"',
+          'git log "thêm giỏ hàng"',
+        ],
+        correctIndex: 0,
+      },
+      {
+        tier: 1, type: "MCQ",
         prompt: "Lệnh nào khởi tạo một kho Git mới trong thư mục hiện tại?",
         options: ["git init", "git start", "git new", "git create"],
         correctIndex: 0,
@@ -82,6 +93,17 @@ export const PART1_GIT: GitSeedTag[] = [
     part: PART,
     description: "Tạo nhánh, chuyển nhánh và gộp thay đổi",
     questions: [
+      {
+        tier: 1, type: "MCQ",
+        prompt: "Sếp giao làm tính năng mới nhưng KHÔNG được ảnh hưởng code đang chạy ở nhánh chính. Bạn nên làm gì trước tiên?",
+        options: [
+          "Tạo một nhánh riêng để làm tính năng đó",
+          "Sửa thẳng trên nhánh main cho nhanh",
+          "Xóa nhánh main đi",
+          "Commit đè lên code cũ",
+        ],
+        correctIndex: 0,
+      },
       {
         tier: 1, type: "MCQ",
         prompt: "Nhánh (branch) trong Git dùng để làm gì?",
@@ -160,6 +182,17 @@ export const PART1_GIT: GitSeedTag[] = [
     part: PART,
     description: "Liên kết remote, push/pull và quy trình PR",
     questions: [
+      {
+        tier: 1, type: "MCQ",
+        prompt: "Bạn code xong ở máy mình và muốn đồng đội trên GitHub thấy được code đó. Việc cần làm là gì?",
+        options: [
+          "Đẩy (push) code lên remote",
+          "Chụp màn hình gửi cho đồng đội",
+          "Copy file qua USB",
+          "Chạy git init lại",
+        ],
+        correctIndex: 0,
+      },
       {
         tier: 1, type: "MCQ",
         prompt: "'origin' trong Git thường chỉ điều gì?",

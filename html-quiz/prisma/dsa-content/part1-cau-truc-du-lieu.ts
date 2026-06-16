@@ -16,6 +16,12 @@ export const PART1_CAU_TRUC_DU_LIEU: DsaSeedTag[] = [
     questions: [
       {
         tier: 1, type: "MCQ",
+        prompt: "Trang shop cần lưu NHIỀU sản phẩm, mỗi sản phẩm có các trường tên và giá. Cấu trúc tổng hợp hợp lý nhất là gì?",
+        options: ["Mảng các object", "Một chuỗi dài", "Một số duy nhất", "Một boolean"],
+        correctIndex: 0,
+      },
+      {
+        tier: 1, type: "MCQ",
         prompt: "Bạn cần lưu danh sách 50 khoản chi theo đúng thứ tự nhập vào. Cấu trúc nào hợp nhất?",
         options: ["Mảng (array)", "Một số (number)", "Một chuỗi (string)", "Một boolean"],
         correctIndex: 0,
@@ -83,6 +89,12 @@ export const PART1_CAU_TRUC_DU_LIEU: DsaSeedTag[] = [
     questions: [
       {
         tier: 1, type: "MCQ",
+        prompt: "Tính năng 'Hoàn tác' (Undo) phải hoàn lại thao tác làm GẦN NHẤT trước tiên. Cấu trúc dữ liệu nào mô tả đúng hành vi này?",
+        options: ["Stack (ngăn xếp)", "Queue (hàng đợi)", "Mảng đã sắp xếp", "Set"],
+        correctIndex: 0,
+      },
+      {
+        tier: 1, type: "MCQ",
         prompt: "Stack (ngăn xếp) hoạt động theo nguyên tắc nào?",
         options: ["LIFO — vào sau ra trước", "FIFO — vào trước ra trước", "Lấy ngẫu nhiên", "Theo bảng chữ cái"],
         correctIndex: 0,
@@ -138,6 +150,12 @@ export const PART1_CAU_TRUC_DU_LIEU: DsaSeedTag[] = [
     part: PART,
     description: "Hàng đợi: vào trước ra trước (enqueue/dequeue)",
     questions: [
+      {
+        tier: 1, type: "MCQ",
+        prompt: "Hàng chờ in tài liệu: ai gửi lệnh in TRƯỚC thì được in TRƯỚC. Cấu trúc dữ liệu nào đúng?",
+        options: ["Queue (hàng đợi)", "Stack (ngăn xếp)", "Map", "Set"],
+        correctIndex: 0,
+      },
       {
         tier: 1, type: "MCQ",
         prompt: "Queue (hàng đợi) hoạt động theo nguyên tắc nào?",
@@ -202,6 +220,12 @@ export const PART1_CAU_TRUC_DU_LIEU: DsaSeedTag[] = [
     questions: [
       {
         tier: 1, type: "MCQ",
+        prompt: "Bạn cần tra nhanh 'mã sản phẩm → số tồn kho' cho hàng nghìn sản phẩm. Cấu trúc nào cho tra cứu theo khóa nhanh nhất?",
+        options: ["Map", "Mảng rồi duyệt tuyến tính", "Stack", "Set"],
+        correctIndex: 0,
+      },
+      {
+        tier: 1, type: "MCQ",
         prompt: "Tạo một Map rỗng trong JS bằng cú pháp nào?",
         options: ["new Map()", "Map[]", "{}.map()", "Map.create()"],
         correctIndex: 0,
@@ -262,6 +286,12 @@ export const PART1_CAU_TRUC_DU_LIEU: DsaSeedTag[] = [
     part: PART,
     description: "Set: khử trùng lặp, kiểm tra tồn tại",
     questions: [
+      {
+        tier: 1, type: "MCQ",
+        prompt: "Danh sách email đăng ký có thể TRÙNG nhau, bạn cần lấy ra danh sách email DUY NHẤT. Cấu trúc nào hợp nhất?",
+        options: ["Set", "Stack", "Queue", "Mảng giữ nguyên"],
+        correctIndex: 0,
+      },
       {
         tier: 1, type: "MCQ",
         prompt: "Tạo một Set rỗng trong JS bằng cú pháp nào?",

@@ -17,6 +17,12 @@ export const PART2_STATE_TUONG_TAC: ReactSeedTag[] = [
     questions: [
       {
         tier: 1, type: "MCQ",
+        prompt: "Nút 'Thích' trên thẻ sản phẩm cần nhớ đã được bấm hay chưa và cập nhật giao diện theo. Bạn dùng gì để lưu trạng thái đó?",
+        options: ["useState", "một biến thường", "một file CSS", "ghi thẳng vào localStorage"],
+        correctIndex: 0,
+      },
+      {
+        tier: 1, type: "MCQ",
         prompt: "State trong React dùng để làm gì?",
         options: [
           "Lưu dữ liệu thay đổi theo thời gian và khiến UI tự cập nhật",
@@ -107,6 +113,17 @@ export const PART2_STATE_TUONG_TAC: ReactSeedTag[] = [
     part: PART,
     description: "Xử lý cú bấm và đổi state khi người dùng tương tác",
     questions: [
+      {
+        tier: 1, type: "MCQ",
+        prompt: "Bạn muốn khi người dùng bấm nút 'Thêm vào giỏ' thì chạy một hàm xử lý. Gắn hàm đó vào đâu của nút?",
+        options: [
+          "Thuộc tính onClick của nút",
+          "Thuộc tính href",
+          "Thuộc tính onLoad",
+          "Thuộc tính value",
+        ],
+        correctIndex: 0,
+      },
       {
         tier: 1, type: "MCQ",
         prompt: "Để xử lý cú click chuột trong React, bạn dùng thuộc tính nào?",
@@ -201,6 +218,17 @@ export const PART2_STATE_TUONG_TAC: ReactSeedTag[] = [
     questions: [
       {
         tier: 1, type: "MCQ",
+        prompt: "Ô tìm kiếm sản phẩm cần React luôn biết người dùng đang gõ gì để lọc danh sách ngay. Nên dùng dạng input nào?",
+        options: [
+          "Controlled input (value gắn state + onChange)",
+          "Input chỉ đọc (readonly)",
+          "Input ẩn (hidden)",
+          "Không cần input nào cả",
+        ],
+        correctIndex: 0,
+      },
+      {
+        tier: 1, type: "MCQ",
         prompt: "Controlled input (ô nhập được điều khiển) nghĩa là gì?",
         options: [
           "Giá trị ô input do state quyết định",
@@ -290,6 +318,17 @@ export const PART2_STATE_TUONG_TAC: ReactSeedTag[] = [
     part: PART,
     description: "Ghép input + nút + hiển thị thành form tương tác",
     questions: [
+      {
+        tier: 1, type: "MCQ",
+        prompt: "Form 'Liên hệ' gồm ô nhập tên và nút Gửi, bấm xong hiển thị lời chào. Cần phối hợp những gì trong React?",
+        options: [
+          "useState cho ô nhập + onClick cho nút",
+          "Chỉ cần CSS",
+          "Chỉ cần HTML tĩnh",
+          "Chỉ cần useEffect",
+        ],
+        correctIndex: 0,
+      },
       {
         tier: 1, type: "MCQ",
         prompt: "Một form React đơn giản thường gồm những gì?",

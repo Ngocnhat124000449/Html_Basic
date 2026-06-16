@@ -15,6 +15,12 @@ export const PART3_BIG_O: DsaSeedTag[] = [
     questions: [
       {
         tier: 1, type: "MCQ",
+        prompt: "Sếp hỏi 'thuật toán này còn chạy nhanh khi dữ liệu tăng gấp đôi không?'. Ký hiệu nào dùng để trả lời về độ phức tạp?",
+        options: ["Big-O", "RGB", "HTTP", "JSON"],
+        correctIndex: 0,
+      },
+      {
+        tier: 1, type: "MCQ",
         prompt: "Big-O dùng để mô tả điều gì?",
         options: [
           "Tốc độ tăng chi phí khi dữ liệu lớn dần",
@@ -89,6 +95,17 @@ export const PART3_BIG_O: DsaSeedTag[] = [
     questions: [
       {
         tier: 1, type: "MCQ",
+        prompt: "Một thuật toán chạy rất nhanh nhưng ngốn nhiều RAM để lưu bảng tạm. Đánh đổi này thuộc về hai loại chi phí nào?",
+        options: [
+          "Thời gian và bộ nhớ (time & space)",
+          "Màu sắc và font chữ",
+          "Mạng và pin",
+          "CPU và màn hình",
+        ],
+        correctIndex: 0,
+      },
+      {
+        tier: 1, type: "MCQ",
         prompt: "Time complexity (độ phức tạp thời gian) đo điều gì?",
         options: [
           "Số phép tính tăng thế nào theo dữ liệu",
@@ -159,6 +176,17 @@ export const PART3_BIG_O: DsaSeedTag[] = [
     part: PART,
     description: "Chọn cách nhanh hơn cho cùng bài toán",
     questions: [
+      {
+        tier: 1, type: "MCQ",
+        prompt: "Vòng lặp lồng nhau kiểm tra trùng (O(n²)) chạy chậm với 10.000 phần tử. Hướng tối ưu thường dùng là gì?",
+        options: [
+          "Dùng Set/Map để giảm còn O(n)",
+          "Thêm nhiều vòng lặp hơn",
+          "In ra console nhiều hơn",
+          "Đổi tên biến cho gọn",
+        ],
+        correctIndex: 0,
+      },
       {
         tier: 1, type: "MCQ",
         prompt: "Cùng tìm 1 phần tử trên mảng CHƯA sắp xếp thì nên dùng cách nào?",

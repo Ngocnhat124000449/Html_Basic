@@ -17,6 +17,12 @@ export const PART1_NEN_TANG: ReactSeedTag[] = [
     questions: [
       {
         tier: 1, type: "MCQ",
+        prompt: "Bạn muốn tách phần 'thẻ sản phẩm' (ảnh + tên + giá) thành một mảnh giao diện tái dùng ở nhiều nơi. Trong React, mảnh đó gọi là gì?",
+        options: ["Một component", "Một file CSS", "Một biến thường", "Một vòng lặp"],
+        correctIndex: 0,
+      },
+      {
+        tier: 1, type: "MCQ",
         prompt: "React là gì trong lập trình web?",
         options: [
           "Thư viện JavaScript để xây dựng giao diện theo component",
@@ -104,6 +110,12 @@ export const PART1_NEN_TANG: ReactSeedTag[] = [
     questions: [
       {
         tier: 1, type: "MCQ",
+        prompt: "Bạn muốn gắn class 'the-sp' cho thẻ <div> bọc card sản phẩm trong JSX. Viết thuộc tính nào?",
+        options: ['className="the-sp"', 'class="the-sp"', 'cssClass="the-sp"', 'classList="the-sp"'],
+        correctIndex: 0,
+      },
+      {
+        tier: 1, type: "MCQ",
         prompt: "Trong JSX, để chèn một biểu thức JavaScript bạn dùng gì?",
         options: [
           "Cặp ngoặc nhọn { }",
@@ -174,6 +186,17 @@ export const PART1_NEN_TANG: ReactSeedTag[] = [
     part: PART,
     description: "Truyền và đọc dữ liệu giữa các component qua props",
     questions: [
+      {
+        tier: 1, type: "MCQ",
+        prompt: "Bạn có một component TheSanPham và muốn dùng nó hiển thị nhiều sản phẩm khác tên và giá nhau. Truyền dữ liệu mỗi sản phẩm vào bằng cách nào?",
+        options: [
+          "Truyền qua props",
+          "Sửa lại code component mỗi lần",
+          "Truyền qua file CSS",
+          "Lưu vào localStorage",
+        ],
+        correctIndex: 0,
+      },
       {
         tier: 1, type: "MCQ",
         prompt: "Props trong React dùng để làm gì?",
@@ -264,6 +287,17 @@ export const PART1_NEN_TANG: ReactSeedTag[] = [
     part: PART,
     description: "Lồng component nhỏ để dựng nên một trang",
     questions: [
+      {
+        tier: 1, type: "MCQ",
+        prompt: "Trang chủ shop gồm phần header, danh sách card sản phẩm và footer. Cách dựng trang đó trong React là gì?",
+        options: [
+          "Ghép các component Header, DanhSachSP, Footer lại với nhau",
+          "Viết tất cả trong một hàm khổng lồ",
+          "Dùng một file CSS duy nhất",
+          "Dùng một ảnh chụp màn hình",
+        ],
+        correctIndex: 0,
+      },
       {
         tier: 1, type: "MCQ",
         prompt: "Dùng một component bên trong component khác (vd <Loi />) gọi là gì?",

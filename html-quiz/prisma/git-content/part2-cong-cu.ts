@@ -15,6 +15,17 @@ export const PART2_CONG_CU: GitSeedTag[] = [
     questions: [
       {
         tier: 1, type: "MCQ",
+        prompt: "Thư mục node_modules rất nặng và bạn không muốn nó bị đưa lên GitHub. Cách xử lý đúng là gì?",
+        options: [
+          "Thêm node_modules vào file .gitignore",
+          "Xóa hẳn thư mục node_modules đi",
+          "Nén lại rồi commit cho nhẹ",
+          "Đổi tên thư mục thành node_mods",
+        ],
+        correctIndex: 0,
+      },
+      {
+        tier: 1, type: "MCQ",
         prompt: "File .gitignore dùng để làm gì?",
         options: [
           "Liệt kê những file/thư mục Git nên BỎ QUA",
@@ -94,6 +105,12 @@ export const PART2_CONG_CU: GitSeedTag[] = [
     part: PART,
     description: "Quản lý gói, scripts và file package.json",
     questions: [
+      {
+        tier: 1, type: "MCQ",
+        prompt: "Bạn tải dự án Node của người khác về nhưng thư mục chưa có node_modules. Lệnh nào cài đủ thư viện để chạy được?",
+        options: ["npm install", "npm start", "npm new", "git clone"],
+        correctIndex: 0,
+      },
       {
         tier: 1, type: "MCQ",
         prompt: "npm là gì trong hệ sinh thái Node.js?",
