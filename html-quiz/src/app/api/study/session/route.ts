@@ -34,7 +34,9 @@ function toClient(tag: TagWithQuestions, isNew: boolean): SessionTag {
           ? "js"
           : tag.track === "dsa"
             ? "dsa"
-            : "html",
+            : tag.track === "git"
+              ? "git"
+              : "html",
     name: tag.name,
     topic: tag.topic,
     description: tag.description,
@@ -67,10 +69,15 @@ export async function GET(req: Request) {
   const params = new URL(req.url).searchParams;
   // extra=1: học vượt — bỏ giới hạn thẻ mới/ngày, lấy tiếp 5 thẻ chưa học kế tiếp
   const extra = params.get("extra") === "1";
-  // track: html (mặc định) | css | js | dsa — hàng đợi và quota tách riêng từng track
+  // track: html (mặc định) | css | js | dsa | git — hàng đợi và quota tách riêng từng track
   const trackParam = params.get("track");
   const track =
-    trackParam === "css" || trackParam === "js" || trackParam === "dsa" ? trackParam : "html";
+    trackParam === "css" ||
+    trackParam === "js" ||
+    trackParam === "dsa" ||
+    trackParam === "git"
+      ? trackParam
+      : "html";
 
   const due = await prisma.userTagProgress.findMany({
     where: { userId, dueAt: { lte: now }, tag: { track } },

@@ -11,7 +11,8 @@
     "postinstall": "prisma generate",
     "seed:css": "tsx prisma/seed-css.ts",
     "seed:js": "tsx prisma/seed-js.ts",
-    "seed:dsa": "tsx prisma/seed-dsa.ts"
+    "seed:dsa": "tsx prisma/seed-dsa.ts",
+    "seed:git": "tsx prisma/seed-git.ts"
   },
   "dependencies": {
     "@prisma/adapter-pg": "^7.8.0",

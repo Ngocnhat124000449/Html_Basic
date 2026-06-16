@@ -5,9 +5,11 @@ import { prisma } from "@/lib/prisma";
 import { gradeCode, gradeFillBlank } from "@/lib/grading/grader";
 import { gradeCss } from "@/lib/grading/grade-css";
 import { gradeJs } from "@/lib/grading/grade-js";
+import { gradeCmd } from "@/lib/grading/grade-cmd";
 import type { Requirement } from "@/lib/grading/types";
 import type { CssRequirement } from "@/lib/grading/css-types";
 import type { JsRequirement, JsRunOutput } from "@/lib/grading/js-types";
+import type { CmdRequirement } from "@/lib/grading/cmd-types";
 
 // Output thô client chạy trong Web Worker gửi về (server KHÔNG tự chạy code).
 const runOutputSchema = z.union([
@@ -65,6 +67,12 @@ export async function POST(req: Request) {
     );
     correct = r.passed;
     results = r.results;
+  } else if (question.type === "WRITE_CMD") {
+    // Gõ lệnh Git/CLI hoặc nội dung file — chấm tĩnh bằng so chuỗi con, KHÔNG chạy gì.
+    const r = gradeCmd(String(answer), (question.requirements as CmdRequirement[]) ?? []);
+    correct = r.passed;
+    results = r.results;
+    parseError = r.parseError ?? false;
   } else {
     const r = gradeCode(String(answer), (question.requirements as Requirement[]) ?? []);
     correct = r.passed;

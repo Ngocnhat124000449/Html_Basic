@@ -22,6 +22,8 @@ export default async function HomePage() {
     jsProgress,
     dsaTotal,
     dsaProgress,
+    gitTotal,
+    gitProgress,
   ] = await Promise.all([
     prisma.tag.count({ where: { track: "html" } }),
     prisma.userTagProgress.findMany({ where: { userId, tag: { track: "html" } } }),
@@ -31,10 +33,18 @@ export default async function HomePage() {
     prisma.userTagProgress.findMany({ where: { userId, tag: { track: "js" } } }),
     prisma.tag.count({ where: { track: "dsa" } }),
     prisma.userTagProgress.findMany({ where: { userId, tag: { track: "dsa" } } }),
+    prisma.tag.count({ where: { track: "git" } }),
+    prisma.userTagProgress.findMany({ where: { userId, tag: { track: "git" } } }),
   ]);
 
   // P2 — dự báo lịch ôn 7 ngày tới + độ nhớ trung bình + thẻ hay quên (mọi khóa)
-  const allProgress = [...htmlProgress, ...cssProgress, ...jsProgress, ...dsaProgress];
+  const allProgress = [
+    ...htmlProgress,
+    ...cssProgress,
+    ...jsProgress,
+    ...dsaProgress,
+    ...gitProgress,
+  ];
   const startToday = new Date(now);
   startToday.setHours(0, 0, 0, 0);
   const forecast = Array.from({ length: 7 }, () => 0);
@@ -130,6 +140,24 @@ export default async function HomePage() {
       },
       beta: true,
     },
+    {
+      href: "/git",
+      name: "Git & Công cụ",
+      icon: "🔀",
+      desc: "Quản lý mã nguồn, GitHub, npm, .env",
+      total: gitTotal,
+      unit: "mục",
+      mastered: gitProgress.filter((p) => p.mastered).length,
+      due: gitProgress.filter((p) => p.dueAt <= now).length,
+      started: gitProgress.length,
+      accent: {
+        card: "border-emerald-200 bg-emerald-50/50 hover:border-emerald-400",
+        bar: "from-emerald-400 to-emerald-600",
+        chip: "bg-emerald-100 text-emerald-700",
+        cta: "text-emerald-700",
+      },
+      beta: true,
+    },
   ];
 
   return (
@@ -141,7 +169,7 @@ export default async function HomePage() {
         <p className="mt-2 text-ink/60">Chọn khóa học để bắt đầu</p>
       </div>
 
-      <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+      <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
         {courses.map((c, i) => {
           const pct = c.total > 0 ? Math.round((c.mastered / c.total) * 100) : 0;
           const startedPct = c.total > 0 ? Math.round((c.started / c.total) * 100) : 0;

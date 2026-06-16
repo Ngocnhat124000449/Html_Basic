@@ -10,7 +10,8 @@ export type ClientQuestion = {
     | "FIX_BUG"
     | "WRITE_STRUCTURE"
     | "WRITE_CSS"
-    | "WRITE_JS";
+    | "WRITE_JS"
+    | "WRITE_CMD";
   prompt: string;
   options: string[] | null;
   starterCode: string | null;
@@ -20,7 +21,7 @@ export type ClientQuestion = {
 
 export type SessionTag = {
   tagId: string;
-  track: "html" | "css" | "js" | "dsa";
+  track: "html" | "css" | "js" | "dsa" | "git";
   name: string;
   topic: string;
   description: string;

@@ -19,8 +19,9 @@ type DbType =
   | "FIX_BUG"
   | "WRITE_STRUCTURE"
   | "WRITE_CSS"
-  | "WRITE_JS";
-type Track = "html" | "css" | "js" | "dsa";
+  | "WRITE_JS"
+  | "WRITE_CMD";
+type Track = "html" | "css" | "js" | "dsa" | "git";
 type Scope = "all" | "html" | "css" | "js";
 
 type Item =
@@ -71,6 +72,7 @@ const TYPE_BADGE: Record<string, { label: string; cls: string }> = {
   WRITE_STRUCTURE: { label: "Viết cấu trúc", cls: "bg-amber-100 text-amber-700" },
   WRITE_CSS: { label: "Viết CSS", cls: "bg-sky-100 text-sky-700" },
   WRITE_JS: { label: "Viết JS", cls: "bg-amber-100 text-amber-700" },
+  WRITE_CMD: { label: "Gõ lệnh", cls: "bg-emerald-100 text-emerald-700" },
   REFLEX: { label: "Phản xạ thẻ", cls: "bg-emerald-100 text-emerald-700" },
   ATTR: { label: "Thuộc tính", cls: "bg-indigo-100 text-indigo-700" },
   CSSREFLEX: { label: "Phản xạ CSS", cls: "bg-cyan-100 text-cyan-700" },
@@ -83,7 +85,7 @@ const normAttr = (s: string) => s.toLowerCase().split("=")[0].replace(/[<>"'`/\s
 
 // Nhãn đáp án: thẻ HTML bọc <>, mục CSS/JS hiện tên trần
 const labelFor = (track: Track | undefined, name: string) =>
-  track === "css" || track === "js" || track === "dsa" ? name : `<${name}>`;
+  track === "css" || track === "js" || track === "dsa" || track === "git" ? name : `<${name}>`;
 
 const SCOPE_META: Record<Scope, string> = {
   all: "Tất cả",

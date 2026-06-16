@@ -14,7 +14,7 @@ const TIER_INFO: Record<number, { label: string; cls: string }> = {
 const MAX_WRONG = 3;
 
 // Nhãn hiển thị: thẻ HTML bọc <>, mục CSS/JS hiện tên trần
-const tagLabel = (tag: { track: "html" | "css" | "js" | "dsa"; name: string }) =>
+const tagLabel = (tag: { track: "html" | "css" | "js" | "dsa" | "git"; name: string }) =>
   tag.track === "html" ? `<${tag.name}>` : tag.name;
 
 // Một câu trong hàng đợi phản xạ — kèm thẻ gốc để chấm gom theo thẻ + lộ tên sau khi trả lời.
@@ -42,7 +42,7 @@ export default function StudyPage() {
   const [submitting, setSubmitting] = useState(false);
   const [finished, setFinished] = useState(false);
   const [summary, setSummary] = useState<{ name: string; passed: boolean }[]>([]);
-  const [track, setTrack] = useState<"html" | "css" | "js" | "dsa">("html");
+  const [track, setTrack] = useState<"html" | "css" | "js" | "dsa" | "git">("html");
   const inputRef = useRef<HTMLInputElement | null>(null);
   const textareaRef = useRef<HTMLTextAreaElement | null>(null);
 
@@ -75,7 +75,8 @@ export default function StudyPage() {
     const params = new URLSearchParams(window.location.search);
     const extra = params.get("extra") === "1";
     const tp = params.get("track");
-    const trk = tp === "css" || tp === "js" || tp === "dsa" ? tp : "html";
+    const trk =
+      tp === "css" || tp === "js" || tp === "dsa" || tp === "git" ? tp : "html";
     const qs = new URLSearchParams();
     if (extra) qs.set("extra", "1");
     if (trk !== "html") qs.set("track", trk);
@@ -102,7 +103,15 @@ export default function StudyPage() {
 
   const unit = track === "html" ? "thẻ" : "mục";
   const homeHref =
-    track === "css" ? "/css" : track === "js" ? "/js" : track === "dsa" ? "/dsa" : "/html";
+    track === "css"
+      ? "/css"
+      : track === "js"
+        ? "/js"
+        : track === "dsa"
+          ? "/dsa"
+          : track === "git"
+            ? "/git"
+            : "/html";
 
   // Chốt phiên: gom lượt sai theo thẻ → batch lên server, dựng tổng kết.
   const finishSession = useCallback(
@@ -216,7 +225,10 @@ export default function StudyPage() {
   const q = item.q;
   const isCode = q.type !== "MCQ";
   const isMultiline =
-    q.type === "WRITE_STRUCTURE" || q.type === "WRITE_CSS" || q.type === "WRITE_JS";
+    q.type === "WRITE_STRUCTURE" ||
+    q.type === "WRITE_CSS" ||
+    q.type === "WRITE_JS" ||
+    q.type === "WRITE_CMD";
   const tier = TIER_INFO[q.tier] ?? TIER_INFO[1];
   const sessionPct = (pos / queue.length) * 100;
   const totalWrong = Object.values(wrongByTag).reduce((s, n) => s + n, 0);

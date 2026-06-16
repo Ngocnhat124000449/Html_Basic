@@ -63,6 +63,7 @@ enum QuestionType {
   WRITE_STRUCTURE
   WRITE_CSS
   WRITE_JS
+  WRITE_CMD
 }
 
 model Question {
