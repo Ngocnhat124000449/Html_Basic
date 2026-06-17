@@ -33,6 +33,12 @@ export const tags: SeedTag[] = [
     questions: [
       {
         tier: 1, type: T.MCQ,
+        prompt: "Trên trang chi tiết sản phẩm, TÊN SẢN PHẨM là dòng quan trọng nhất ở đầu trang. Dùng thẻ tiêu đề nào?",
+        options: ["<h1>", "<p>", "<span>", "<title>"],
+        correctIndex: 0,
+      },
+      {
+        tier: 1, type: T.MCQ,
         prompt: "Trang chủ cần dòng tiêu đề lớn nhất hiển thị tên cửa hàng 'ShopVN'. Thẻ nào phù hợp nhất?",
         options: ["<title>", "<h1>", "<header>", "<strong>"],
         correctIndex: 1,
@@ -95,6 +101,12 @@ export const tags: SeedTag[] = [
     topic: "Văn bản",
     description: "Đoạn văn bản",
     questions: [
+      {
+        tier: 1, type: T.MCQ,
+        prompt: "Phần mô tả sản phẩm gồm vài câu văn xuôi thành một đoạn. Bọc đoạn đó bằng thẻ nào?",
+        options: ["<span>", "<p>", "<div>", "<br>"],
+        correctIndex: 1,
+      },
       {
         tier: 1, type: T.MCQ,
         prompt: "Bạn dán 3 đoạn giới thiệu công ty, mỗi đoạn cần là một khối văn bản riêng có khoảng cách trên dưới. Bọc mỗi đoạn bằng thẻ nào?",
@@ -163,6 +175,12 @@ export const tags: SeedTag[] = [
     questions: [
       {
         tier: 1, type: T.MCQ,
+        prompt: "Trong dòng 'Giảm giá CHỈ HÔM NAY', muốn cụm 'CHỈ HÔM NAY' đậm và có ngữ nghĩa quan trọng. Dùng thẻ nào?",
+        options: ["<b>", "<strong>", "<mark>", "<em>"],
+        correctIndex: 1,
+      },
+      {
+        tier: 1, type: T.MCQ,
         prompt: "Câu 'Không hoàn tiền sau 30 ngày' trong điều khoản cần in đậm VÀ được máy đọc màn hình nhấn mạnh là nội dung quan trọng. Thẻ nào đúng nhất?",
         options: ["<b>", "<mark>", "<em>", "<strong>"],
         correctIndex: 3,
@@ -220,6 +238,12 @@ export const tags: SeedTag[] = [
     topic: "Văn bản",
     description: "Nhấn mạnh ngữ điệu (hiển thị nghiêng)",
     questions: [
+      {
+        tier: 1, type: T.MCQ,
+        prompt: "Muốn nhấn ngữ điệu nhẹ ở từ 'thật sự' trong câu (chữ nghiêng, có ngữ nghĩa). Dùng thẻ nào?",
+        options: ["<i>", "<em>", "<span>", "<u>"],
+        correctIndex: 1,
+      },
       {
         tier: 1, type: T.MCQ,
         prompt: "Trong câu 'Sản phẩm này rất đáng mua', bạn muốn từ 'rất' được nhấn ngữ điệu (đọc màn hình nhấn giọng, hiển thị nghiêng). Dùng thẻ nào?",
@@ -281,6 +305,12 @@ export const tags: SeedTag[] = [
     questions: [
       {
         tier: 1, type: T.MCQ,
+        prompt: "Trong khối địa chỉ, muốn xuống dòng giữa 'Số 1 Lê Lợi' và 'Quận 1' mà vẫn trong cùng một đoạn. Dùng thẻ nào?",
+        options: ["<p>", "<br>", "<hr>", "<div>"],
+        correctIndex: 1,
+      },
+      {
+        tier: 1, type: T.MCQ,
         prompt: "Địa chỉ công ty gồm 3 dòng phải xuống dòng đúng vị trí nhưng vẫn nằm trong cùng một đoạn <p>. Dùng thẻ nào?",
         options: ["<hr>", "<br>", "Tách thành 3 thẻ <p>", "Thêm nhiều khoảng trắng"],
         correctIndex: 1,
@@ -339,6 +369,12 @@ export const tags: SeedTag[] = [
     topic: "Liên kết & Media",
     description: "Liên kết (anchor) đến trang hoặc vị trí khác",
     questions: [
+      {
+        tier: 1, type: T.MCQ,
+        prompt: "Trên card sản phẩm, muốn dòng chữ 'Xem chi tiết' bấm vào thì chuyển sang trang sản phẩm. Dùng thẻ nào?",
+        options: ["<a>", "<link>", "<button>", "<nav>"],
+        correctIndex: 0,
+      },
       {
         tier: 1, type: T.MCQ,
         prompt: "Chữ 'Xem chính sách đổi trả' phải bấm được và chuyển người dùng sang trang khác. Thẻ nào đúng?",
@@ -407,6 +443,12 @@ export const tags: SeedTag[] = [
     topic: "Liên kết & Media",
     description: "Hiển thị hình ảnh",
     questions: [
+      {
+        tier: 1, type: T.MCQ,
+        prompt: "Card sản phẩm cần hiển thị ảnh của món hàng ở trên cùng. Dùng thẻ nào?",
+        options: ["<image>", "<img>", "<picture>", "<figure>"],
+        correctIndex: 1,
+      },
       {
         tier: 1, type: T.MCQ,
         prompt: "Cần hiển thị ảnh cat.jpg kèm mô tả cho người dùng đọc màn hình. Cách viết nào đúng?",
@@ -484,6 +526,12 @@ export const tags: SeedTag[] = [
     questions: [
       {
         tier: 1, type: T.MCQ,
+        prompt: "Menu liệt kê các danh mục KHÔNG cần thứ tự (Điện thoại, Laptop...). Bọc cả danh sách bằng thẻ nào?",
+        options: ["<ol>", "<ul>", "<dl>", "<div>"],
+        correctIndex: 1,
+      },
+      {
+        tier: 1, type: T.MCQ,
         prompt: "Liệt kê các tính năng sản phẩm — thứ tự không quan trọng, mỗi dòng một dấu chấm tròn. Thẻ bao ngoài là gì?",
         options: ["<ol>", "<ul>", "<dl>", "<li>"],
         correctIndex: 1,
@@ -557,6 +605,12 @@ export const tags: SeedTag[] = [
     questions: [
       {
         tier: 1, type: T.MCQ,
+        prompt: "Hướng dẫn các BƯỚC đặt hàng theo đúng thứ tự 1, 2, 3. Nên dùng loại danh sách nào?",
+        options: ["<ul>", "<ol>", "<dl>", "<menu>"],
+        correctIndex: 1,
+      },
+      {
+        tier: 1, type: T.MCQ,
         prompt: "Công thức nấu ăn có 5 bước phải làm đúng trình tự, cần đánh số tự động 1 → 5. Thẻ bao ngoài là gì?",
         options: ["<ul>", "<dl>", "<ol>", "<table>"],
         correctIndex: 2,
@@ -618,6 +672,12 @@ export const tags: SeedTag[] = [
     topic: "Danh sách",
     description: "Một mục trong danh sách",
     questions: [
+      {
+        tier: 1, type: T.MCQ,
+        prompt: "Mỗi danh mục trong menu <ul> là một mục riêng. Dùng thẻ nào cho mỗi mục đó?",
+        options: ["<item>", "<li>", "<dd>", "<p>"],
+        correctIndex: 1,
+      },
       {
         tier: 1, type: T.MCQ,
         prompt: "Trong danh sách mua sắm, mỗi món hàng 'Táo', 'Cam', 'Sữa' nằm trong thẻ nào?",
@@ -683,6 +743,12 @@ export const tags: SeedTag[] = [
     topic: "Bảng",
     description: "Bảng dữ liệu",
     questions: [
+      {
+        tier: 1, type: T.MCQ,
+        prompt: "Cần hiển thị bảng so sánh giá theo hàng và cột rõ ràng. Dùng thẻ nào để tạo bảng?",
+        options: ["<grid>", "<table>", "<div>", "<list>"],
+        correctIndex: 1,
+      },
       {
         tier: 1, type: T.MCQ,
         prompt: "Trường hợp nào NÊN dùng <table>?",
@@ -754,6 +820,12 @@ export const tags: SeedTag[] = [
     questions: [
       {
         tier: 1, type: T.MCQ,
+        prompt: "Trong bảng, mỗi HÀNG (vd thông tin một sản phẩm) được tạo bằng thẻ nào?",
+        options: ["<td>", "<tr>", "<th>", "<row>"],
+        correctIndex: 1,
+      },
+      {
+        tier: 1, type: T.MCQ,
         prompt: "Trong bảng điểm, toàn bộ dữ liệu của học sinh 'An' (tên, điểm toán, điểm văn) nằm trên cùng một hàng. Hàng đó là thẻ gì?",
         options: ["<td>", "<tr>", "<th>", "<tbody>"],
         correctIndex: 1,
@@ -811,6 +883,12 @@ export const tags: SeedTag[] = [
     topic: "Bảng",
     description: "Ô dữ liệu trong bảng",
     questions: [
+      {
+        tier: 1, type: T.MCQ,
+        prompt: "Trong một hàng bảng, mỗi Ô DỮ LIỆU (vd giá tiền) dùng thẻ nào?",
+        options: ["<td>", "<th>", "<tr>", "<cell>"],
+        correctIndex: 0,
+      },
       {
         tier: 1, type: T.MCQ,
         prompt: "Ô chứa giá trị '99.000đ' tại giao điểm hàng 'Áo thun' và cột 'Giá' là thẻ gì?",
@@ -875,6 +953,12 @@ export const tags: SeedTag[] = [
     questions: [
       {
         tier: 1, type: T.MCQ,
+        prompt: "Hàng đầu bảng là TIÊU ĐỀ CỘT ('Tên', 'Giá') in đậm căn giữa. Mỗi ô tiêu đề dùng thẻ nào?",
+        options: ["<td>", "<th>", "<thead>", "<caption>"],
+        correctIndex: 1,
+      },
+      {
+        tier: 1, type: T.MCQ,
         prompt: "Hàng đầu của bảng chứa nhãn cột 'Tên sản phẩm', 'Giá' — cần đậm, căn giữa và mang ngữ nghĩa tiêu đề. Mỗi ô nhãn dùng thẻ gì?",
         options: ["<td>", "<th>", "<thead>", "<caption>"],
         correctIndex: 1,
@@ -933,6 +1017,12 @@ export const tags: SeedTag[] = [
     topic: "Form",
     description: "Biểu mẫu thu thập dữ liệu người dùng",
     questions: [
+      {
+        tier: 1, type: T.MCQ,
+        prompt: "Trang liên hệ cần thu thập tên + email rồi gửi đi. Bọc các ô nhập và nút gửi bằng thẻ nào?",
+        options: ["<div>", "<form>", "<fieldset>", "<section>"],
+        correctIndex: 1,
+      },
       {
         tier: 1, type: T.MCQ,
         prompt: "Trang liên hệ có các ô nhập và nút gửi. Phải bao tất cả trong thẻ nào để nhấn Enter tự gửi và dữ liệu được chuyển đến server?",
@@ -1000,6 +1090,12 @@ export const tags: SeedTag[] = [
     topic: "Form",
     description: "Ô nhập liệu",
     questions: [
+      {
+        tier: 1, type: T.MCQ,
+        prompt: "Form đăng ký cần một ô để người dùng gõ email trên MỘT dòng. Dùng thẻ nào?",
+        options: ["<input>", "<textarea>", "<field>", "<box>"],
+        correctIndex: 0,
+      },
       {
         tier: 1, type: T.MCQ,
         prompt: "Cần ô đánh dấu ✓ 'Tôi đồng ý điều khoản'. Cách viết nào đúng?",
@@ -1075,6 +1171,12 @@ export const tags: SeedTag[] = [
     questions: [
       {
         tier: 1, type: T.MCQ,
+        prompt: "Muốn dòng chữ 'Email' gắn với ô nhập, bấm vào chữ thì con trỏ nhảy vào ô. Dùng thẻ nào?",
+        options: ["<span>", "<label>", "<legend>", "<caption>"],
+        correctIndex: 1,
+      },
+      {
+        tier: 1, type: T.MCQ,
         prompt: "Bấm vào chữ 'Số điện thoại' thì con trỏ phải tự nhảy vào ô nhập bên cạnh. Chữ đó cần bọc bằng thẻ gì?",
         options: ["<span>", "<legend>", "<label>", "<caption>"],
         correctIndex: 2,
@@ -1136,6 +1238,12 @@ export const tags: SeedTag[] = [
     topic: "Form",
     description: "Nút bấm",
     questions: [
+      {
+        tier: 1, type: T.MCQ,
+        prompt: "Cuối form cần một nút 'Gửi' để bấm gửi biểu mẫu đi. Dùng thẻ nào?",
+        options: ["<a>", "<button>", "<span>", "<div>"],
+        correctIndex: 1,
+      },
       {
         tier: 1, type: T.MCQ,
         prompt: "Cuối form đăng ký cần nút 'Tạo tài khoản' để gửi form. Cách viết nào đúng?",
@@ -1210,6 +1318,12 @@ export const tags: SeedTag[] = [
     questions: [
       {
         tier: 1, type: T.MCQ,
+        prompt: "Ô 'Lời nhắn' trong form cần cho nhập NHIỀU DÒNG văn bản. Dùng thẻ nào?",
+        options: ["<input>", "<textarea>", "<text>", "<p>"],
+        correctIndex: 1,
+      },
+      {
+        tier: 1, type: T.MCQ,
         prompt: "Ô 'Nội dung góp ý' cần cho khách viết nhiều dòng và kéo giãn được kích thước. Thẻ nào phù hợp?",
         options: ["<input type=\"text\">", "<textarea>", "<input rows=\"5\">", "<p contenteditable>"],
         correctIndex: 1,
@@ -1272,6 +1386,12 @@ export const tags: SeedTag[] = [
     questions: [
       {
         tier: 1, type: T.MCQ,
+        prompt: "Cho người dùng CHỌN một cỡ áo từ danh sách thả xuống. Dùng thẻ nào?",
+        options: ["<input>", "<select>", "<datalist>", "<options>"],
+        correctIndex: 1,
+      },
+      {
+        tier: 1, type: T.MCQ,
         prompt: "Trường 'Tỉnh/Thành phố' cho khách chọn 1 trong 63 lựa chọn từ hộp thả xuống. Thẻ bao ngoài là gì?",
         options: ["<select>", "<dropdown>", "<ul>", "<input type=\"list\">"],
         correctIndex: 0,
@@ -1330,6 +1450,12 @@ export const tags: SeedTag[] = [
     topic: "Văn bản",
     description: "Tiêu đề cấp 2 — mục lớn trong trang",
     questions: [
+      {
+        tier: 1, type: T.MCQ,
+        prompt: "Trang chủ chia nhiều mục lớn như 'Sản phẩm nổi bật', 'Khuyến mãi'. Tiêu đề mỗi mục lớn nên dùng thẻ nào?",
+        options: ["<h1>", "<h2>", "<p>", "<strong>"],
+        correctIndex: 1,
+      },
       {
         tier: 1, type: T.MCQ,
         prompt: "Bài viết đã có tiêu đề chính <h1>, giờ cần tiêu đề cho từng mục lớn: 'Nguyên liệu', 'Cách làm'. Thẻ nào đúng phân cấp?",
@@ -1391,6 +1517,12 @@ export const tags: SeedTag[] = [
     questions: [
       {
         tier: 1, type: T.MCQ,
+        prompt: "Trong mục 'Sản phẩm nổi bật' lại có các mục con như 'Điện thoại'. Tiêu đề mục con nên dùng thẻ nào?",
+        options: ["<h1>", "<h2>", "<h3>", "<b>"],
+        correctIndex: 2,
+      },
+      {
+        tier: 1, type: T.MCQ,
         prompt: "Trong mục <h2>Điện thoại</h2>, cần tiêu đề con cho từng hãng 'iPhone', 'Samsung'. Dùng cấp tiêu đề nào để không nhảy cóc?",
         options: ["<h6>", "<h2>", "<h3>", "<h5>"],
         correctIndex: 2,
@@ -1448,6 +1580,12 @@ export const tags: SeedTag[] = [
     topic: "Văn bản",
     description: "Vùng inline không ngữ nghĩa — thường dùng để áp CSS",
     questions: [
+      {
+        tier: 1, type: T.MCQ,
+        prompt: "Muốn tô màu RIÊNG cụm 'còn hàng' trong một câu mà không xuống dòng và không thêm ngữ nghĩa. Dùng thẻ nào?",
+        options: ["<div>", "<span>", "<p>", "<strong>"],
+        correctIndex: 1,
+      },
       {
         tier: 1, type: T.MCQ,
         prompt: "Bạn cần tô đỏ đúng MỘT TỪ ở giữa câu bằng CSS mà không làm câu xuống dòng hay tách khối. Bọc từ đó bằng thẻ gì?",
@@ -1512,6 +1650,12 @@ export const tags: SeedTag[] = [
     questions: [
       {
         tier: 1, type: T.MCQ,
+        prompt: "Trang giới thiệu muốn trích một đoạn đánh giá DÀI của khách hàng thành một khối riêng. Dùng thẻ nào?",
+        options: ["<q>", "<blockquote>", "<p>", "<cite>"],
+        correctIndex: 1,
+      },
+      {
+        tier: 1, type: T.MCQ,
         prompt: "Bài báo trích nguyên văn một đoạn phát biểu dài của chuyên gia, hiển thị thành khối thụt lề riêng. Thẻ nào đúng ngữ nghĩa?",
         options: ["<pre>", "<em>", "<blockquote>", "<aside>"],
         correctIndex: 2,
@@ -1564,6 +1708,12 @@ export const tags: SeedTag[] = [
     topic: "Văn bản",
     description: "Hiển thị một đoạn mã nguồn inline",
     questions: [
+      {
+        tier: 1, type: T.MCQ,
+        prompt: "Trong bài hướng dẫn, muốn hiển thị một đoạn mã ngắn giữa câu (vd console.log) với phông chữ mã. Dùng thẻ nào?",
+        options: ["<code>", "<pre>", "<kbd>", "<samp>"],
+        correctIndex: 0,
+      },
       {
         tier: 1, type: T.MCQ,
         prompt: "Trong câu 'Chạy lệnh npm install để cài đặt', tên lệnh cần hiển thị font monospace và mang ngữ nghĩa 'đây là mã'. Bọc bằng thẻ gì?",
@@ -1627,6 +1777,12 @@ export const tags: SeedTag[] = [
     questions: [
       {
         tier: 1, type: T.MCQ,
+        prompt: "Bạn dán một đoạn code nhiều dòng và muốn GIỮ NGUYÊN khoảng trắng cùng các dòng xuống. Dùng thẻ nào?",
+        options: ["<p>", "<pre>", "<code>", "<div>"],
+        correctIndex: 1,
+      },
+      {
+        tier: 1, type: T.MCQ,
         prompt: "Bạn dán khối code 10 dòng có thụt lề nhưng trình duyệt gộp hết thành một dòng. Thẻ nào giữ nguyên từng khoảng trắng và xuống dòng?",
         options: ["<p>", "<pre>", "<code>", "<div>"],
         correctIndex: 1,
@@ -1686,6 +1842,12 @@ export const tags: SeedTag[] = [
     questions: [
       {
         tier: 1, type: T.MCQ,
+        prompt: "Muốn một đường kẻ ngang phân tách hai chủ đề khác nhau trên trang. Dùng thẻ nào?",
+        options: ["<br>", "<hr>", "<line>", "<div>"],
+        correctIndex: 1,
+      },
+      {
+        tier: 1, type: T.MCQ,
         prompt: "Giữa phần giới thiệu và phần bình luận cần một đường kẻ ngang thể hiện 'chuyển chủ đề'. Thẻ nào đúng?",
         options: ["<br>", "<line>", "<hr>", "<div class=\"line\">"],
         correctIndex: 2,
@@ -1743,6 +1905,12 @@ export const tags: SeedTag[] = [
     topic: "Văn bản",
     description: "Đánh dấu / làm nổi bật văn bản (nền vàng)",
     questions: [
+      {
+        tier: 1, type: T.MCQ,
+        prompt: "Trong trang kết quả tìm kiếm, muốn làm nổi bật từ khóa khớp bằng nền vàng có ngữ nghĩa. Dùng thẻ nào?",
+        options: ["<mark>", "<strong>", "<span>", "<em>"],
+        correctIndex: 0,
+      },
       {
         tier: 1, type: T.MCQ,
         prompt: "Trang kết quả tìm kiếm muốn từ khóa người dùng vừa gõ được tô nền vàng trong từng kết quả. Thẻ nào đúng ngữ nghĩa?",
@@ -1809,6 +1977,12 @@ export const tags: SeedTag[] = [
     questions: [
       {
         tier: 1, type: T.MCQ,
+        prompt: "Cần viết công thức nước H2O với số 2 nằm ở DƯỚI. Dùng thẻ nào cho số 2?",
+        options: ["<sup>", "<sub>", "<small>", "<i>"],
+        correctIndex: 1,
+      },
+      {
+        tier: 1, type: T.MCQ,
         prompt: "Trang hóa học cần viết công thức nước: chữ H, số 2 nằm thấp xuống dưới, rồi chữ O. Số 2 bọc bằng thẻ gì?",
         options: ["<sup>", "<small>", "<sub>", "<low>"],
         correctIndex: 2,
@@ -1871,6 +2045,12 @@ export const tags: SeedTag[] = [
     topic: "Văn bản",
     description: "Chỉ số trên (superscript) — như x²",
     questions: [
+      {
+        tier: 1, type: T.MCQ,
+        prompt: "Cần viết x mũ 2 (x²) với số 2 nằm ở TRÊN. Dùng thẻ nào cho số 2?",
+        options: ["<sub>", "<sup>", "<b>", "<small>"],
+        correctIndex: 1,
+      },
       {
         tier: 1, type: T.MCQ,
         prompt: "Bài toán cần hiển thị 'x bình phương': chữ x rồi số 2 nhỏ nằm cao phía trên. Số 2 bọc bằng thẻ gì?",
@@ -1936,6 +2116,12 @@ export const tags: SeedTag[] = [
     topic: "Liên kết & Media",
     description: "Nhúng và phát video",
     questions: [
+      {
+        tier: 1, type: T.MCQ,
+        prompt: "Trang giới thiệu cần nhúng một video clip có nút phát/dừng ngay trên trang. Dùng thẻ nào?",
+        options: ["<video>", "<media>", "<embed>", "<iframe>"],
+        correctIndex: 0,
+      },
       {
         tier: 1, type: T.MCQ,
         prompt: "Trang khóa học cần phát đoạn phim bài giảng từ file intro.mp4 ngay trong trang. Thẻ nào đúng?",
@@ -2005,6 +2191,12 @@ export const tags: SeedTag[] = [
     questions: [
       {
         tier: 1, type: T.MCQ,
+        prompt: "Muốn nhúng một file nhạc nền có thanh điều khiển phát/dừng. Dùng thẻ nào?",
+        options: ["<sound>", "<audio>", "<media>", "<music>"],
+        correctIndex: 1,
+      },
+      {
+        tier: 1, type: T.MCQ,
         prompt: "Trang podcast cần trình phát cho file tap-1.mp3 với nút play và thanh âm lượng. Thẻ nào đúng?",
         options: ["<sound controls>", "<audio controls>", "<video controls>", "<player>"],
         correctIndex: 1,
@@ -2067,6 +2259,12 @@ export const tags: SeedTag[] = [
     questions: [
       {
         tier: 1, type: T.MCQ,
+        prompt: "Muốn cung cấp nhiều định dạng (mp4, webm) cho cùng một video để trình duyệt tự chọn được. Dùng thẻ nào bên trong <video>?",
+        options: ["<src>", "<source>", "<media>", "<option>"],
+        correctIndex: 1,
+      },
+      {
+        tier: 1, type: T.MCQ,
         prompt: "Video của bạn có 2 phiên bản .webm và .mp4. Bên trong <video>, mỗi phiên bản khai báo bằng thẻ nào để trình duyệt tự chọn?",
         options: ["<src>", "<file>", "<source>", "<track>"],
         correctIndex: 2,
@@ -2124,6 +2322,12 @@ export const tags: SeedTag[] = [
     topic: "Liên kết & Media",
     description: "Khối minh họa độc lập (ảnh, biểu đồ, code...)",
     questions: [
+      {
+        tier: 1, type: T.MCQ,
+        prompt: "Một biểu đồ kèm chú thích là khối minh họa độc lập có thể di chuyển nguyên khối. Bọc cả khối bằng thẻ nào?",
+        options: ["<div>", "<figure>", "<section>", "<aside>"],
+        correctIndex: 1,
+      },
       {
         tier: 1, type: T.MCQ,
         prompt: "Biểu đồ doanh thu và dòng chú thích bên dưới phải 'dính' với nhau thành một khối minh họa độc lập. Thẻ bao ngoài là gì?",
@@ -2190,6 +2394,12 @@ export const tags: SeedTag[] = [
     questions: [
       {
         tier: 1, type: T.MCQ,
+        prompt: "Bên trong <figure>, dòng chú thích mô tả cho ảnh nên dùng thẻ nào?",
+        options: ["<caption>", "<figcaption>", "<p>", "<label>"],
+        correctIndex: 1,
+      },
+      {
+        tier: 1, type: T.MCQ,
         prompt: "Bên trong khối <figure>, dòng 'Hình 1: Sơ đồ hệ thống' cần thẻ chú thích đúng chuẩn. Thẻ nào?",
         options: ["<caption>", "<figcaption>", "<label>", "<small>"],
         correctIndex: 1,
@@ -2248,6 +2458,12 @@ export const tags: SeedTag[] = [
     topic: "Danh sách",
     description: "Danh sách mô tả (cặp thuật ngữ – định nghĩa)",
     questions: [
+      {
+        tier: 1, type: T.MCQ,
+        prompt: "Trang FAQ gồm các cặp 'thuật ngữ — định nghĩa' đi liền nhau. Nên dùng loại danh sách nào?",
+        options: ["<ul>", "<ol>", "<dl>", "<table>"],
+        correctIndex: 2,
+      },
       {
         tier: 1, type: T.MCQ,
         prompt: "Hiển thị thông số kỹ thuật dạng cặp 'CPU: i7', 'RAM: 16GB' đúng ngữ nghĩa danh sách mô tả. Thẻ bao ngoài là gì?",
@@ -2309,6 +2525,12 @@ export const tags: SeedTag[] = [
     questions: [
       {
         tier: 1, type: T.MCQ,
+        prompt: "Trong danh sách mô tả, phần THUẬT NGỮ (vd 'Bảo hành') dùng thẻ nào?",
+        options: ["<dt>", "<dd>", "<dl>", "<th>"],
+        correctIndex: 0,
+      },
+      {
+        tier: 1, type: T.MCQ,
         prompt: "Trong danh sách mô tả thông số, phần TÊN thông số ('CPU', 'RAM') nằm trong thẻ nào?",
         options: ["<dd>", "<li>", "<dt>", "<th>"],
         correctIndex: 2,
@@ -2366,6 +2588,12 @@ export const tags: SeedTag[] = [
     topic: "Danh sách",
     description: "Phần mô tả / định nghĩa của thuật ngữ",
     questions: [
+      {
+        tier: 1, type: T.MCQ,
+        prompt: "Trong danh sách mô tả, phần GIẢI THÍCH cho thuật ngữ dùng thẻ nào?",
+        options: ["<dt>", "<dd>", "<li>", "<p>"],
+        correctIndex: 1,
+      },
       {
         tier: 1, type: T.MCQ,
         prompt: "Trong danh sách mô tả thông số, phần GIÁ TRỊ ('i7', '16GB') đứng sau tên thông số nằm trong thẻ nào?",
@@ -2428,6 +2656,12 @@ export const tags: SeedTag[] = [
     questions: [
       {
         tier: 1, type: T.MCQ,
+        prompt: "Muốn nhóm riêng (các) hàng tiêu đề của bảng để dễ tạo kiểu. Dùng thẻ nào?",
+        options: ["<thead>", "<tbody>", "<header>", "<th>"],
+        correctIndex: 0,
+      },
+      {
+        tier: 1, type: T.MCQ,
         prompt: "Bảng dài cần nhóm các hàng nhãn cột vào một khối riêng ở đầu bảng (để cố định khi cuộn, in lặp mỗi trang). Khối đó là thẻ gì?",
         options: ["<th>", "<thead>", "<header>", "<caption>"],
         correctIndex: 1,
@@ -2485,6 +2719,12 @@ export const tags: SeedTag[] = [
     topic: "Bảng",
     description: "Nhóm các hàng dữ liệu chính của bảng",
     questions: [
+      {
+        tier: 1, type: T.MCQ,
+        prompt: "Muốn nhóm các hàng DỮ LIỆU CHÍNH của bảng, tách khỏi tiêu đề. Dùng thẻ nào?",
+        options: ["<tbody>", "<thead>", "<main>", "<tr>"],
+        correctIndex: 0,
+      },
       {
         tier: 1, type: T.MCQ,
         prompt: "JavaScript cần thêm hàng sản phẩm mới vào đúng phần thân bảng, không đụng phần nhãn cột. Phần thân đó là thẻ gì?",
@@ -2546,6 +2786,12 @@ export const tags: SeedTag[] = [
     questions: [
       {
         tier: 1, type: T.MCQ,
+        prompt: "Bảng hóa đơn cần một hàng TỔNG CỘNG ở cuối, nhóm riêng. Dùng thẻ nào?",
+        options: ["<tfoot>", "<footer>", "<tbody>", "<tr>"],
+        correctIndex: 0,
+      },
+      {
+        tier: 1, type: T.MCQ,
         prompt: "Hàng 'Tổng cộng: 500.000đ' cuối bảng hóa đơn cần nằm trong khối tổng kết riêng của bảng. Khối đó là thẻ gì?",
         options: ["<footer>", "<tfoot>", "<tr class=\"total\">", "<caption>"],
         correctIndex: 1,
@@ -2603,6 +2849,12 @@ export const tags: SeedTag[] = [
     topic: "Bảng",
     description: "Tiêu đề / chú thích của bảng",
     questions: [
+      {
+        tier: 1, type: T.MCQ,
+        prompt: "Muốn đặt tiêu đề 'Bảng giá tháng 6' gắn liền ngay cho một bảng. Dùng thẻ nào?",
+        options: ["<title>", "<caption>", "<h3>", "<legend>"],
+        correctIndex: 1,
+      },
       {
         tier: 1, type: T.MCQ,
         prompt: "Máy đọc màn hình cần đọc tên bảng 'Doanh thu quý 1' trước khi đọc dữ liệu. Tên bảng đặt trong thẻ nào (gắn liền với bảng)?",
@@ -2663,6 +2915,12 @@ export const tags: SeedTag[] = [
     topic: "Form",
     description: "Một lựa chọn bên trong select",
     questions: [
+      {
+        tier: 1, type: T.MCQ,
+        prompt: "Bên trong dropdown <select>, mỗi lựa chọn (S, M, L) dùng thẻ nào?",
+        options: ["<li>", "<option>", "<item>", "<opt>"],
+        correctIndex: 1,
+      },
       {
         tier: 1, type: T.MCQ,
         prompt: "Bên trong hộp thả xuống chọn size áo, từng dòng 'S', 'M', 'L' là thẻ gì?",
@@ -2727,6 +2985,12 @@ export const tags: SeedTag[] = [
     questions: [
       {
         tier: 1, type: T.MCQ,
+        prompt: "Muốn nhóm các trường 'Địa chỉ giao hàng' lại với một khung bao quanh. Dùng thẻ nào?",
+        options: ["<group>", "<fieldset>", "<section>", "<div>"],
+        correctIndex: 1,
+      },
+      {
+        tier: 1, type: T.MCQ,
         prompt: "Form thanh toán dài cần gom nhóm các ô 'Địa chỉ giao hàng' vào một khung riêng, tách khỏi nhóm 'Thông tin thẻ'. Thẻ nào đúng ngữ nghĩa?",
         options: ["<div>", "<fieldset>", "<section>", "<group>"],
         correctIndex: 1,
@@ -2784,6 +3048,12 @@ export const tags: SeedTag[] = [
     topic: "Form",
     description: "Tiêu đề của nhóm fieldset",
     questions: [
+      {
+        tier: 1, type: T.MCQ,
+        prompt: "Muốn đặt tiêu đề 'Thông tin thanh toán' cho một nhóm <fieldset>. Dùng thẻ nào?",
+        options: ["<legend>", "<caption>", "<label>", "<h3>"],
+        correctIndex: 0,
+      },
       {
         tier: 1, type: T.MCQ,
         prompt: "Khung <fieldset> cần dòng tiêu đề 'Thông tin giao hàng' hiển thị chèn trên viền khung. Thẻ nào đúng?",
@@ -2846,6 +3116,12 @@ export const tags: SeedTag[] = [
     questions: [
       {
         tier: 1, type: T.MCQ,
+        prompt: "Thẻ ngoài cùng bao bọc TOÀN BỘ một trang web (cả head lẫn body) là thẻ nào?",
+        options: ["<body>", "<html>", "<head>", "<main>"],
+        correctIndex: 1,
+      },
+      {
+        tier: 1, type: T.MCQ,
         prompt: "Ngay sau dòng <!DOCTYPE html>, toàn bộ tài liệu phải nằm trong một thẻ gốc duy nhất. Thẻ đó là gì?",
         options: ["<body>", "<html>", "<root>", "<head>"],
         correctIndex: 1,
@@ -2905,6 +3181,12 @@ export const tags: SeedTag[] = [
     questions: [
       {
         tier: 1, type: T.MCQ,
+        prompt: "Phần khai báo charset, title và link CSS — KHÔNG hiển thị trên trang — đặt trong thẻ nào?",
+        options: ["<header>", "<head>", "<body>", "<meta>"],
+        correctIndex: 1,
+      },
+      {
+        tier: 1, type: T.MCQ,
         prompt: "Tiêu đề tab, khai báo bảng mã, link file CSS — những thứ KHÔNG hiển thị trong trang — đặt vào khu vực nào?",
         options: ["<header>", "<head>", "<meta>", "<body>"],
         correctIndex: 1,
@@ -2962,6 +3244,12 @@ export const tags: SeedTag[] = [
     topic: "Cấu trúc trang",
     description: "Chứa toàn bộ nội dung hiển thị của trang",
     questions: [
+      {
+        tier: 1, type: T.MCQ,
+        prompt: "Toàn bộ nội dung NHÌN THẤY của trang (chữ, ảnh, nút) được đặt trong thẻ nào?",
+        options: ["<main>", "<body>", "<html>", "<content>"],
+        correctIndex: 1,
+      },
       {
         tier: 1, type: T.MCQ,
         prompt: "Mọi thứ người dùng NHÌN THẤY trên trang — tiêu đề, ảnh, nút bấm — phải nằm trong thẻ nào?",
@@ -3028,6 +3316,12 @@ export const tags: SeedTag[] = [
     questions: [
       {
         tier: 1, type: T.MCQ,
+        prompt: "Muốn đặt tên trang hiện trên TAB của trình duyệt là 'ShopVN'. Dùng thẻ nào?",
+        options: ["<h1>", "<title>", "<head>", "<name>"],
+        correctIndex: 1,
+      },
+      {
+        tier: 1, type: T.MCQ,
         prompt: "Dòng chữ 'ShopVN — Giày chính hãng' hiện trên TAB trình duyệt và trong kết quả Google được lấy từ thẻ nào?",
         options: ["<h1>", "<header>", "<meta>", "<title>"],
         correctIndex: 3,
@@ -3080,6 +3374,12 @@ export const tags: SeedTag[] = [
     topic: "Cấu trúc trang",
     description: "Khai báo metadata (charset, viewport...) — thẻ rỗng",
     questions: [
+      {
+        tier: 1, type: T.MCQ,
+        prompt: "Cần khai báo bảng mã UTF-8 và viewport cho điện thoại trong <head>. Dùng thẻ nào?",
+        options: ["<meta>", "<link>", "<info>", "<config>"],
+        correctIndex: 0,
+      },
       {
         tier: 1, type: T.MCQ,
         prompt: "Tiếng Việt trên trang hiển thị lỗi thành 'Tiáº¿ng Viá»t'. Bạn cần khai báo bảng mã UTF-8 bằng thẻ rỗng nào trong <head>?",
@@ -3148,6 +3448,12 @@ export const tags: SeedTag[] = [
     questions: [
       {
         tier: 1, type: T.MCQ,
+        prompt: "Cần một KHỐI bao quanh để dàn bố cục bằng CSS, không mang ngữ nghĩa riêng. Dùng thẻ nào?",
+        options: ["<span>", "<div>", "<section>", "<box>"],
+        correctIndex: 1,
+      },
+      {
+        tier: 1, type: T.MCQ,
         prompt: "Cần một khối bao gom 3 card sản phẩm để áp CSS Grid — khối này không mang ý nghĩa ngữ nghĩa nào. Thẻ nào phù hợp?",
         options: ["<section>", "<div>", "<span>", "<article>"],
         correctIndex: 1,
@@ -3207,6 +3513,12 @@ export const tags: SeedTag[] = [
     topic: "Cấu trúc trang",
     description: "Nạp tài nguyên ngoài (CSS, favicon) — thẻ rỗng trong head",
     questions: [
+      {
+        tier: 1, type: T.MCQ,
+        prompt: "Muốn nạp file style.css vào trang (đặt trong <head>). Dùng thẻ nào?",
+        options: ["<style>", "<link>", "<script>", "<a>"],
+        correctIndex: 1,
+      },
       {
         tier: 1, type: T.MCQ,
         prompt: "Trang cần nạp file style.css từ ngoài vào. Cách viết nào đúng (đặt trong <head>)?",
@@ -3281,6 +3593,12 @@ export const tags: SeedTag[] = [
     questions: [
       {
         tier: 1, type: T.MCQ,
+        prompt: "Muốn nạp file app.js để trang có tương tác. Dùng thẻ nào?",
+        options: ["<js>", "<script>", "<link>", "<code>"],
+        correctIndex: 1,
+      },
+      {
+        tier: 1, type: T.MCQ,
         prompt: "Trang cần nạp file app.js để nút bấm có tương tác. Thẻ nào đúng?",
         options: [
           "<link rel=\"javascript\" href=\"app.js\">",
@@ -3349,6 +3667,12 @@ export const tags: SeedTag[] = [
     questions: [
       {
         tier: 1, type: T.MCQ,
+        prompt: "Phần đầu trang chứa logo và thanh tìm kiếm. Dùng thẻ ngữ nghĩa nào để bọc khối đó?",
+        options: ["<head>", "<header>", "<top>", "<div>"],
+        correctIndex: 1,
+      },
+      {
+        tier: 1, type: T.MCQ,
         prompt: "Vùng trên cùng của trang chứa logo, tên site và menu đang viết bằng <div class=\"top\">. Thẻ ngữ nghĩa nào nên thay thế?",
         options: ["<head>", "<header>", "<nav>", "<title>"],
         correctIndex: 1,
@@ -3401,6 +3725,12 @@ export const tags: SeedTag[] = [
     topic: "Ngữ nghĩa",
     description: "Khối chứa các liên kết điều hướng chính",
     questions: [
+      {
+        tier: 1, type: T.MCQ,
+        prompt: "Thanh chứa các liên kết điều hướng chính (Trang chủ, Sản phẩm, Liên hệ). Bọc bằng thẻ ngữ nghĩa nào?",
+        options: ["<nav>", "<menu>", "<ul>", "<header>"],
+        correctIndex: 0,
+      },
       {
         tier: 1, type: T.MCQ,
         prompt: "Khối chứa các liên kết 'Trang chủ / Sản phẩm / Liên hệ' — menu điều hướng chính — nên bọc bằng thẻ ngữ nghĩa nào?",
@@ -3466,6 +3796,12 @@ export const tags: SeedTag[] = [
     questions: [
       {
         tier: 1, type: T.MCQ,
+        prompt: "Nội dung CHÍNH và duy nhất của trang (không gồm header/footer). Bọc bằng thẻ ngữ nghĩa nào?",
+        options: ["<content>", "<main>", "<section>", "<body>"],
+        correctIndex: 1,
+      },
+      {
+        tier: 1, type: T.MCQ,
         prompt: "Nút 'Bỏ qua đến nội dung chính' cho người dùng bàn phím phải nhảy thẳng đến vùng nội dung trung tâm của trang. Vùng đó là thẻ gì?",
         options: ["<body>", "<main>", "<section>", "<article>"],
         correctIndex: 1,
@@ -3523,6 +3859,12 @@ export const tags: SeedTag[] = [
     topic: "Ngữ nghĩa",
     description: "Một phần nội dung theo chủ đề, thường có tiêu đề riêng",
     questions: [
+      {
+        tier: 1, type: T.MCQ,
+        prompt: "Trang chủ chia thành các phần theo chủ đề, mỗi phần có tiêu đề riêng. Dùng thẻ ngữ nghĩa nào cho mỗi phần?",
+        options: ["<div>", "<section>", "<article>", "<part>"],
+        correctIndex: 1,
+      },
       {
         tier: 1, type: T.MCQ,
         prompt: "Landing page chia thành các phần 'Tính năng', 'Bảng giá', 'Đánh giá' — mỗi phần có tiêu đề riêng nhưng không tự đứng độc lập. Thẻ nào đúng?",
@@ -3584,6 +3926,12 @@ export const tags: SeedTag[] = [
     questions: [
       {
         tier: 1, type: T.MCQ,
+        prompt: "Một bài blog hoàn chỉnh tự đứng được, có thể chia sẻ riêng. Bọc bằng thẻ ngữ nghĩa nào?",
+        options: ["<section>", "<article>", "<div>", "<post>"],
+        correctIndex: 1,
+      },
+      {
+        tier: 1, type: T.MCQ,
         prompt: "Mỗi bài đăng blog có thể copy nguyên khối sang trang khác mà vẫn đầy đủ ý nghĩa. Khối đó nên bọc bằng thẻ gì?",
         options: ["<article>", "<section>", "<main>", "<div>"],
         correctIndex: 0,
@@ -3643,6 +3991,12 @@ export const tags: SeedTag[] = [
     questions: [
       {
         tier: 1, type: T.MCQ,
+        prompt: "Cột bên phải chứa quảng cáo và 'bài liên quan' — nội dung phụ bên lề. Dùng thẻ ngữ nghĩa nào?",
+        options: ["<side>", "<aside>", "<section>", "<div>"],
+        correctIndex: 1,
+      },
+      {
+        tier: 1, type: T.MCQ,
         prompt: "Cột bên phải trang bài viết chứa 'Bài liên quan' và quảng cáo — bỏ đi không ảnh hưởng bài chính. Thẻ ngữ nghĩa nào đúng?",
         options: ["<sidebar>", "<aside>", "<section>", "<footer>"],
         correctIndex: 1,
@@ -3695,6 +4049,12 @@ export const tags: SeedTag[] = [
     topic: "Ngữ nghĩa",
     description: "Phần chân trang hoặc chân một khối nội dung",
     questions: [
+      {
+        tier: 1, type: T.MCQ,
+        prompt: "Cuối trang chứa thông tin bản quyền và liên kết chính sách. Bọc bằng thẻ ngữ nghĩa nào?",
+        options: ["<bottom>", "<footer>", "<foot>", "<div>"],
+        correctIndex: 1,
+      },
       {
         tier: 1, type: T.MCQ,
         prompt: "Vùng cuối trang chứa '© 2026 ShopVN' và liên kết chính sách nên bọc bằng thẻ ngữ nghĩa nào?",

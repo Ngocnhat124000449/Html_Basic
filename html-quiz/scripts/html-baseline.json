@@ -1,12 +1,12 @@
 {
   "tags": 60,
-  "questions": 420,
-  "questionsPerTag": 7,
-  "progressRows": 22,
-  "attemptRows": 205,
+  "questions": 480,
+  "questionsPerTag": 8,
+  "progressRows": 32,
+  "attemptRows": 310,
   "usersWithProgress": {
+    "NguyenNhat380@gmail.com": 26,
     "Nguyennhat380@gmail.com": 5,
-    "claude-test@example.com": 1,
-    "NguyenNhat380@gmail.com": 16
+    "claude-test@example.com": 1
   }
 }

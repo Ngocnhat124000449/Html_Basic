@@ -49,7 +49,8 @@ async function snapshot(): Promise<Baseline> {
   return {
     tags: htmlTags.length,
     questions: questionIds.length,
-    questionsPerTag: htmlTags.every((t) => t.questions.length === 7) ? 7 : -1,
+    // Mỗi thẻ phải còn ĐỦ cấu trúc tối thiểu 3+3+1 = 7 câu (có thể nhiều hơn do thêm biến thể).
+    questionsPerTag: htmlTags.length ? Math.min(...htmlTags.map((t) => t.questions.length)) : 0,
     progressRows: progress.length,
     attemptRows,
     usersWithProgress,
@@ -72,7 +73,7 @@ async function main() {
     errors.push(`Số thẻ HTML: ${current.tags} (baseline ${baseline.tags})`);
   if (current.questions !== baseline.questions)
     errors.push(`Số câu hỏi HTML: ${current.questions} (baseline ${baseline.questions})`);
-  if (current.questionsPerTag !== 7) errors.push(`Có thẻ không đủ 7 câu (3+3+1)`);
+  if (current.questionsPerTag < 7) errors.push(`Có thẻ < 7 câu (thiếu cấu trúc 3+3+1)`);
   // Tiến độ/attempts chỉ được phép TĂNG (người dùng học thêm) — giảm là mất dữ liệu
   if (current.progressRows < baseline.progressRows)
     errors.push(`Tiến độ GIẢM: ${current.progressRows} < ${baseline.progressRows}`);
