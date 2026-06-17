@@ -13,6 +13,12 @@ export const PART3_CHUONG_10_11: CssSeedTag[] = [
     questions: [
       {
         tier: 1, type: "MCQ",
+        prompt: "Thẻ <span> nằm cùng dòng còn <div> chiếm cả dòng. Khác biệt này do giá trị display mặc định nào?",
+        options: ["inline (span) và block (div)", "flex và grid", "static và fixed", "none và auto"],
+        correctIndex: 0,
+      },
+      {
+        tier: 1, type: "MCQ",
         prompt: "Phần tử BLOCK (như div, p) cư xử thế nào?",
         options: [
           "Nằm cùng dòng với phần tử khác",
@@ -90,6 +96,12 @@ export const PART3_CHUONG_10_11: CssSeedTag[] = [
     part: PART,
     description: "Kết hợp: nằm cùng dòng nhưng nhận width/height/padding dọc",
     questions: [
+      {
+        tier: 1, type: "MCQ",
+        prompt: "Muốn các nút nằm CÙNG DÒNG nhưng vẫn đặt được width/height/padding dọc. Dùng display nào?",
+        options: ["inline-block", "inline", "block", "none"],
+        correctIndex: 0,
+      },
       {
         tier: 1, type: "MCQ",
         prompt: "display: inline-block  kết hợp ưu điểm gì?",
@@ -172,6 +184,12 @@ export const PART3_CHUONG_10_11: CssSeedTag[] = [
     questions: [
       {
         tier: 1, type: "MCQ",
+        prompt: "Muốn GỠ HẲN một phần tử khỏi layout (không chiếm chỗ). Dùng khai báo nào?",
+        options: ["display: none", "visibility: hidden", "opacity: 0", "overflow: hidden"],
+        correctIndex: 0,
+      },
+      {
+        tier: 1, type: "MCQ",
         prompt: "display: none  có tác dụng gì?",
         options: [
           "Làm mờ phần tử",
@@ -245,6 +263,12 @@ export const PART3_CHUONG_10_11: CssSeedTag[] = [
     part: PART,
     description: "Bật chế độ flex — xếp các con thành hàng linh hoạt",
     questions: [
+      {
+        tier: 1, type: "MCQ",
+        prompt: "Muốn xếp các card sản phẩm thành một HÀNG NGANG linh hoạt. Bật chế độ nào cho khối cha?",
+        options: ["display: flex", "display: block", "display: inline", "float: left"],
+        correctIndex: 0,
+      },
       {
         tier: 1, type: "MCQ",
         prompt: "Bật Flexbox cho một khung chứa dùng khai báo nào?",
@@ -326,6 +350,12 @@ export const PART3_CHUONG_10_11: CssSeedTag[] = [
     questions: [
       {
         tier: 1, type: "MCQ",
+        prompt: "Trong một flex container, muốn xếp các con theo CHIỀU DỌC (trên xuống). Dùng khai báo nào?",
+        options: ["flex-direction: column", "flex-direction: row", "flex-wrap: wrap", "align-items: column"],
+        correctIndex: 0,
+      },
+      {
+        tier: 1, type: "MCQ",
         prompt: "Xếp các con flex thành CỘT DỌC dùng khai báo nào?",
         options: [
           "flex-direction: column;",
@@ -405,6 +435,12 @@ export const PART3_CHUONG_10_11: CssSeedTag[] = [
     questions: [
       {
         tier: 1, type: "MCQ",
+        prompt: "Thanh header dùng flex: muốn đẩy logo về trái và menu về phải (dàn đều theo trục ngang). Dùng thuộc tính nào?",
+        options: ["justify-content", "align-items", "gap", "text-align"],
+        correctIndex: 0,
+      },
+      {
+        tier: 1, type: "MCQ",
         prompt: "Đẩy các con flex về CHÍNH GIỮA theo trục chính dùng giá trị nào?",
         options: [
           "justify-content: center;",
@@ -482,6 +518,12 @@ export const PART3_CHUONG_10_11: CssSeedTag[] = [
     part: PART,
     description: "Căn các con theo TRỤC PHỤ (vuông góc trục chính)",
     questions: [
+      {
+        tier: 1, type: "MCQ",
+        prompt: "Trong thanh flex ngang, muốn căn các con vào GIỮA theo chiều dọc (trục phụ). Dùng thuộc tính nào?",
+        options: ["align-items: center", "justify-content: center", "vertical-align: middle", "margin: auto"],
+        correctIndex: 0,
+      },
       {
         tier: 1, type: "MCQ",
         prompt: "Trong flex row, căn các con vào GIỮA theo chiều DỌC dùng khai báo nào?",
@@ -564,6 +606,12 @@ export const PART3_CHUONG_10_11: CssSeedTag[] = [
     questions: [
       {
         tier: 1, type: "MCQ",
+        prompt: "Khi màn hình hẹp, muốn các card flex XUỐNG DÒNG thay vì bị co ép. Dùng khai báo nào?",
+        options: ["flex-wrap: wrap", "flex-wrap: nowrap", "overflow: scroll", "white-space: nowrap"],
+        correctIndex: 0,
+      },
+      {
+        tier: 1, type: "MCQ",
         prompt: "Cho phép các con flex XUỐNG DÒNG khi không đủ chỗ dùng khai báo nào?",
         options: ["flex-wrap: wrap;", "flex-break: on;", "wrap: true;", "overflow: wrap;"],
         correctIndex: 0,
@@ -632,6 +680,12 @@ export const PART3_CHUONG_10_11: CssSeedTag[] = [
     part: PART,
     description: "Cho con co giãn chiếm phần dư: flex 1, shorthand flex",
     questions: [
+      {
+        tier: 1, type: "MCQ",
+        prompt: "Muốn ô tìm kiếm trong thanh ngang GIÃN RA chiếm hết khoảng trống còn lại. Dùng khai báo nào?",
+        options: ["flex: 1", "width: 100%", "flex-grow: 0", "margin: auto"],
+        correctIndex: 0,
+      },
       {
         tier: 1, type: "MCQ",
         prompt: "Cho một con flex CHIẾM HẾT khoảng trống còn dư dùng khai báo nào?",
@@ -706,6 +760,12 @@ export const PART3_CHUONG_10_11: CssSeedTag[] = [
     part: PART,
     description: "Khoảng cách giữa các con flex/grid — gọn hơn margin",
     questions: [
+      {
+        tier: 1, type: "MCQ",
+        prompt: "Muốn tạo khoảng cách đều giữa các card trong flex mà không dùng margin. Dùng thuộc tính nào?",
+        options: ["gap", "margin", "padding", "space"],
+        correctIndex: 0,
+      },
       {
         tier: 1, type: "MCQ",
         prompt: "Tạo khoảng cách đều giữa các con flex dùng khai báo nào (đặt trên container)?",

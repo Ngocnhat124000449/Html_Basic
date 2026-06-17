@@ -13,6 +13,12 @@ export const PART1_CHUONG_3_5: CssSeedTag[] = [
     questions: [
       {
         tier: 1, type: "MCQ",
+        prompt: "Hai rule cùng nhắm <p>: rule viết SAU đặt màu xanh, rule trước màu đỏ (cùng độ ưu tiên). Chữ ra màu gì?",
+        options: ["Xanh — rule viết sau thắng", "Đỏ", "Đen mặc định", "Báo lỗi"],
+        correctIndex: 0,
+      },
+      {
+        tier: 1, type: "MCQ",
         prompt: "File css có 2 rule:  p { color: red; }  rồi bên dưới  p { color: blue; }  — đoạn văn màu gì?",
         options: [
           "Đỏ — rule viết trước thắng",
@@ -94,6 +100,12 @@ export const PART1_CHUONG_3_5: CssSeedTag[] = [
     part: PART,
     description: "Độ ưu tiên của selector: inline > id > class > thẻ",
     questions: [
+      {
+        tier: 1, type: "MCQ",
+        prompt: "Một nút vừa khớp rule theo class vừa theo id, hai rule đặt màu khác nhau. Rule nào thắng?",
+        options: ["Rule theo class", "Rule theo id", "Rule viết trước", "Rule ngắn hơn"],
+        correctIndex: 1,
+      },
       {
         tier: 1, type: "MCQ",
         prompt: "Cùng nhắm một phần tử: rule dùng #id và rule dùng .class — bên nào thắng?",
@@ -179,6 +191,12 @@ export const PART1_CHUONG_3_5: CssSeedTag[] = [
     questions: [
       {
         tier: 1, type: "MCQ",
+        prompt: "Đặt color cho <body>, các đoạn <p> con KHÔNG đặt màu riêng sẽ hiển thị thế nào?",
+        options: ["Kế thừa màu chữ từ <body>", "Luôn đen mặc định", "Trong suốt", "Báo lỗi"],
+        correctIndex: 0,
+      },
+      {
+        tier: 1, type: "MCQ",
         prompt: "Đặt  body { color: #333; }  — các thẻ <p> bên trong (không có rule màu riêng) hiển thị màu gì?",
         options: [
           "Đen mặc định, vì rule chỉ áp cho body",
@@ -251,6 +269,12 @@ export const PART1_CHUONG_3_5: CssSeedTag[] = [
     part: PART,
     description: "!important ép khai báo thắng — con dao hai lưỡi của cascade",
     questions: [
+      {
+        tier: 1, type: "MCQ",
+        prompt: "Một màu cứ bị rule khác đè dù bạn viết đúng. Cách 'ép thắng' (nên hạn chế dùng) là gì?",
+        options: ["Viết hoa thuộc tính", "Thêm !important vào khai báo", "Thêm dấu ?", "Lặp lại rule 3 lần"],
+        correctIndex: 1,
+      },
       {
         tier: 1, type: "MCQ",
         prompt: "Bạn cần ép một style cứng đầu phải thắng. Cú pháp đúng của !important là gì?",
@@ -336,6 +360,12 @@ export const PART1_CHUONG_3_5: CssSeedTag[] = [
     questions: [
       {
         tier: 1, type: "MCQ",
+        prompt: "Muốn một phần tử LẤY LẠI đúng giá trị kế thừa từ cha cho một thuộc tính. Dùng từ khóa nào?",
+        options: ["inherit", "initial", "none", "auto"],
+        correctIndex: 0,
+      },
+      {
+        tier: 1, type: "MCQ",
         prompt: "Giá trị nào ÉP phần tử lấy giá trị của thuộc tính đó theo phần tử cha?",
         options: ["auto", "inherit", "initial", "parent"],
         correctIndex: 1,
@@ -414,6 +444,12 @@ export const PART1_CHUONG_3_5: CssSeedTag[] = [
     part: PART,
     description: "Pixel — đơn vị tuyệt đối, cố định không theo ngữ cảnh",
     questions: [
+      {
+        tier: 1, type: "MCQ",
+        prompt: "Muốn một viền dày cố định đúng 2 chấm điểm, không đổi theo cỡ chữ. Dùng đơn vị nào?",
+        options: ["px", "em", "%", "vw"],
+        correctIndex: 0,
+      },
       {
         tier: 1, type: "MCQ",
         prompt: "Bạn đặt độ dày viền  border: 1px. px thuộc loại đơn vị nào?",
@@ -495,6 +531,12 @@ export const PART1_CHUONG_3_5: CssSeedTag[] = [
     questions: [
       {
         tier: 1, type: "MCQ",
+        prompt: "Muốn cỡ chữ luôn theo cỡ GỐC của trang (không bị nhân dồn theo cha). Dùng đơn vị nào?",
+        options: ["rem", "em", "px", "%"],
+        correctIndex: 0,
+      },
+      {
+        tier: 1, type: "MCQ",
         prompt: "Bạn đặt cỡ chữ bằng rem (vd 2rem). Đơn vị rem tính theo cỡ chữ của phần tử nào?",
         options: [
           "Phần tử cha trực tiếp",
@@ -572,6 +614,12 @@ export const PART1_CHUONG_3_5: CssSeedTag[] = [
     part: PART,
     description: "Đơn vị % — tương đối theo phần tử cha",
     questions: [
+      {
+        tier: 1, type: "MCQ",
+        prompt: "Muốn một <div> rộng bằng nửa phần tử cha và tự co theo cha. Dùng giá trị nào cho width?",
+        options: ["50%", "50px", "50vw", "50em"],
+        correctIndex: 0,
+      },
       {
         tier: 1, type: "MCQ",
         prompt: "Khai báo  width: 50%  thì 50% được tính theo gì?",
@@ -657,6 +705,12 @@ export const PART1_CHUONG_3_5: CssSeedTag[] = [
     questions: [
       {
         tier: 1, type: "MCQ",
+        prompt: "Muốn một banner cao đúng bằng chiều cao màn hình. Dùng đơn vị nào cho height?",
+        options: ["100vh", "100%", "100px", "100vw"],
+        correctIndex: 0,
+      },
+      {
+        tier: 1, type: "MCQ",
         prompt: "Bạn đặt  height: 100vh  cho một section. 100vh tương ứng với gì?",
         options: [
           "100 pixel chiều cao",
@@ -735,6 +789,12 @@ export const PART1_CHUONG_3_5: CssSeedTag[] = [
     questions: [
       {
         tier: 1, type: "MCQ",
+        prompt: "Designer đưa mã màu thương hiệu #3b82f6. Đó là cách ghi màu nào trong CSS?",
+        options: ["hex (#3b82f6)", "tên màu (blue)", "rgb()", "hsl()"],
+        correctIndex: 0,
+      },
+      {
+        tier: 1, type: "MCQ",
         prompt: "Mã hex  #ff0000  là màu gì?",
         options: ["Xanh dương", "Đỏ", "Xanh lá", "Trắng"],
         correctIndex: 1,
@@ -811,6 +871,17 @@ export const PART1_CHUONG_3_5: CssSeedTag[] = [
     questions: [
       {
         tier: 1, type: "MCQ",
+        prompt: "Một hộp gồm nội dung, khoảng đệm, viền và khoảng cách ngoài. Thứ tự từ TRONG ra NGOÀI là gì?",
+        options: [
+          "content → padding → border → margin",
+          "margin → border → padding → content",
+          "border → content → margin → padding",
+          "padding → margin → border → content",
+        ],
+        correctIndex: 0,
+      },
+      {
+        tier: 1, type: "MCQ",
         prompt: "Thứ tự các lớp của box model từ TRONG ra NGOÀI?",
         options: [
           "margin → border → padding → content",
@@ -879,6 +950,12 @@ export const PART1_CHUONG_3_5: CssSeedTag[] = [
     part: PART,
     description: "Khoảng đệm bên trong viền — đẩy nội dung ra xa mép hộp",
     questions: [
+      {
+        tier: 1, type: "MCQ",
+        prompt: "Muốn chữ trong nút cách mép nút một khoảng cho thoáng (bên TRONG viền). Dùng thuộc tính nào?",
+        options: ["padding", "margin", "gap", "border"],
+        correctIndex: 0,
+      },
       {
         tier: 1, type: "MCQ",
         prompt: "Chữ trong khung đang dính sát viền rất khó đọc. Tăng thuộc tính nào?",
@@ -957,6 +1034,12 @@ export const PART1_CHUONG_3_5: CssSeedTag[] = [
     part: PART,
     description: "Khoảng cách bên ngoài viền — đẩy các hộp ra xa nhau",
     questions: [
+      {
+        tier: 1, type: "MCQ",
+        prompt: "Muốn đẩy hai card xa nhau ra (khoảng cách BÊN NGOÀI viền). Dùng thuộc tính nào?",
+        options: ["margin", "padding", "gap", "border"],
+        correctIndex: 0,
+      },
       {
         tier: 1, type: "MCQ",
         prompt: "Hai thẻ sản phẩm đứng dính sát nhau. Muốn tạo khoảng cách GIỮA chúng, dùng gì?",
@@ -1038,6 +1121,12 @@ export const PART1_CHUONG_3_5: CssSeedTag[] = [
     questions: [
       {
         tier: 1, type: "MCQ",
+        prompt: "Muốn vẽ một đường viền 1px màu xám quanh card. Dùng thuộc tính nào?",
+        options: ["border", "outline", "box-shadow", "padding"],
+        correctIndex: 0,
+      },
+      {
+        tier: 1, type: "MCQ",
         prompt: "Cách viết gọn viền liền nét 1px màu đen?",
         options: [
           "border: black 1px;",
@@ -1115,6 +1204,12 @@ export const PART1_CHUONG_3_5: CssSeedTag[] = [
     part: PART,
     description: "border-box: width là kích thước THẬT đã gồm padding và border",
     questions: [
+      {
+        tier: 1, type: "MCQ",
+        prompt: "Đặt width: 300px nhưng thêm padding làm hộp phình quá 300px. Khai báo nào để width là kích thước THẬT?",
+        options: ["box-sizing: border-box", "box-sizing: content-box", "overflow: hidden", "width: auto"],
+        correctIndex: 0,
+      },
       {
         tier: 1, type: "MCQ",
         prompt: "box-sizing: border-box  nghĩa là gì?",

@@ -13,6 +13,12 @@ export const PART3_CHUONG_12_15: CssSeedTag[] = [
     questions: [
       {
         tier: 1, type: "MCQ",
+        prompt: "Muốn dàn ảnh thư viện thành lưới NHIỀU HÀNG VÀ CỘT cùng lúc. Bật chế độ nào cho khối cha?",
+        options: ["display: grid", "display: flex", "display: block", "float: left"],
+        correctIndex: 0,
+      },
+      {
+        tier: 1, type: "MCQ",
         prompt: "Bật CSS Grid cho khung chứa dùng khai báo nào?",
         options: ["display: grid;", "display: table;", "grid: on;", "layout: grid;"],
         correctIndex: 0,
@@ -85,6 +91,12 @@ export const PART3_CHUONG_12_15: CssSeedTag[] = [
     part: PART,
     description: "Định nghĩa số cột và độ rộng từng cột; đơn vị fr",
     questions: [
+      {
+        tier: 1, type: "MCQ",
+        prompt: "Muốn một lưới sản phẩm có 3 CỘT rộng bằng nhau. Dùng khai báo nào?",
+        options: ["grid-template-columns: 1fr 1fr 1fr", "columns: 3", "grid-columns: 3", "flex: 3"],
+        correctIndex: 0,
+      },
       {
         tier: 1, type: "MCQ",
         prompt: "Tạo lưới 3 CỘT BẰNG NHAU dùng khai báo nào?",
@@ -170,6 +182,12 @@ export const PART3_CHUONG_12_15: CssSeedTag[] = [
     part: PART,
     description: "Định nghĩa hàng và cách phần tử trải qua nhiều ô (span)",
     questions: [
+      {
+        tier: 1, type: "MCQ",
+        prompt: "Trong lưới, muốn một ô nổi bật TRẢI QUA 2 cột. Dùng khai báo nào trên ô đó?",
+        options: ["grid-column: span 2", "colspan: 2", "grid-span: 2", "width: 2fr"],
+        correctIndex: 0,
+      },
       {
         tier: 1, type: "MCQ",
         prompt: "Định nghĩa chiều cao các HÀNG của lưới dùng khai báo nào?",
@@ -258,6 +276,12 @@ export const PART3_CHUONG_12_15: CssSeedTag[] = [
     questions: [
       {
         tier: 1, type: "MCQ",
+        prompt: "Muốn card làm MỐC để gắn một nhãn con định vị bên trong nó. Đặt position nào cho card?",
+        options: ["relative", "absolute", "fixed", "static"],
+        correctIndex: 0,
+      },
+      {
+        tier: 1, type: "MCQ",
         prompt: "position: relative cho phép làm gì?",
         options: [
           "Dịch phần tử so với VỊ TRÍ GỐC của nó bằng top/left/right/bottom",
@@ -334,6 +358,12 @@ export const PART3_CHUONG_12_15: CssSeedTag[] = [
     part: PART,
     description: "Gỡ khỏi luồng, định vị theo tổ tiên positioned gần nhất",
     questions: [
+      {
+        tier: 1, type: "MCQ",
+        prompt: "Muốn ghim một nhãn 'SALE' vào GÓC của card (theo card cha). Dùng position nào cho nhãn?",
+        options: ["absolute", "relative", "fixed", "sticky"],
+        correctIndex: 0,
+      },
       {
         tier: 1, type: "MCQ",
         prompt: "position: absolute làm gì với phần tử?",
@@ -416,6 +446,12 @@ export const PART3_CHUONG_12_15: CssSeedTag[] = [
     questions: [
       {
         tier: 1, type: "MCQ",
+        prompt: "Muốn thanh header DÍNH lại ở đầu trang khi người dùng cuộn xuống. Dùng position nào?",
+        options: ["sticky", "static", "relative", "absolute"],
+        correctIndex: 0,
+      },
+      {
+        tier: 1, type: "MCQ",
         prompt: "Header GHIM CỐ ĐỊNH trên cùng dù cuộn trang dùng position nào?",
         options: ["fixed", "absolute", "relative", "static"],
         correctIndex: 0,
@@ -494,6 +530,12 @@ export const PART3_CHUONG_12_15: CssSeedTag[] = [
     part: PART,
     description: "Thứ tự xếp chồng các phần tử positioned theo chiều sâu",
     questions: [
+      {
+        tier: 1, type: "MCQ",
+        prompt: "Một popup bị che sau nội dung khác, muốn nó NỔI LÊN TRÊN cùng. Dùng thuộc tính nào?",
+        options: ["z-index", "order", "position", "opacity"],
+        correctIndex: 0,
+      },
       {
         tier: 1, type: "MCQ",
         prompt: "z-index điều khiển gì?",
@@ -577,6 +619,17 @@ export const PART3_CHUONG_12_15: CssSeedTag[] = [
     questions: [
       {
         tier: 1, type: "MCQ",
+        prompt: "Muốn áp CSS khác khi màn hình hẹp dưới 768px (điện thoại). Dùng cú pháp nào?",
+        options: [
+          "@media (max-width: 768px) { ... }",
+          "@if width < 768 { ... }",
+          "@screen mobile { ... }",
+          "media: 768px",
+        ],
+        correctIndex: 0,
+      },
+      {
+        tier: 1, type: "MCQ",
         prompt: "Áp CSS riêng khi màn hình HẸP hơn 600px dùng cú pháp nào?",
         options: [
           "@media (max-width: 600px) { ... }",
@@ -658,6 +711,17 @@ export const PART3_CHUONG_12_15: CssSeedTag[] = [
     part: PART,
     description: "Chọn điểm ngắt hợp lý theo nội dung, không theo thiết bị",
     questions: [
+      {
+        tier: 1, type: "MCQ",
+        prompt: "Khi chọn điểm ngắt (breakpoint) responsive cho bền vững, nên dựa vào đâu?",
+        options: [
+          "Theo nơi nội dung bắt đầu vỡ layout",
+          "Theo từng đời iPhone",
+          "Luôn cố định đúng 1024px",
+          "Không cần điểm ngắt",
+        ],
+        correctIndex: 0,
+      },
       {
         tier: 1, type: "MCQ",
         prompt: "Breakpoint (điểm ngắt) là gì?",
@@ -751,6 +815,12 @@ export const PART3_CHUONG_12_15: CssSeedTag[] = [
     questions: [
       {
         tier: 1, type: "MCQ",
+        prompt: "Muốn một khối nội dung rộng đúng 300px. Dùng thuộc tính nào?",
+        options: ["width: 300px", "size: 300px", "w: 300px", "max: 300px"],
+        correctIndex: 0,
+      },
+      {
+        tier: 1, type: "MCQ",
         prompt: "Đặt chiều rộng cố định 300px dùng khai báo nào?",
         options: ["width: 300px;", "size: 300px;", "w: 300px;", "length: 300px;"],
         correctIndex: 0,
@@ -828,6 +898,12 @@ export const PART3_CHUONG_12_15: CssSeedTag[] = [
     part: PART,
     description: "Giới hạn co giãn: min-width, max-width, min/max-height",
     questions: [
+      {
+        tier: 1, type: "MCQ",
+        prompt: "Muốn một cột nội dung co giãn được nhưng KHÔNG BAO GIỜ rộng quá 600px. Dùng thuộc tính nào?",
+        options: ["max-width: 600px", "width: 600px", "min-width: 600px", "limit-width: 600px"],
+        correctIndex: 0,
+      },
       {
         tier: 1, type: "MCQ",
         prompt: "Giới hạn khối KHÔNG RỘNG QUÁ 1200px (nhưng co được khi màn hẹp) dùng gì?",

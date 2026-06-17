@@ -13,6 +13,12 @@ export const PART2_CHUONG_6_7: CssSeedTag[] = [
     questions: [
       {
         tier: 1, type: "MCQ",
+        prompt: "Muốn đổi MÀU CHỮ của một đoạn văn sang xám đậm. Dùng thuộc tính nào?",
+        options: ["color", "background-color", "font-color", "text-color"],
+        correctIndex: 0,
+      },
+      {
+        tier: 1, type: "MCQ",
         prompt: "Thuộc tính nào đổi MÀU CHỮ của phần tử?",
         options: ["text-color", "color", "font-color", "text-style"],
         correctIndex: 1,
@@ -84,6 +90,12 @@ export const PART2_CHUONG_6_7: CssSeedTag[] = [
     part: PART,
     description: "Màu nền của hộp — tô hết content và padding",
     questions: [
+      {
+        tier: 1, type: "MCQ",
+        prompt: "Muốn tô NỀN vàng cho một khối cảnh báo. Dùng thuộc tính nào?",
+        options: ["background-color", "color", "fill", "border-color"],
+        correctIndex: 0,
+      },
       {
         tier: 1, type: "MCQ",
         prompt: "Thuộc tính nào đặt MÀU NỀN cho phần tử?",
@@ -158,6 +170,12 @@ export const PART2_CHUONG_6_7: CssSeedTag[] = [
     part: PART,
     description: "Dùng ảnh làm nền với url()",
     questions: [
+      {
+        tier: 1, type: "MCQ",
+        prompt: "Muốn dùng một ảnh làm nền cho banner đầu trang. Dùng thuộc tính kèm hàm nào?",
+        options: ["background-image: url(...)", "src: url(...)", "img: url(...)", "background-src: ..."],
+        correctIndex: 0,
+      },
       {
         tier: 1, type: "MCQ",
         prompt: "Cú pháp đúng để đặt ảnh nen.jpg làm nền?",
@@ -244,6 +262,12 @@ export const PART2_CHUONG_6_7: CssSeedTag[] = [
     questions: [
       {
         tier: 1, type: "MCQ",
+        prompt: "Ảnh nền banner cần PHỦ KÍN khung dù bị cắt mép. Dùng giá trị nào cho background-size?",
+        options: ["cover", "contain", "auto", "100px"],
+        correctIndex: 0,
+      },
+      {
+        tier: 1, type: "MCQ",
         prompt: "Muốn ảnh nền PHỦ KÍN toàn bộ phần tử (chấp nhận bị cắt bớt), giá trị nào đúng?",
         options: [
           "background-size: contain;",
@@ -323,6 +347,12 @@ export const PART2_CHUONG_6_7: CssSeedTag[] = [
     questions: [
       {
         tier: 1, type: "MCQ",
+        prompt: "Muốn ảnh nền luôn neo ở CHÍNH GIỮA khung. Dùng giá trị nào cho background-position?",
+        options: ["center", "top left", "stretch", "repeat"],
+        correctIndex: 0,
+      },
+      {
+        tier: 1, type: "MCQ",
         prompt: "Căn ảnh nền vào CHÍNH GIỮA phần tử, khai báo nào đúng?",
         options: [
           "background-position: center;",
@@ -395,6 +425,12 @@ export const PART2_CHUONG_6_7: CssSeedTag[] = [
     part: PART,
     description: "Nền chuyển màu với linear-gradient / radial-gradient",
     questions: [
+      {
+        tier: 1, type: "MCQ",
+        prompt: "Muốn nền nút chuyển màu mượt từ xanh sang tím. Dùng giá trị nào cho background?",
+        options: ["linear-gradient(...)", "url(...)", "rgb(...)", "blur(...)"],
+        correctIndex: 0,
+      },
       {
         tier: 1, type: "MCQ",
         prompt: "Tạo nền chuyển dần từ màu này sang màu khác dùng gì?",
@@ -480,6 +516,12 @@ export const PART2_CHUONG_6_7: CssSeedTag[] = [
     questions: [
       {
         tier: 1, type: "MCQ",
+        prompt: "Muốn làm MỜ cả một thẻ ảnh còn 50% (cả nội dung lẫn nền). Dùng khai báo nào?",
+        options: ["opacity: 0.5", "visibility: 0.5", "display: 0.5", "filter: 0.5"],
+        correctIndex: 0,
+      },
+      {
+        tier: 1, type: "MCQ",
         prompt: "Thuộc tính nào chỉnh độ mờ của cả phần tử?",
         options: ["transparency", "opacity", "alpha", "fade"],
         correctIndex: 1,
@@ -554,6 +596,17 @@ export const PART2_CHUONG_6_7: CssSeedTag[] = [
     part: PART,
     description: "Chọn font chữ với danh sách dự phòng (font stack)",
     questions: [
+      {
+        tier: 1, type: "MCQ",
+        prompt: "Muốn dùng font 'Roboto', nếu máy không có thì lùi về sans-serif. Khai báo thế nào?",
+        options: [
+          "font-family: 'Roboto', sans-serif",
+          "font: Roboto",
+          "font-name: Roboto",
+          "font-family: Roboto chỉ vậy",
+        ],
+        correctIndex: 0,
+      },
       {
         tier: 1, type: "MCQ",
         prompt: "Thuộc tính nào đổi KIỂU CHỮ (font) của phần tử?",
@@ -635,6 +688,12 @@ export const PART2_CHUONG_6_7: CssSeedTag[] = [
     questions: [
       {
         tier: 1, type: "MCQ",
+        prompt: "Muốn chỉnh CỠ CHỮ của tiêu đề to lên. Dùng thuộc tính nào?",
+        options: ["font-size", "text-size", "font-weight", "line-height"],
+        correctIndex: 0,
+      },
+      {
+        tier: 1, type: "MCQ",
         prompt: "Thuộc tính nào đổi CỠ CHỮ?",
         options: ["text-size", "font-size", "size", "font-scale"],
         correctIndex: 1,
@@ -709,6 +768,12 @@ export const PART2_CHUONG_6_7: CssSeedTag[] = [
     questions: [
       {
         tier: 1, type: "MCQ",
+        prompt: "Muốn chữ tiêu đề ĐẬM hơn (bold). Dùng khai báo nào?",
+        options: ["font-weight: 700", "font-bold: true", "font-style: bold", "text-weight: bold"],
+        correctIndex: 0,
+      },
+      {
+        tier: 1, type: "MCQ",
         prompt: "Thuộc tính nào làm chữ ĐẬM?",
         options: ["font-bold", "font-weight", "text-strong", "font-style"],
         correctIndex: 1,
@@ -776,6 +841,12 @@ export const PART2_CHUONG_6_7: CssSeedTag[] = [
     part: PART,
     description: "Chữ nghiêng (italic) và shorthand font",
     questions: [
+      {
+        tier: 1, type: "MCQ",
+        prompt: "Muốn một dòng trích dẫn hiển thị NGHIÊNG. Dùng khai báo nào?",
+        options: ["font-style: italic", "font-weight: italic", "text-style: italic", "font: oblique-only"],
+        correctIndex: 0,
+      },
       {
         tier: 1, type: "MCQ",
         prompt: "Làm chữ NGHIÊNG dùng khai báo nào?",
@@ -852,6 +923,12 @@ export const PART2_CHUONG_6_7: CssSeedTag[] = [
     questions: [
       {
         tier: 1, type: "MCQ",
+        prompt: "Đoạn văn dày chữ khó đọc, muốn giãn KHOẢNG CÁCH GIỮA CÁC DÒNG. Dùng thuộc tính nào?",
+        options: ["line-height", "letter-spacing", "padding", "font-size"],
+        correctIndex: 0,
+      },
+      {
+        tier: 1, type: "MCQ",
         prompt: "Thuộc tính nào chỉnh KHOẢNG CÁCH GIỮA CÁC DÒNG chữ?",
         options: ["letter-spacing", "line-height", "word-spacing", "text-gap"],
         correctIndex: 1,
@@ -924,6 +1001,12 @@ export const PART2_CHUONG_6_7: CssSeedTag[] = [
     part: PART,
     description: "Căn chữ trong khối: left, center, right, justify",
     questions: [
+      {
+        tier: 1, type: "MCQ",
+        prompt: "Muốn CĂN GIỮA dòng tiêu đề trong khối của nó. Dùng khai báo nào?",
+        options: ["text-align: center", "align: center", "justify-content: center", "margin: center"],
+        correctIndex: 0,
+      },
       {
         tier: 1, type: "MCQ",
         prompt: "Căn GIỮA dòng tiêu đề dùng khai báo nào?",
@@ -1005,6 +1088,12 @@ export const PART2_CHUONG_6_7: CssSeedTag[] = [
     questions: [
       {
         tier: 1, type: "MCQ",
+        prompt: "Muốn BỎ gạch chân mặc định của các link <a>. Dùng khai báo nào?",
+        options: ["text-decoration: none", "text-underline: off", "decoration: hidden", "border-bottom: none"],
+        correctIndex: 0,
+      },
+      {
+        tier: 1, type: "MCQ",
         prompt: "Bỏ GẠCH CHÂN mặc định của link dùng khai báo nào?",
         options: [
           "text-decoration: none;",
@@ -1082,6 +1171,12 @@ export const PART2_CHUONG_6_7: CssSeedTag[] = [
     part: PART,
     description: "Đổi kiểu hoa/thường và giãn cách ký tự letter-spacing",
     questions: [
+      {
+        tier: 1, type: "MCQ",
+        prompt: "Muốn hiển thị nhãn nút thành CHỮ HOA TOÀN BỘ mà không sửa HTML. Dùng khai báo nào?",
+        options: ["text-transform: uppercase", "font-case: upper", "text-style: caps", "text-transform: bold"],
+        correctIndex: 0,
+      },
       {
         tier: 1, type: "MCQ",
         prompt: "Hiển thị chữ TOÀN HOA mà không sửa nội dung HTML, dùng gì?",

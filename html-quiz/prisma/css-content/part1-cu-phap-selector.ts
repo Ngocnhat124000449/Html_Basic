@@ -14,6 +14,17 @@ export const PART1_CHUONG_1_2: CssSeedTag[] = [
     questions: [
       {
         tier: 1, type: "MCQ",
+        prompt: "Muốn cho mọi đoạn <p> có màu chữ xám. Một rule CSS được viết theo cấu trúc nào?",
+        options: [
+          "{ selector: thuộc-tính }",
+          "selector { thuộc-tính: giá-trị; }",
+          "thuộc-tính(selector): giá-trị",
+          "giá-trị = selector",
+        ],
+        correctIndex: 1,
+      },
+      {
+        tier: 1, type: "MCQ",
         prompt: "Một rule CSS hoàn chỉnh gồm những phần nào?",
         options: [
           "Tên thẻ và nội dung văn bản",
@@ -91,6 +102,17 @@ export const PART1_CHUONG_1_2: CssSeedTag[] = [
     part: PART,
     description: "Nhúng file .css ngoài bằng <link rel=\"stylesheet\">",
     questions: [
+      {
+        tier: 1, type: "MCQ",
+        prompt: "Bạn viết style trong file style.css riêng và muốn trang dùng nó. Nhúng vào <head> bằng cách nào?",
+        options: [
+          '<link rel="stylesheet" href="style.css">',
+          '<style src="style.css">',
+          '<script src="style.css">',
+          '<css href="style.css">',
+        ],
+        correctIndex: 0,
+      },
       {
         tier: 1, type: "MCQ",
         prompt: "Bạn có file styles.css riêng. Dòng nào nhúng nó vào trang HTML?",
@@ -171,6 +193,12 @@ export const PART1_CHUONG_1_2: CssSeedTag[] = [
     questions: [
       {
         tier: 1, type: "MCQ",
+        prompt: "Chỉ vài dòng CSS cho riêng một trang, muốn viết thẳng trong file HTML. Đặt vào thẻ nào?",
+        options: ["<css>", "<link>", "<style>", "<script>"],
+        correctIndex: 2,
+      },
+      {
+        tier: 1, type: "MCQ",
         prompt: "Muốn viết CSS ngay trong file HTML (không tạo file ngoài), bạn dùng thẻ nào?",
         options: ["<css>", "<style>", "<link>", "<script>"],
         correctIndex: 1,
@@ -242,6 +270,17 @@ export const PART1_CHUONG_1_2: CssSeedTag[] = [
     part: PART,
     description: "Khai báo CSS trực tiếp qua thuộc tính style của thẻ",
     questions: [
+      {
+        tier: 1, type: "MCQ",
+        prompt: "Muốn tô nhanh nền đỏ cho ĐÚNG một thẻ <div> ngay tại thẻ đó. Cách nào?",
+        options: [
+          'style="background: red"',
+          'class="red"',
+          'css="red"',
+          'color="red"',
+        ],
+        correctIndex: 0,
+      },
       {
         tier: 1, type: "MCQ",
         prompt: "Muốn đổi màu đúng MỘT thẻ duy nhất ngay tại chỗ trong HTML, bạn viết:",
@@ -327,6 +366,12 @@ export const PART1_CHUONG_1_2: CssSeedTag[] = [
     questions: [
       {
         tier: 1, type: "MCQ",
+        prompt: "Muốn ghi chú giải thích một đoạn CSS để trình duyệt bỏ qua. Viết thế nào?",
+        options: ["// ghi chú", "/* ghi chú */", "<!-- ghi chú -->", "# ghi chú"],
+        correctIndex: 1,
+      },
+      {
+        tier: 1, type: "MCQ",
         prompt: "Muốn ghi chú giải thích trong file CSS (trình duyệt bỏ qua khi chạy). Cú pháp chú thích (comment) trong CSS là gì?",
         options: ["// ghi chú", "<!-- ghi chú -->", "/* ghi chú */", "# ghi chú"],
         correctIndex: 2,
@@ -402,6 +447,12 @@ export const PART1_CHUONG_1_2: CssSeedTag[] = [
     questions: [
       {
         tier: 1, type: "MCQ",
+        prompt: "Muốn MỌI thẻ <a> trên trang đổi sang màu xanh. Dùng selector nào?",
+        options: ["#a", ".a", "*a", "a"],
+        correctIndex: 3,
+      },
+      {
+        tier: 1, type: "MCQ",
         prompt: "Muốn MỌI đoạn văn <p> trên trang đều màu xám, selector nào đúng?",
         options: ["#p", ".p", "p", "<p>"],
         correctIndex: 2,
@@ -468,6 +519,12 @@ export const PART1_CHUONG_1_2: CssSeedTag[] = [
     part: PART,
     description: "Chọn phần tử theo class với dấu chấm (.)",
     questions: [
+      {
+        tier: 1, type: "MCQ",
+        prompt: "Nhiều nút dùng chung class 'btn', muốn bo góc tất cả. Dùng selector nào?",
+        options: [".btn", "#btn", "btn", "*btn"],
+        correctIndex: 0,
+      },
       {
         tier: 1, type: "MCQ",
         prompt: "HTML có  <p class=\"ghi-chu\">  — selector nào chọn nó?",
@@ -544,6 +601,12 @@ export const PART1_CHUONG_1_2: CssSeedTag[] = [
     questions: [
       {
         tier: 1, type: "MCQ",
+        prompt: "Header có id='top', muốn tạo kiểu riêng cho đúng phần tử đó. Dùng selector nào?",
+        options: [".top", "#top", "top", "*top"],
+        correctIndex: 1,
+      },
+      {
+        tier: 1, type: "MCQ",
         prompt: "HTML có  <header id=\"menu-chinh\">  — selector nào chọn nó?",
         options: [".menu-chinh", "#menu-chinh", "menu-chinh", "id=menu-chinh"],
         correctIndex: 1,
@@ -611,6 +674,12 @@ export const PART1_CHUONG_1_2: CssSeedTag[] = [
     part: PART,
     description: "Chọn theo quan hệ: hậu duệ (khoảng trắng) và con trực tiếp (>)",
     questions: [
+      {
+        tier: 1, type: "MCQ",
+        prompt: "Chỉ muốn các <a> NẰM TRONG thanh <nav> đổi màu, không ảnh hưởng link khác. Viết selector nào?",
+        options: ["nav,a", "nav.a", "nav a", "a > nav"],
+        correctIndex: 2,
+      },
       {
         tier: 1, type: "MCQ",
         prompt: "Chọn mọi thẻ <a> nằm BÊN TRONG <nav> (ở mọi cấp lồng), selector nào đúng?",
@@ -690,6 +759,12 @@ export const PART1_CHUONG_1_2: CssSeedTag[] = [
     part: PART,
     description: "Áp một khối khai báo cho nhiều selector bằng dấu phẩy",
     questions: [
+      {
+        tier: 1, type: "MCQ",
+        prompt: "Muốn h1, h2, h3 dùng CHUNG một font. Cách gọn nhất để gom chúng vào một rule là gì?",
+        options: ["h1, h2, h3 { ... }", "h1 h2 h3 { ... }", "h1+h2+h3 { ... }", "h1|h2|h3 { ... }"],
+        correctIndex: 0,
+      },
       {
         tier: 1, type: "MCQ",
         prompt: "h1, h2 và h3 cần cùng một font. Cách viết MỘT rule cho cả ba?",
@@ -775,6 +850,12 @@ export const PART1_CHUONG_1_2: CssSeedTag[] = [
     questions: [
       {
         tier: 1, type: "MCQ",
+        prompt: "Muốn tạo kiểu riêng cho ô nhập email (<input type=\"email\">) mà không thêm class. Dùng selector nào?",
+        options: ['input.email', 'input[type="email"]', 'input#email', 'input=email'],
+        correctIndex: 1,
+      },
+      {
+        tier: 1, type: "MCQ",
         prompt: "Chọn mọi  <input type=\"text\">  trên trang, selector nào đúng?",
         options: [
           "input.text",
@@ -858,6 +939,12 @@ export const PART1_CHUONG_1_2: CssSeedTag[] = [
     questions: [
       {
         tier: 1, type: "MCQ",
+        prompt: "Muốn tô nền khác cho mục ĐẦU TIÊN trong một danh sách. Dùng pseudo-class nào?",
+        options: [":first-child", ":first", ":top", "::first"],
+        correctIndex: 0,
+      },
+      {
+        tier: 1, type: "MCQ",
         prompt: "Chọn thẻ <li> ĐẦU TIÊN trong danh sách, selector nào đúng?",
         options: ["li:first", "li:first-child", "li[0]", "first li"],
         correctIndex: 1,
@@ -935,6 +1022,12 @@ export const PART1_CHUONG_1_2: CssSeedTag[] = [
     part: PART,
     description: "Dấu sao (*) chọn mọi phần tử — nền tảng của CSS reset",
     questions: [
+      {
+        tier: 1, type: "MCQ",
+        prompt: "Muốn reset margin và padding về 0 cho TẤT CẢ phần tử trước khi style. Dùng selector nào?",
+        options: ["html", "body", "all", "*"],
+        correctIndex: 3,
+      },
       {
         tier: 1, type: "MCQ",
         prompt: "Selector nào chọn MỌI phần tử trên trang?",

@@ -13,6 +13,12 @@ export const PART2_CHUONG_8_9: CssSeedTag[] = [
     questions: [
       {
         tier: 1, type: "MCQ",
+        prompt: "Muốn card sản phẩm có BÓNG ĐỔ nhẹ để nổi lên khỏi nền. Dùng thuộc tính nào?",
+        options: ["box-shadow", "text-shadow", "border", "outline"],
+        correctIndex: 0,
+      },
+      {
+        tier: 1, type: "MCQ",
         prompt: "Thuộc tính nào tạo BÓNG ĐỔ cho hộp?",
         options: ["shadow", "box-shadow", "drop-shadow", "element-shadow"],
         correctIndex: 1,
@@ -85,6 +91,12 @@ export const PART2_CHUONG_8_9: CssSeedTag[] = [
     part: PART,
     description: "Bóng cho chữ — cứu chữ trắng trên ảnh nền sáng",
     questions: [
+      {
+        tier: 1, type: "MCQ",
+        prompt: "Chữ trắng trên ảnh nền sáng bị khó đọc, muốn thêm bóng cho CHỮ. Dùng thuộc tính nào?",
+        options: ["text-shadow", "box-shadow", "filter", "border"],
+        correctIndex: 0,
+      },
       {
         tier: 1, type: "MCQ",
         prompt: "Thuộc tính nào tạo bóng cho CHỮ?",
@@ -166,6 +178,12 @@ export const PART2_CHUONG_8_9: CssSeedTag[] = [
     questions: [
       {
         tier: 1, type: "MCQ",
+        prompt: "Muốn BO TRÒN bốn góc của một card. Dùng thuộc tính nào?",
+        options: ["border-radius", "border-round", "corner-radius", "radius"],
+        correctIndex: 0,
+      },
+      {
+        tier: 1, type: "MCQ",
         prompt: "Thuộc tính nào BO TRÒN GÓC của hộp?",
         options: ["corner-round", "border-radius", "box-corner", "round"],
         correctIndex: 1,
@@ -238,6 +256,12 @@ export const PART2_CHUONG_8_9: CssSeedTag[] = [
     part: PART,
     description: "Viền focus không chiếm chỗ — đừng xóa nếu không thay thế",
     questions: [
+      {
+        tier: 1, type: "MCQ",
+        prompt: "Khi người dùng tab tới một nút, muốn giữ viền focus rõ ràng mà KHÔNG chiếm chỗ. Đó là thuộc tính nào?",
+        options: ["outline", "border", "box-shadow", "margin"],
+        correctIndex: 0,
+      },
       {
         tier: 1, type: "MCQ",
         prompt: "Viền xanh xuất hiện quanh ô input khi bấm Tab vào là gì?",
@@ -319,6 +343,12 @@ export const PART2_CHUONG_8_9: CssSeedTag[] = [
     questions: [
       {
         tier: 1, type: "MCQ",
+        prompt: "Muốn con trỏ chuột biến thành hình bàn tay khi rê vào một thẻ có thể bấm. Dùng khai báo nào?",
+        options: ["cursor: pointer", "cursor: hand", "mouse: pointer", "pointer: hand"],
+        correctIndex: 0,
+      },
+      {
+        tier: 1, type: "MCQ",
         prompt: "Con trỏ BÀN TAY (như khi rê lên link) là giá trị nào?",
         options: ["cursor: hand;", "cursor: pointer;", "cursor: click;", "cursor: link;"],
         correctIndex: 1,
@@ -381,6 +411,12 @@ export const PART2_CHUONG_8_9: CssSeedTag[] = [
     part: PART,
     description: "Tùy biến/bỏ dấu đầu dòng của danh sách",
     questions: [
+      {
+        tier: 1, type: "MCQ",
+        prompt: "Muốn BỎ dấu chấm đầu dòng của một menu <ul>. Dùng khai báo nào?",
+        options: ["list-style: none", "list: none", "bullet: none", "list-style: hidden"],
+        correctIndex: 0,
+      },
       {
         tier: 1, type: "MCQ",
         prompt: "Menu ngang dùng <ul> nhưng còn DẤU CHẤM đầu dòng. Bỏ bằng gì?",
@@ -457,6 +493,12 @@ export const PART2_CHUONG_8_9: CssSeedTag[] = [
     questions: [
       {
         tier: 1, type: "MCQ",
+        prompt: "Nội dung tràn ra khỏi hộp, muốn hiện THANH CUỘN chỉ khi cần. Dùng khai báo nào?",
+        options: ["overflow: auto", "overflow: visible", "clip: scroll", "scroll: on"],
+        correctIndex: 0,
+      },
+      {
+        tier: 1, type: "MCQ",
         prompt: "Nội dung dài hơn hộp. Muốn CẮT BỎ phần tràn (không thanh cuộn), dùng gì?",
         options: ["overflow: hidden;", "overflow: cut;", "display: clip;", "max-content: hide;"],
         correctIndex: 0,
@@ -529,6 +571,12 @@ export const PART2_CHUONG_8_9: CssSeedTag[] = [
     part: PART,
     description: "Ba cách ẩn phần tử: display none, visibility hidden, opacity 0",
     questions: [
+      {
+        tier: 1, type: "MCQ",
+        prompt: "Muốn ẩn một phần tử nhưng VẪN GIỮ CHỖ của nó trong layout. Dùng khai báo nào?",
+        options: ["visibility: hidden", "display: none", "opacity: 0", "hidden: true"],
+        correctIndex: 0,
+      },
       {
         tier: 1, type: "MCQ",
         prompt: "visibility: hidden  làm gì?",
@@ -611,6 +659,12 @@ export const PART2_CHUONG_8_9: CssSeedTag[] = [
     questions: [
       {
         tier: 1, type: "MCQ",
+        prompt: "Ảnh trong khung cố định bị méo, muốn ảnh PHỦ KÍN khung mà không méo (có thể cắt). Dùng khai báo nào?",
+        options: ["object-fit: cover", "object-fit: fill", "background-size: cover", "aspect-ratio: 1"],
+        correctIndex: 0,
+      },
+      {
+        tier: 1, type: "MCQ",
         prompt: "Ảnh <img> bị MÉO khi ép width/height cố định. Thuộc tính nào sửa?",
         options: ["image-render", "object-fit", "background-size", "aspect-fix"],
         correctIndex: 1,
@@ -686,6 +740,12 @@ export const PART2_CHUONG_8_9: CssSeedTag[] = [
     questions: [
       {
         tier: 1, type: "MCQ",
+        prompt: "Muốn khung video luôn giữ tỷ lệ 16:9 dù co giãn theo bề rộng. Dùng thuộc tính nào?",
+        options: ["aspect-ratio: 16/9", "ratio: 16:9", "width: 16; height: 9", "scale: 16/9"],
+        correctIndex: 0,
+      },
+      {
+        tier: 1, type: "MCQ",
         prompt: "Thuộc tính nào KHÓA TỶ LỆ khung (rộng/cao) của phần tử?",
         options: ["ratio", "aspect-ratio", "frame-ratio", "size-ratio"],
         correctIndex: 1,
@@ -753,6 +813,12 @@ export const PART2_CHUONG_8_9: CssSeedTag[] = [
     part: PART,
     description: "Bộ lọc ảnh: blur, grayscale, brightness...",
     questions: [
+      {
+        tier: 1, type: "MCQ",
+        prompt: "Muốn làm ảnh thumbnail XÁM (grayscale) khi chưa được chọn. Dùng thuộc tính nào?",
+        options: ["filter: grayscale(1)", "opacity: gray", "color: gray", "background: gray"],
+        correctIndex: 0,
+      },
       {
         tier: 1, type: "MCQ",
         prompt: "Làm MỜ NHÒE một ảnh bằng CSS dùng gì?",
@@ -832,6 +898,17 @@ export const PART2_CHUONG_8_9: CssSeedTag[] = [
     part: PART,
     description: "max-width: 100% + height: auto — ảnh không phá layout",
     questions: [
+      {
+        tier: 1, type: "MCQ",
+        prompt: "Muốn ảnh không bao giờ rộng quá khung cha và giữ đúng tỷ lệ. Dùng cặp khai báo nào?",
+        options: [
+          "max-width: 100%; height: auto",
+          "width: 100px",
+          "object-fit: fill",
+          "position: absolute",
+        ],
+        correctIndex: 0,
+      },
       {
         tier: 1, type: "MCQ",
         prompt: "Cặp khai báo KINH ĐIỂN cho ảnh co giãn theo khung, không tràn?",
@@ -917,6 +994,12 @@ export const PART2_CHUONG_8_9: CssSeedTag[] = [
     part: PART,
     description: "Gộp các thuộc tính nền vào một dòng background",
     questions: [
+      {
+        tier: 1, type: "MCQ",
+        prompt: "Muốn gộp màu nền, ảnh nền và vị trí vào MỘT dòng cho gọn. Dùng thuộc tính shorthand nào?",
+        options: ["background", "background-all", "bg", "background-set"],
+        correctIndex: 0,
+      },
       {
         tier: 1, type: "MCQ",
         prompt: "background  là shorthand gộp những gì?",
@@ -1007,6 +1090,12 @@ export const PART2_CHUONG_8_9: CssSeedTag[] = [
     questions: [
       {
         tier: 1, type: "MCQ",
+        prompt: "Muốn thêm một biểu tượng trang trí TRƯỚC tiêu đề mà không sửa HTML. Dùng kỹ thuật nào?",
+        options: ["Pseudo-element ::before", "Thêm thẻ <img>", "Dùng JavaScript", "Thêm một class"],
+        correctIndex: 0,
+      },
+      {
+        tier: 1, type: "MCQ",
         prompt: "::before và ::after là gì?",
         options: [
           "Hai thẻ HTML mới",
@@ -1087,6 +1176,12 @@ export const PART2_CHUONG_8_9: CssSeedTag[] = [
     part: PART,
     description: "Khi nào dùng <img>, khi nào dùng background-image",
     questions: [
+      {
+        tier: 1, type: "MCQ",
+        prompt: "Ảnh là NỘI DUNG quan trọng cần trình đọc màn hình đọc (vd ảnh sản phẩm). Nên dùng cách nào?",
+        options: ["Thẻ <img> có alt", "background-image", "::before content", "filter"],
+        correctIndex: 0,
+      },
       {
         tier: 1, type: "MCQ",
         prompt: "Ảnh SẢN PHẨM trong trang bán hàng nên dùng cách nào?",

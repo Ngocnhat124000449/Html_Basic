@@ -13,6 +13,12 @@ export const PART4_CHUONG_16_20: CssSeedTag[] = [
     questions: [
       {
         tier: 1, type: "MCQ",
+        prompt: "Muốn nút ĐỔI MÀU khi người dùng rê chuột vào. Dùng pseudo-class nào?",
+        options: [":hover", ":click", ":over", ":mouse"],
+        correctIndex: 0,
+      },
+      {
+        tier: 1, type: "MCQ",
         prompt: "Đổi màu nút khi RÊ CHUỘT vào dùng pseudo-class nào?",
         options: [".nut:hover", ".nut:click", ".nut:over", ".nut.hover"],
         correctIndex: 0,
@@ -90,6 +96,12 @@ export const PART4_CHUONG_16_20: CssSeedTag[] = [
     part: PART,
     description: ":focus (đang chọn ô nhập) và :active (đang nhấn)",
     questions: [
+      {
+        tier: 1, type: "MCQ",
+        prompt: "Muốn ô input đổi viền khi người dùng ĐANG NHẬP vào nó. Dùng pseudo-class nào?",
+        options: [":focus", ":hover", ":active", ":target"],
+        correctIndex: 0,
+      },
       {
         tier: 1, type: "MCQ",
         prompt: "Đổi kiểu ô input KHI ĐANG GÕ (được chọn) dùng pseudo-class nào?",
@@ -171,6 +183,12 @@ export const PART4_CHUONG_16_20: CssSeedTag[] = [
     part: PART,
     description: "Chuyển động mượt giữa hai trạng thái khi giá trị đổi",
     questions: [
+      {
+        tier: 1, type: "MCQ",
+        prompt: "Muốn màu nút đổi MƯỢT trong 0.3s khi hover thay vì đổi giật. Dùng thuộc tính nào?",
+        options: ["transition", "animation", "transform", "duration"],
+        correctIndex: 0,
+      },
       {
         tier: 1, type: "MCQ",
         prompt: "Làm nút đổi màu MƯỢT trong 0.3s khi hover dùng khai báo nào (trên trạng thái thường)?",
@@ -256,6 +274,12 @@ export const PART4_CHUONG_16_20: CssSeedTag[] = [
     questions: [
       {
         tier: 1, type: "MCQ",
+        prompt: "Muốn chuyển động bắt đầu chậm rồi nhanh dần một cách tự nhiên. Dùng timing function nào?",
+        options: ["ease", "linear", "none", "step"],
+        correctIndex: 0,
+      },
+      {
+        tier: 1, type: "MCQ",
         prompt: "Giá trị timing nào cho tốc độ ĐỀU từ đầu đến cuối?",
         options: ["linear", "ease", "ease-in", "bounce"],
         correctIndex: 0,
@@ -329,6 +353,12 @@ export const PART4_CHUONG_16_20: CssSeedTag[] = [
     part: PART,
     description: "Biến đổi phần tử: phóng to (scale), xoay (rotate)",
     questions: [
+      {
+        tier: 1, type: "MCQ",
+        prompt: "Muốn card PHÓNG TO nhẹ (105%) khi hover để tạo cảm giác nổi. Dùng khai báo nào?",
+        options: ["transform: scale(1.05)", "zoom: 1.05", "size: 1.05", "scale-up: 1.05"],
+        correctIndex: 0,
+      },
       {
         tier: 1, type: "MCQ",
         prompt: "PHÓNG TO phần tử lên 1.1 lần khi hover dùng khai báo nào?",
@@ -409,6 +439,12 @@ export const PART4_CHUONG_16_20: CssSeedTag[] = [
     questions: [
       {
         tier: 1, type: "MCQ",
+        prompt: "Muốn nhấc một phần tử lên trên 10px khi hover mà KHÔNG đẩy các phần tử khác. Dùng khai báo nào?",
+        options: ["transform: translateY(-10px)", "margin-top: -10px", "top: -10px", "position: 10px"],
+        correctIndex: 0,
+      },
+      {
+        tier: 1, type: "MCQ",
         prompt: "Dịch phần tử LÊN TRÊN 8px khi hover dùng khai báo nào?",
         options: [
           "transform: translateY(-8px);",
@@ -487,6 +523,12 @@ export const PART4_CHUONG_16_20: CssSeedTag[] = [
     part: PART,
     description: "Định nghĩa các mốc của hoạt ảnh với @keyframes",
     questions: [
+      {
+        tier: 1, type: "MCQ",
+        prompt: "Muốn định nghĩa các MỐC của một hoạt ảnh (0%, 50%, 100%). Dùng cú pháp nào?",
+        options: ["@keyframes", "@animation", "@frames", "@motion"],
+        correctIndex: 0,
+      },
       {
         tier: 1, type: "MCQ",
         prompt: "Định nghĩa một hoạt ảnh nhiều bước dùng cú pháp nào?",
@@ -574,6 +616,12 @@ export const PART4_CHUONG_16_20: CssSeedTag[] = [
     questions: [
       {
         tier: 1, type: "MCQ",
+        prompt: "Muốn biểu tượng tải QUAY LIÊN TỤC. Sau khi đã có @keyframes, gắn vào phần tử bằng thuộc tính nào?",
+        options: ["animation", "transition", "transform", "loop"],
+        correctIndex: 0,
+      },
+      {
+        tier: 1, type: "MCQ",
         prompt: "Chạy hoạt ảnh tên quay trong 2 giây dùng khai báo nào?",
         options: [
           "animation: quay 2s;",
@@ -659,6 +707,12 @@ export const PART4_CHUONG_16_20: CssSeedTag[] = [
     questions: [
       {
         tier: 1, type: "MCQ",
+        prompt: "Muốn khi bấm link mục lục, trang CUỘN MƯỢT tới phần đó thay vì nhảy phắt. Dùng khai báo nào?",
+        options: ["scroll-behavior: smooth", "scroll: smooth", "overflow: smooth", "behavior: smooth"],
+        correctIndex: 0,
+      },
+      {
+        tier: 1, type: "MCQ",
         prompt: "Làm trang cuộn MƯỢT (thay vì nhảy phắt) khi bấm link #anchor dùng khai báo nào?",
         options: [
           "scroll-behavior: smooth;",
@@ -730,6 +784,12 @@ export const PART4_CHUONG_16_20: CssSeedTag[] = [
     part: PART,
     description: "Cuộn 'bắt dính' từng khối như slider/carousel",
     questions: [
+      {
+        tier: 1, type: "MCQ",
+        prompt: "Muốn một slider ảnh CUỘN BẮT DÍNH từng tấm như carousel. Dùng nhóm thuộc tính nào?",
+        options: ["scroll-snap", "scroll-stop", "snap-scroll", "carousel"],
+        correctIndex: 0,
+      },
       {
         tier: 1, type: "MCQ",
         prompt: "Tạo cuộn ngang 'bắt dính' từng slide, ta đặt trên KHUNG cuộn khai báo nào?",
