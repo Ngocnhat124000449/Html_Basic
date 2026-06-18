@@ -5,8 +5,9 @@ import { prisma } from "@/lib/prisma";
 import type { ClientQuestion, SessionTag } from "@/lib/study-types";
 import { toRunSpecs, type JsRequirement } from "@/lib/grading/js-types";
 import { toReactSpecs, type ReactRequirement } from "@/lib/grading/react-types";
+import { LEECH_LAPSES } from "@/lib/fsrs";
+import { getUserSettings } from "@/lib/user-settings";
 
-const NEW_PER_DAY = 5;
 const SESSION_CAP = 10;
 
 type TagWithQuestions = Prisma.TagGetPayload<{ include: { questions: true } }>;
@@ -77,33 +78,52 @@ export async function GET(req: Request) {
   const userId = session.user.id;
   const now = new Date();
   const params = new URL(req.url).searchParams;
-  // extra=1: học vượt — bỏ giới hạn thẻ mới/ngày, lấy tiếp 5 thẻ chưa học kế tiếp
+  const settings = await getUserSettings(userId);
+  // extra=1: học vượt — bỏ giới hạn thẻ mới/ngày, lấy tiếp thẻ chưa học kế tiếp
   const extra = params.get("extra") === "1";
-  // track: html (mặc định) | css | js | dsa | git — hàng đợi và quota tách riêng từng track
   const trackParam = params.get("track");
-  const track =
-    trackParam === "css" ||
-    trackParam === "js" ||
-    trackParam === "dsa" ||
-    trackParam === "git" ||
-    trackParam === "react" ||
-    trackParam === "project"
-      ? trackParam
-      : "html";
+  const SPECIFIC = ["html", "css", "js", "dsa", "git", "react", "project"];
+  const withQuestions = { tag: { include: { questions: { orderBy: { tier: "asc" as const } } } } };
+
+  // CHẾ ĐỘ "Ôn tất cả": thẻ đến hạn của MỌI khóa (trừ khóa đã ẩn), ưu tiên đến
+  // hạn lâu nhất, KHÔNG bốc thẻ mới, cap theo reviewCap của người dùng.
+  if (trackParam === "all") {
+    const due = await prisma.userTagProgress.findMany({
+      where: { userId, dueAt: { lte: now }, tag: { track: { notIn: settings.hiddenTracks } } },
+      orderBy: { dueAt: "asc" },
+      take: settings.reviewCap,
+      include: withQuestions,
+    });
+    return NextResponse.json({ tags: due.map((d) => toClient(d.tag, false)) });
+  }
+
+  // CHẾ ĐỘ "Thẻ hay quên" (leech): lapses cao của mọi khóa, KHÔNG cần đến hạn.
+  if (trackParam === "leech") {
+    const leech = await prisma.userTagProgress.findMany({
+      where: { userId, lapses: { gte: LEECH_LAPSES }, tag: { track: { notIn: settings.hiddenTracks } } },
+      orderBy: { lapses: "desc" },
+      take: settings.reviewCap,
+      include: withQuestions,
+    });
+    return NextResponse.json({ tags: leech.map((d) => toClient(d.tag, false)) });
+  }
+
+  // CHẾ ĐỘ theo từng khóa (mặc định html): hàng đợi đến hạn + quota thẻ mới/ngày.
+  const track = SPECIFIC.includes(trackParam ?? "") ? trackParam! : "html";
 
   const due = await prisma.userTagProgress.findMany({
     where: { userId, dueAt: { lte: now }, tag: { track } },
     orderBy: { dueAt: "asc" },
-    include: { tag: { include: { questions: { orderBy: { tier: "asc" } } } } },
+    include: withQuestions,
   });
 
   const startOfDay = new Date(now);
   startOfDay.setHours(0, 0, 0, 0);
-  // Quota 5 thẻ mới/ngày tính riêng từng track
+  // Quota thẻ mới/ngày (cá nhân hóa qua settings.dailyNew) tính riêng từng track
   const newToday = await prisma.userTagProgress.count({
     where: { userId, createdAt: { gte: startOfDay }, tag: { track } },
   });
-  const allowedNew = extra ? NEW_PER_DAY : Math.max(0, NEW_PER_DAY - newToday);
+  const allowedNew = extra ? settings.dailyNew : Math.max(0, settings.dailyNew - newToday);
 
   let newTags: TagWithQuestions[] = [];
   if (allowedNew > 0) {

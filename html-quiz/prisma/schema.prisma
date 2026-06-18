@@ -16,6 +16,20 @@ model User {
   progress     UserTagProgress[]
   attempts     Attempt[]
   reviewLogs   ReviewLog[]
+  settings     UserSettings?
+}
+
+// Tùy biến ôn tập theo từng người (Pha 1). fsrsParams để dành cho Pha 2 (tối ưu
+// 21 trọng số FSRS riêng từ ReviewLog) — null = dùng tham số mặc định.
+model UserSettings {
+  userId          String   @id
+  user            User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  dailyNew        Int      @default(5)
+  reviewCap       Int      @default(20)
+  targetRetention Float    @default(0.9)
+  hiddenTracks    String[] @default([])
+  fsrsParams      Json?
+  updatedAt       DateTime @updatedAt
 }
 
 model Tag {

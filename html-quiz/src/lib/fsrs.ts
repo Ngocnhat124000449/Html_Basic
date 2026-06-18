@@ -1,18 +1,38 @@
 // Lớp bọc ts-fsrs cho lịch ôn tập (P1). Chấm ở mức THẺ; grade suy ra tự động
 // từ số lượt sai trong phiên (không có nút tự chấm thủ công).
-import { createEmptyCard, fsrs, Rating, State, type Card, type Grade } from "ts-fsrs";
+import { createEmptyCard, fsrs, Rating, State, type Card, type FSRS, type Grade } from "ts-fsrs";
 
-// request_retention 0.9 = mục tiêu nhớ 90%; fuzz chống dồn cục; short_term để
-// grade "Again" lịch lại trong ngày (khớp UX "học lại hôm nay").
-const scheduler = fsrs({
-  request_retention: 0.9,
-  enable_fuzz: true,
-  enable_short_term: true,
-});
+// request_retention = mục tiêu nhớ (mặc định 0.9 = 90%), CÁ NHÂN HÓA theo người
+// dùng (UserSettings.targetRetention). fuzz chống dồn cục; short_term để grade
+// "Again" lịch lại trong ngày. fsrsParams (Pha 2) = 21 trọng số tối ưu riêng.
+export const DEFAULT_RETENTION = 0.9;
 
-// stability (số ngày để độ nhớ tụt còn 90%) đạt ngưỡng này coi là "nắm vững".
+export type FsrsOpts = { retention?: number; params?: number[] };
+
+// Bộ lập lịch tốn chút chi phí khởi tạo → memo theo (retention|params).
+const schedulerCache = new Map<string, FSRS>();
+function getScheduler(opts?: FsrsOpts): FSRS {
+  const retention = opts?.retention ?? DEFAULT_RETENTION;
+  const w = opts?.params;
+  const key = `${retention}|${w ? w.join(",") : ""}`;
+  let s = schedulerCache.get(key);
+  if (!s) {
+    s = fsrs({
+      request_retention: retention,
+      enable_fuzz: true,
+      enable_short_term: true,
+      ...(w ? { w } : {}),
+    });
+    schedulerCache.set(key, s);
+  }
+  return s;
+}
+
+// stability (số ngày để độ nhớ tụt còn mục tiêu) đạt ngưỡng này coi là "nắm vững".
 export const MASTERY_STABILITY = 21;
 export const MAX_WRONG = 3;
+// Số lần quên (lapses) từ ngưỡng này coi là "thẻ hay quên" (leech) — luyện riêng.
+export const LEECH_LAPSES = 8;
 
 // Map số lượt sai (0..3) → Rating. 0 mượt = Easy ... ≥3 rớt = Again.
 export function ratingFromWrong(wrongCount: number): Grade {
@@ -67,17 +87,18 @@ export function fromCard(card: Card): CardFields & { mastered: boolean } {
 }
 
 // Lên lịch lần ôn kế tiếp cho card với grade tại thời điểm now.
-export function schedule(card: Card, grade: Grade, now: Date): Card {
-  return scheduler.next(card, now, grade).card;
+export function schedule(card: Card, grade: Grade, now: Date, opts?: FsrsOpts): Card {
+  return getScheduler(opts).next(card, now, grade).card;
 }
 
 // Tiện ích gộp: từ row + số lượt sai → các trường cần lưu.
 export function nextFromWrong(
   row: Partial<CardFields> | null | undefined,
   wrongCount: number,
-  now: Date
+  now: Date,
+  opts?: FsrsOpts
 ): CardFields & { mastered: boolean } {
-  return fromCard(schedule(toCard(row), ratingFromWrong(wrongCount), now));
+  return fromCard(schedule(toCard(row), ratingFromWrong(wrongCount), now, opts));
 }
 
 // Bản ghi nhật ký ôn (ReviewLog) để lưu DB.
@@ -96,9 +117,10 @@ export type ReviewLogFields = {
 export function nextWithLog(
   row: Partial<CardFields> | null | undefined,
   wrongCount: number,
-  now: Date
+  now: Date,
+  opts?: FsrsOpts
 ): { fields: CardFields & { mastered: boolean }; log: ReviewLogFields } {
-  const res = scheduler.next(toCard(row), now, ratingFromWrong(wrongCount));
+  const res = getScheduler(opts).next(toCard(row), now, ratingFromWrong(wrongCount));
   return {
     fields: fromCard(res.card),
     log: {
@@ -118,8 +140,9 @@ export function nextWithLog(
 // Thẻ chưa ôn (stability<=0) trả về 0. Dùng cho thống kê dashboard.
 export function retrievability(
   row: Partial<CardFields> | null | undefined,
-  now: Date
+  now: Date,
+  opts?: FsrsOpts
 ): number {
   if (!row || !row.stability || row.stability <= 0) return 0;
-  return scheduler.get_retrievability(toCard(row), now, false) as number;
+  return getScheduler(opts).get_retrievability(toCard(row), now, false) as number;
 }

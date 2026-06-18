@@ -3,6 +3,7 @@ import { z } from "zod";
 import { auth } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
 import { nextWithLog, MAX_WRONG } from "@/lib/fsrs";
+import { getUserSettings, fsrsOptsOf } from "@/lib/user-settings";
 
 // Chế độ phản xạ chấm cả phiên một lần: mỗi thẻ kèm tổng lượt sai (0..MAX_WRONG).
 const schema = z.object({
@@ -43,6 +44,7 @@ export async function POST(req: Request) {
   const validIds = new Set(tags.map((t) => t.id));
 
   const now = new Date();
+  const fsrsOpts = fsrsOptsOf(await getUserSettings(userId));
   const existing = await prisma.userTagProgress.findMany({
     where: { userId, tagId: { in: [...validIds] } },
   });
@@ -52,7 +54,7 @@ export async function POST(req: Request) {
   const summary: { tagId: string; mastered: boolean }[] = [];
   for (const tagId of validIds) {
     const wrongCount = byTag.get(tagId) ?? 0;
-    const { fields: next, log } = nextWithLog(byId.get(tagId) ?? null, wrongCount, now);
+    const { fields: next, log } = nextWithLog(byId.get(tagId) ?? null, wrongCount, now, fsrsOpts);
     const data = {
       stability: next.stability,
       difficulty: next.difficulty,

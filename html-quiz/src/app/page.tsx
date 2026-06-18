@@ -2,10 +2,10 @@ import Link from "next/link";
 import { redirect } from "next/navigation";
 import { auth } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
-import { retrievability } from "@/lib/fsrs";
+import { retrievability, LEECH_LAPSES } from "@/lib/fsrs";
+import { getUserSettings, fsrsOptsOf } from "@/lib/user-settings";
 
 const DAY_MS = 24 * 60 * 60 * 1000;
-const LEECH_LAPSES = 8;
 
 export default async function HomePage() {
   const session = await auth();
@@ -63,9 +63,12 @@ export default async function HomePage() {
     if (off <= 0) forecast[0]++;
     else if (off < 7) forecast[off]++;
   }
+  const fsrsOpts = fsrsOptsOf(await getUserSettings(userId));
   const reviewed = allProgress.filter((p) => p.stability > 0);
   const avgRetention = reviewed.length
-    ? Math.round((reviewed.reduce((s, p) => s + retrievability(p, now), 0) / reviewed.length) * 100)
+    ? Math.round(
+        (reviewed.reduce((s, p) => s + retrievability(p, now, fsrsOpts), 0) / reviewed.length) * 100
+      )
     : null;
   const leeches = allProgress.filter((p) => p.lapses >= LEECH_LAPSES).length;
   const dueToday = forecast[0];
@@ -213,6 +216,12 @@ export default async function HomePage() {
           Xin chào, {session.user.name} 👋
         </h1>
         <p className="mt-2 text-ink/60">Chọn khóa học để bắt đầu</p>
+        <Link
+          href="/settings"
+          className="mt-3 inline-block text-sm font-medium text-ink/50 transition-colors hover:text-flame-600"
+        >
+          ⚙️ Tùy chỉnh ôn tập
+        </Link>
       </div>
 
       <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
@@ -277,9 +286,12 @@ export default async function HomePage() {
               </span>
             )}
             {leeches > 0 && (
-              <span className="rounded-full bg-red-100 px-2.5 py-1 font-semibold text-red-700">
-                {leeches} thẻ hay quên
-              </span>
+              <Link
+                href="/study?track=leech"
+                className="rounded-full bg-red-100 px-2.5 py-1 font-semibold text-red-700 transition-colors hover:bg-red-200"
+              >
+                {leeches} thẻ hay quên →
+              </Link>
             )}
           </div>
         </div>
@@ -301,10 +313,10 @@ export default async function HomePage() {
 
         {dueToday > 0 ? (
           <Link
-            href="/study"
+            href="/study?track=all"
             className="mt-5 inline-block font-medium text-flame-600 transition-transform hover:translate-x-1"
           >
-            Ôn ngay {dueToday} thẻ đến hạn →
+            Ôn ngay {dueToday} thẻ đến hạn (mọi khóa) →
           </Link>
         ) : (
           <p className="mt-5 text-sm text-ink/50">🎉 Hôm nay không còn thẻ đến hạn — quay lại sau nhé.</p>

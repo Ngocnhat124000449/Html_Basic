@@ -16,7 +16,7 @@ const MAX_WRONG = 3;
 
 // Nhãn hiển thị: thẻ HTML bọc <>, mục CSS/JS hiện tên trần
 const tagLabel = (tag: {
-  track: "html" | "css" | "js" | "dsa" | "git" | "react" | "project";
+  track: "html" | "css" | "js" | "dsa" | "git" | "react" | "project" | "all" | "leech";
   name: string;
 }) => (tag.track === "html" ? `<${tag.name}>` : tag.name);
 
@@ -46,7 +46,7 @@ export default function StudyPage() {
   const [finished, setFinished] = useState(false);
   const [summary, setSummary] = useState<{ name: string; passed: boolean }[]>([]);
   const [track, setTrack] = useState<
-    "html" | "css" | "js" | "dsa" | "git" | "react" | "project"
+    "html" | "css" | "js" | "dsa" | "git" | "react" | "project" | "all" | "leech"
   >("html");
   const inputRef = useRef<HTMLInputElement | null>(null);
   const textareaRef = useRef<HTMLTextAreaElement | null>(null);
@@ -86,7 +86,9 @@ export default function StudyPage() {
       tp === "dsa" ||
       tp === "git" ||
       tp === "react" ||
-      tp === "project"
+      tp === "project" ||
+      tp === "all" ||
+      tp === "leech"
         ? tp
         : "html";
     const qs = new URLSearchParams();
@@ -127,7 +129,9 @@ export default function StudyPage() {
               ? "/react"
               : track === "project"
                 ? "/project"
-                : "/html";
+                : track === "all" || track === "leech"
+                  ? "/"
+                  : "/html";
 
   // Chốt phiên: gom lượt sai theo thẻ → batch lên server, dựng tổng kết.
   const finishSession = useCallback(
