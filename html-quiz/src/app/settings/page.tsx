@@ -27,6 +27,8 @@ export default function SettingsPage() {
   const [reviewCap, setReviewCap] = useState(20);
   const [targetRetention, setTargetRetention] = useState(0.9);
   const [hidden, setHidden] = useState<string[]>([]);
+  const [fsrsOptimized, setFsrsOptimized] = useState(false);
+  const [fsrsOptimizedAt, setFsrsOptimizedAt] = useState<string | null>(null);
 
   useEffect(() => {
     fetch("/api/settings")
@@ -37,10 +39,22 @@ export default function SettingsPage() {
           setReviewCap(d.reviewCap);
           setTargetRetention(d.targetRetention);
           setHidden(d.hiddenTracks ?? []);
+          setFsrsOptimized(!!d.fsrsOptimized);
+          setFsrsOptimizedAt(d.fsrsOptimizedAt ?? null);
         }
         setLoaded(true);
       });
   }, []);
+
+  async function resetFsrs() {
+    await fetch("/api/settings", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ resetFsrs: true }),
+    });
+    setFsrsOptimized(false);
+    setFsrsOptimizedAt(null);
+  }
 
   function toggleTrack(id: string) {
     setSaved(false);
@@ -151,6 +165,32 @@ export default function SettingsPage() {
             })}
           </div>
         </div>
+      </div>
+
+      <div className="rounded-2xl border border-ink/10 bg-surface p-6">
+        <span className="font-display font-bold">Lịch ôn tối ưu riêng (FSRS)</span>
+        {fsrsOptimized ? (
+          <>
+            <p className="mt-1 text-sm text-emerald-700">
+              ✓ Đã tối ưu theo lịch sử ôn của bạn
+              {fsrsOptimizedAt
+                ? ` — cập nhật ${new Date(fsrsOptimizedAt).toLocaleDateString("vi-VN")}`
+                : ""}
+              .
+            </p>
+            <button
+              onClick={resetFsrs}
+              className="mt-3 rounded-full border border-ink/15 px-4 py-2 text-sm font-medium text-ink/70 transition-colors hover:border-red-300 hover:text-red-700"
+            >
+              Khôi phục lịch mặc định
+            </button>
+          </>
+        ) : (
+          <p className="mt-1 text-sm text-ink/55">
+            Đang dùng lịch mặc định. Khi bạn ôn đủ nhiều (≈400 lượt), hệ thống có thể tối ưu bộ
+            tham số ghi nhớ riêng cho bạn để lịch sát hơn.
+          </p>
+        )}
       </div>
 
       <div className="flex items-center gap-3">

@@ -1,5 +1,6 @@
 import { prisma } from "./prisma";
 import { DEFAULT_RETENTION, type FsrsOpts } from "./fsrs";
+import { isValidFsrsParams } from "./fsrs-params";
 
 // Cài đặt ôn tập hiệu lực của một người (đọc UserSettings, thiếu thì dùng mặc định).
 export type EffectiveSettings = {
@@ -26,7 +27,8 @@ export async function getUserSettings(userId: string): Promise<EffectiveSettings
     reviewCap: s.reviewCap,
     targetRetention: s.targetRetention,
     hiddenTracks: s.hiddenTracks,
-    fsrsParams: (s.fsrsParams as number[] | null) ?? null,
+    // Chỉ dùng tham số tối ưu nếu HỢP LỆ (đúng 21 số hữu hạn) — nếu không, mặc định.
+    fsrsParams: isValidFsrsParams(s.fsrsParams) ? s.fsrsParams : null,
   };
 }
 

@@ -29,6 +29,7 @@ model UserSettings {
   targetRetention Float    @default(0.9)
   hiddenTracks    String[] @default([])
   fsrsParams      Json?
+  fsrsOptimizedAt DateTime?
   updatedAt       DateTime @updatedAt
 }
 

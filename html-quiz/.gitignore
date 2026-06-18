@@ -50,3 +50,8 @@ next-env.d.ts
 .remember/
 
 .vercel
+
+# Pha 2 FSRS optimizer (offline, không commit)
+tmp/
+.venv/
+__pycache__/

@@ -1,0 +1,7 @@
+# PHA 2 — chỉ dùng cho scripts/optimize_fsrs.py (tối ưu FSRS offline).
+# KHÔNG liên quan app Next.js. Cài trong venv riêng:
+#   python -m venv .venv && source .venv/bin/activate   (Windows: .venv\Scripts\activate)
+#   pip install -r scripts/requirements.txt
+fsrs-optimizer==5.6.0
+pandas
+torch
