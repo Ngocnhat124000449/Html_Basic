@@ -18,6 +18,12 @@ export const PART6_TRUC_QUAN_HOA: JsSeedTag[] = [
     questions: [
       {
         tier: 1, type: "MCQ",
+        prompt: "Muốn vẽ đồ họa 2D (cột biểu đồ) thủ công bằng JS lên trang. Vẽ lên thẻ nào?",
+        options: ["<canvas>", "<svg2d>", "<draw>", "<graph>"],
+        correctIndex: 0,
+      },
+      {
+        tier: 1, type: "MCQ",
         prompt: "Để vẽ đồ họa 2D bằng JavaScript, bạn dùng thẻ HTML nào?",
         options: ["<canvas>", "<draw>", "<svg2d>", "<graphic>"],
         correctIndex: 0,
@@ -78,6 +84,12 @@ export const PART6_TRUC_QUAN_HOA: JsSeedTag[] = [
     part: PART,
     description: "Nhúng CDN và tạo new Chart với object config",
     questions: [
+      {
+        tier: 1, type: "MCQ",
+        prompt: "Muốn vẽ biểu đồ đẹp nhanh mà không tự tính trục/chú thích. Tạo biểu đồ bằng cú pháp nào?",
+        options: ["new Chart(ctx, config)", "Chart.draw(config)", "new Graph(config)", "chart(config)"],
+        correctIndex: 0,
+      },
       {
         tier: 1, type: "MCQ",
         prompt: "Cách nhanh nhất để dùng Chart.js trong một dự án nhỏ không cài npm là gì?",
@@ -142,6 +154,12 @@ export const PART6_TRUC_QUAN_HOA: JsSeedTag[] = [
     part: PART,
     description: "Biểu đồ tròn (pie) gom chi tiêu theo danh mục",
     questions: [
+      {
+        tier: 1, type: "MCQ",
+        prompt: "Muốn xem TỈ LỆ chi tiêu theo từng danh mục. Loại biểu đồ Chart.js nào hợp nhất?",
+        options: ["type: 'pie'", "type: 'line'", "type: 'scatter'", "type: 'bar'"],
+        correctIndex: 0,
+      },
       {
         tier: 1, type: "MCQ",
         prompt: "Loại biểu đồ nào hợp để xem TỈ LỆ chi tiêu giữa các danh mục?",
@@ -220,6 +238,12 @@ export const PART6_TRUC_QUAN_HOA: JsSeedTag[] = [
     part: PART,
     description: "Biểu đồ cột (bar) so tổng chi theo tháng",
     questions: [
+      {
+        tier: 1, type: "MCQ",
+        prompt: "Muốn SO SÁNH tổng chi giữa các tháng. Loại biểu đồ Chart.js nào hợp nhất?",
+        options: ["type: 'bar'", "type: 'pie'", "type: 'doughnut'", "type: 'radar'"],
+        correctIndex: 0,
+      },
       {
         tier: 1, type: "MCQ",
         prompt: "Loại biểu đồ nào hợp để SO SÁNH tổng chi giữa các tháng?",

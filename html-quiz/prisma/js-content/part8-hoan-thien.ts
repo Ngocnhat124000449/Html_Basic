@@ -17,6 +17,17 @@ export const PART8_HOAN_THIEN: JsSeedTag[] = [
     questions: [
       {
         tier: 1, type: "MCQ",
+        prompt: "Muốn cho người dùng TẢI VỀ dữ liệu chi tiêu dạng .json. Bước đầu là chuyển dữ liệu sang gì?",
+        options: [
+          "Chuỗi JSON bằng JSON.stringify",
+          "Ảnh chụp màn hình",
+          "Một bảng HTML",
+          "Một số nguyên",
+        ],
+        correctIndex: 0,
+      },
+      {
+        tier: 1, type: "MCQ",
         prompt: "Để chuyển một object hoặc mảng JavaScript thành chuỗi JSON, bạn dùng gì?",
         options: ["JSON.stringify(data)", "JSON.toText(data)", "data.toJSON()", "String(data)"],
         correctIndex: 0,
@@ -93,6 +104,12 @@ export const PART8_HOAN_THIEN: JsSeedTag[] = [
     part: PART,
     description: "Ghép mảng dữ liệu thành chuỗi CSV mở được bằng Excel",
     questions: [
+      {
+        tier: 1, type: "MCQ",
+        prompt: "Muốn người dùng mở dữ liệu chi tiêu bằng Excel/Google Sheets. Nên xuất ra định dạng nào?",
+        options: ["CSV", "PNG", "MP4", "EXE"],
+        correctIndex: 0,
+      },
       {
         tier: 1, type: "MCQ",
         prompt: "CSV là định dạng lưu dữ liệu kiểu gì?",
@@ -176,6 +193,17 @@ export const PART8_HOAN_THIEN: JsSeedTag[] = [
     part: PART,
     description: "Thử app như người dùng, xử lý trường hợp biên",
     questions: [
+      {
+        tier: 1, type: "MCQ",
+        prompt: "Trước khi giao app, nên thử những trường hợp đặc biệt nào để app không vỡ?",
+        options: [
+          "Danh sách rỗng, số 0, dữ liệu lạ",
+          "Chỉ thử khi có nhiều dữ liệu đẹp",
+          "Không cần thử gì",
+          "Chỉ thử trên máy mình",
+        ],
+        correctIndex: 0,
+      },
       {
         tier: 1, type: "MCQ",
         prompt: "Kiểm thử thủ công (manual testing) nghĩa là gì?",

@@ -14,6 +14,12 @@ export const PART1_NEN_TANG: JsSeedTag[] = [
     questions: [
       {
         tier: 1, type: "MCQ",
+        prompt: "Trang chỉ có HTML/CSS thì 'bất động'. Thêm thứ gì để trang phản hồi được khi người dùng bấm nút?",
+        options: ["JavaScript", "Thêm CSS", "Thêm ảnh", "Thêm thẻ meta"],
+        correctIndex: 0,
+      },
+      {
+        tier: 1, type: "MCQ",
         prompt: "Bạn viết xong file app.js và muốn trang web chạy nó. Nhúng file JS ngoài này vào HTML bằng thẻ nào?",
         options: ['<script src="app.js"></script>', '<js src="app.js">', '<link src="app.js">', '<script href="app.js">'],
         correctIndex: 0,
@@ -88,6 +94,12 @@ export const PART1_NEN_TANG: JsSeedTag[] = [
     questions: [
       {
         tier: 1, type: "MCQ",
+        prompt: "Đang gỡ lỗi, muốn xem giá trị biến tong hiện ra ở tab Console của DevTools. Dùng lệnh nào?",
+        options: ["console.log(tong)", "print(tong)", "alert.log(tong)", "document.write(tong)"],
+        correctIndex: 0,
+      },
+      {
+        tier: 1, type: "MCQ",
         prompt: "Đang nghi biến diem sai giá trị, bạn muốn in nó ra để kiểm tra. Lệnh nào in một giá trị ra console của trình duyệt?",
         options: ["console.log(x)", "print(x)", "echo x", "log.console(x)"],
         correctIndex: 0,
@@ -156,6 +168,12 @@ export const PART1_NEN_TANG: JsSeedTag[] = [
     part: PART,
     description: "Kết thúc câu lệnh bằng ; và ghi chú trong JS",
     questions: [
+      {
+        tier: 1, type: "MCQ",
+        prompt: "Muốn ghi chú một dòng giải thích trong file JS để trình duyệt bỏ qua. Viết thế nào?",
+        options: ["// ghi chú", "<!-- ghi chú -->", "# ghi chú", "-- ghi chú"],
+        correctIndex: 0,
+      },
       {
         tier: 1, type: "MCQ",
         prompt: "Bạn muốn ghi một dòng chú thích để giải thích code (máy bỏ qua khi chạy). Comment một dòng trong JS viết thế nào?",
@@ -230,6 +248,12 @@ export const PART1_NEN_TANG: JsSeedTag[] = [
     questions: [
       {
         tier: 1, type: "MCQ",
+        prompt: "Biến soLuong trong giỏ hàng sẽ THAY ĐỔI khi người dùng thêm/bớt món. Khai báo bằng từ khóa nào?",
+        options: ["let", "const", "var", "fix"],
+        correctIndex: 0,
+      },
+      {
+        tier: 1, type: "MCQ",
         prompt: "Khai báo một biến điểm số có thể thay đổi về sau dùng từ khóa nào?",
         options: ["let", "const", "final", "def"],
         correctIndex: 0,
@@ -299,6 +323,12 @@ export const PART1_NEN_TANG: JsSeedTag[] = [
     questions: [
       {
         tier: 1, type: "MCQ",
+        prompt: "Giá trị THUE_SUAT = 0.1 không bao giờ đổi trong suốt chương trình. Khai báo bằng từ khóa nào?",
+        options: ["const", "let", "var", "fixed"],
+        correctIndex: 0,
+      },
+      {
+        tier: 1, type: "MCQ",
         prompt: "Khai báo một giá trị không bao giờ đổi (vd số PI) dùng từ khóa nào?",
         options: ["const", "let", "var", "static"],
         correctIndex: 0,
@@ -366,6 +396,12 @@ export const PART1_NEN_TANG: JsSeedTag[] = [
     part: PART,
     description: "Vì sao nên dùng let/const thay cho var cũ",
     questions: [
+      {
+        tier: 1, type: "MCQ",
+        prompt: "Code JavaScript hiện đại khuyên KHÔNG dùng var nữa. Nên thay bằng cặp từ khóa nào?",
+        options: ["let và const", "int và string", "def và val", "new và old"],
+        correctIndex: 0,
+      },
       {
         tier: 1, type: "MCQ",
         prompt: "Hai từ khóa khai báo biến hiện đại (ES6+) được khuyên dùng là?",
@@ -444,6 +480,12 @@ export const PART1_NEN_TANG: JsSeedTag[] = [
     questions: [
       {
         tier: 1, type: "MCQ",
+        prompt: "Tên sản phẩm 'Áo thun' lưu trong một biến thuộc kiểu dữ liệu nào?",
+        options: ["string (chuỗi)", "number", "boolean", "object"],
+        correctIndex: 0,
+      },
+      {
+        tier: 1, type: "MCQ",
         prompt: "Giá trị nào là một chuỗi (string) hợp lệ?",
         options: ['"Xin chào"', "Xin chào", "123 (không nháy)", "true"],
         correctIndex: 0,
@@ -509,6 +551,12 @@ export const PART1_NEN_TANG: JsSeedTag[] = [
     questions: [
       {
         tier: 1, type: "MCQ",
+        prompt: "Giá tiền 199000 lưu trong một biến thuộc kiểu dữ liệu nào?",
+        options: ["number", "string", "boolean", "null"],
+        correctIndex: 0,
+      },
+      {
+        tier: 1, type: "MCQ",
         prompt: "Giá trị nào là kiểu number?",
         options: ["3.14", '"3.14"', "true", "null"],
         correctIndex: 0,
@@ -572,6 +620,12 @@ export const PART1_NEN_TANG: JsSeedTag[] = [
     part: PART,
     description: "Đúng/sai: true và false",
     questions: [
+      {
+        tier: 1, type: "MCQ",
+        prompt: "Trạng thái 'đã đăng nhập hay chưa' nên lưu bằng kiểu dữ liệu nào?",
+        options: ["boolean (true/false)", "string", "number", "array"],
+        correctIndex: 0,
+      },
       {
         tier: 1, type: "MCQ",
         prompt: "Hai giá trị của kiểu boolean là gì?",
@@ -643,6 +697,12 @@ export const PART1_NEN_TANG: JsSeedTag[] = [
     questions: [
       {
         tier: 1, type: "MCQ",
+        prompt: "Một biến vừa khai báo nhưng CHƯA được gán giá trị sẽ mang giá trị gì?",
+        options: ["undefined", "null", "0", "chuỗi rỗng"],
+        correctIndex: 0,
+      },
+      {
+        tier: 1, type: "MCQ",
         prompt: "Biến khai báo let x; mà chưa gán có giá trị gì?",
         options: ["undefined", "null", "0", '""'],
         correctIndex: 0,
@@ -712,6 +772,12 @@ export const PART1_NEN_TANG: JsSeedTag[] = [
     questions: [
       {
         tier: 1, type: "MCQ",
+        prompt: "Muốn kiểm tra biến gia đang là số hay chuỗi để xử lý cho đúng. Dùng toán tử nào?",
+        options: ["typeof gia", "checktype(gia)", "gia.type", "kind(gia)"],
+        correctIndex: 0,
+      },
+      {
+        tier: 1, type: "MCQ",
         prompt: "Không chắc biến x đang là số hay chuỗi, bạn muốn biết kiểu của nó. Dùng gì?",
         options: ["typeof x", "x.type", "type(x)", "x.typeof()"],
         correctIndex: 0,
@@ -773,6 +839,12 @@ export const PART1_NEN_TANG: JsSeedTag[] = [
     questions: [
       {
         tier: 1, type: "MCQ",
+        prompt: "Muốn tính thành tiền = đơn giá NHÂN số lượng. Dùng toán tử nào?",
+        options: ["*", "x", "mul", "^"],
+        correctIndex: 0,
+      },
+      {
+        tier: 1, type: "MCQ",
         prompt: "Muốn lấy phần dư của phép chia (vd để xét số chẵn/lẻ). Dùng toán tử nào?",
         options: ["%", "/", "//", "mod"],
         correctIndex: 0,
@@ -825,6 +897,12 @@ export const PART1_NEN_TANG: JsSeedTag[] = [
     part: PART,
     description: "So sánh chặt === (khuyên dùng) và lỏng ==",
     questions: [
+      {
+        tier: 1, type: "MCQ",
+        prompt: "Muốn so sánh CHẶT cả giá trị lẫn kiểu (an toàn, được khuyên dùng). Dùng toán tử nào?",
+        options: ["===", "==", "=", "!="],
+        correctIndex: 0,
+      },
       {
         tier: 1, type: "MCQ",
         prompt: "Toán tử so sánh BẰNG được khuyên dùng (so cả kiểu) là gì?",
@@ -896,6 +974,12 @@ export const PART1_NEN_TANG: JsSeedTag[] = [
     questions: [
       {
         tier: 1, type: "MCQ",
+        prompt: "Chỉ cho đặt hàng khi 'đã đăng nhập VÀ giỏ hàng không rỗng'. Dùng toán tử nào nối hai điều kiện?",
+        options: ["&&", "||", "!", "&"],
+        correctIndex: 0,
+      },
+      {
+        tier: 1, type: "MCQ",
         prompt: "Toán tử VÀ (cả hai điều kiện đúng) là gì?",
         options: ["&&", "||", "!", "and"],
         correctIndex: 0,
@@ -960,6 +1044,12 @@ export const PART1_NEN_TANG: JsSeedTag[] = [
     part: PART,
     description: "Chèn biến vào chuỗi bằng `${}`",
     questions: [
+      {
+        tier: 1, type: "MCQ",
+        prompt: "Muốn ghép lời chào dạng `Xin chào ${ten}` để chèn thẳng biến vào chuỗi. Dùng loại nháy nào?",
+        options: ["Backtick `...`", "Nháy đơn '...'", "Nháy kép \"...\"", "Ngoặc vuông [...]"],
+        correctIndex: 0,
+      },
       {
         tier: 1, type: "MCQ",
         prompt: "Chèn biến ten vào chuỗi hiện đại viết thế nào?",
@@ -1031,6 +1121,12 @@ export const PART1_NEN_TANG: JsSeedTag[] = [
     questions: [
       {
         tier: 1, type: "MCQ",
+        prompt: "Muốn đổi email người dùng nhập thành CHỮ THƯỜNG hết trước khi lưu. Dùng method nào?",
+        options: [".toLowerCase()", ".lower()", ".downcase()", ".small()"],
+        correctIndex: 0,
+      },
+      {
+        tier: 1, type: "MCQ",
         prompt: "Đổi chuỗi s sang CHỮ HOA dùng method nào?",
         options: ["s.toUpperCase()", "s.upper()", "s.toUpper()", "upperCase(s)"],
         correctIndex: 0,
@@ -1093,6 +1189,12 @@ export const PART1_NEN_TANG: JsSeedTag[] = [
     part: PART,
     description: "Chuyển đổi số ↔ chuỗi: Number(), String(), parseInt",
     questions: [
+      {
+        tier: 1, type: "MCQ",
+        prompt: "Ô input trả về '25' (chuỗi), muốn đổi sang SỐ để cộng trừ cho đúng. Dùng cách nào?",
+        options: ["Number('25')", "String('25')", "'25'.toNum()", "int('25')"],
+        correctIndex: 0,
+      },
       {
         tier: 1, type: "MCQ",
         prompt: 'Chuyển chuỗi "42" thành số dùng gì?',

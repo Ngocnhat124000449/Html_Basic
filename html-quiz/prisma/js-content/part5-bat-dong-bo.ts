@@ -17,6 +17,12 @@ export const PART5_BAT_DONG_BO: JsSeedTag[] = [
     questions: [
       {
         tier: 1, type: "MCQ",
+        prompt: "Hàm bạn truyền vào addEventListener để 'được gọi lại' khi có sự kiện gọi là gì?",
+        options: ["Callback", "Promise", "Class", "Module"],
+        correctIndex: 0,
+      },
+      {
+        tier: 1, type: "MCQ",
         prompt: "Bạn đưa một hàm cho setTimeout để nó 'gọi lại' khi tới giờ. Hàm được truyền kiểu đó gọi là gì?",
         options: ["Một HÀM được truyền vào hàm khác để gọi lại", "Một biến số", "Một vòng lặp", "Một class"],
         correctIndex: 0,
@@ -72,6 +78,12 @@ export const PART5_BAT_DONG_BO: JsSeedTag[] = [
     part: PART,
     description: "Hẹn chạy code sau một khoảng thời gian",
     questions: [
+      {
+        tier: 1, type: "MCQ",
+        prompt: "Muốn hiện thông báo 'Cảm ơn' SAU 3 giây kể từ khi đặt hàng. Dùng hàm nào?",
+        options: ["setTimeout", "setInterval", "wait(3)", "sleep(3)"],
+        correctIndex: 0,
+      },
       {
         tier: 1, type: "MCQ",
         prompt: "Chạy một hàm SAU 1 giây dùng gì?",
@@ -131,6 +143,12 @@ export const PART5_BAT_DONG_BO: JsSeedTag[] = [
     questions: [
       {
         tier: 1, type: "MCQ",
+        prompt: "Một thao tác cho kết quả TRONG TƯƠNG LAI (vd tải dữ liệu qua mạng). Đối tượng đại diện cho nó là gì?",
+        options: ["Promise", "Callback duy nhất", "Array", "Boolean"],
+        correctIndex: 0,
+      },
+      {
+        tier: 1, type: "MCQ",
         prompt: "Muốn biểu diễn một kết quả 'sẽ có trong tương lai' (vd tải xong dữ liệu). Tạo một Promise mới dùng cú pháp nào?",
         options: ["new Promise((resolve, reject) => ...)", "Promise.create()", "new Promise[]", "promise()"],
         correctIndex: 0,
@@ -185,6 +203,12 @@ export const PART5_BAT_DONG_BO: JsSeedTag[] = [
     part: PART,
     description: "Xử lý kết quả & lỗi của một Promise",
     questions: [
+      {
+        tier: 1, type: "MCQ",
+        prompt: "Sau khi một Promise hoàn tất, muốn xử lý KẾT QUẢ và bắt LỖI. Dùng cặp phương thức nào?",
+        options: [".then() và .catch()", ".do() và .err()", ".ok() và .fail()", ".run() và .stop()"],
+        correctIndex: 0,
+      },
       {
         tier: 1, type: "MCQ",
         prompt: "Nhận KẾT QUẢ khi Promise thành công dùng gì?",
@@ -245,6 +269,12 @@ export const PART5_BAT_DONG_BO: JsSeedTag[] = [
     questions: [
       {
         tier: 1, type: "MCQ",
+        prompt: "Muốn viết code gọi API trông tuần tự, dễ đọc như đồng bộ. Dùng cặp từ khóa nào?",
+        options: ["async / await", "then / then", "loop / wait", "sync / hold"],
+        correctIndex: 0,
+      },
+      {
+        tier: 1, type: "MCQ",
         prompt: "Đánh dấu một hàm là bất đồng bộ dùng từ khóa nào?",
         options: ["async", "await", "promise", "defer"],
         correctIndex: 0,
@@ -298,6 +328,12 @@ export const PART5_BAT_DONG_BO: JsSeedTag[] = [
     part: PART,
     description: "Bắt lỗi trong hàm async bằng try/catch",
     questions: [
+      {
+        tier: 1, type: "MCQ",
+        prompt: "Trong hàm async, muốn BẮT LỖI khi 'await fetch' thất bại (mất mạng). Dùng cấu trúc nào?",
+        options: ["try/catch", "if/else", "switch", "while"],
+        correctIndex: 0,
+      },
       {
         tier: 1, type: "MCQ",
         prompt: "Bắt lỗi của await trong hàm async dùng gì?",
@@ -356,6 +392,12 @@ export const PART5_BAT_DONG_BO: JsSeedTag[] = [
     part: PART,
     description: "Gọi API lấy dữ liệu qua mạng",
     questions: [
+      {
+        tier: 1, type: "MCQ",
+        prompt: "Muốn lấy danh sách sản phẩm từ một API qua mạng. Dùng hàm nào?",
+        options: ["fetch(url)", "get(url)", "http(url)", "load(url)"],
+        correctIndex: 0,
+      },
       {
         tier: 1, type: "MCQ",
         prompt: "Gọi một API để lấy dữ liệu dùng gì?",
@@ -417,6 +459,12 @@ export const PART5_BAT_DONG_BO: JsSeedTag[] = [
     questions: [
       {
         tier: 1, type: "MCQ",
+        prompt: "Một hàm trả về mảng [data, error]. Muốn rút nhanh ra hai biến theo VỊ TRÍ. Cú pháp nào?",
+        options: ["const [data, error] = ketQua", "const { data } = ketQua", "data = ketQua.0", "ketQua -> data"],
+        correctIndex: 0,
+      },
+      {
+        tier: 1, type: "MCQ",
         prompt: "Rút hai phần tử đầu mảng ra biến viết thế nào?",
         options: ["const [a, b] = arr", "const {a, b} = arr", "const a, b = arr", "const [a; b] = arr"],
         correctIndex: 0,
@@ -474,6 +522,12 @@ export const PART5_BAT_DONG_BO: JsSeedTag[] = [
     questions: [
       {
         tier: 1, type: "MCQ",
+        prompt: "Muốn gộp hai mảng sản phẩm cũ và mới thành một mảng mới. Dùng cú pháp nào?",
+        options: ["[...cu, ...moi]", "cu - moi", "merge(cu, moi)", "cu && moi"],
+        correctIndex: 0,
+      },
+      {
+        tier: 1, type: "MCQ",
         prompt: "Gom MỌI tham số của hàm vào một mảng dùng?",
         options: ["function f(...args) {}", "function f(args[]) {}", "function f(*args) {}", "function f(args...) {}"],
         correctIndex: 0,
@@ -529,6 +583,12 @@ export const PART5_BAT_DONG_BO: JsSeedTag[] = [
     part: PART,
     description: "Truy cập an toàn (?.) và giá trị thay thế (??)",
     questions: [
+      {
+        tier: 1, type: "MCQ",
+        prompt: "Muốn đọc user.diaChi.thanhPho mà KHÔNG lỗi nếu diaChi chưa có. Dùng cú pháp nào?",
+        options: ["user.diaChi?.thanhPho", "user.diaChi.thanhPho", "user!diaChi!thanhPho", "user..thanhPho"],
+        correctIndex: 0,
+      },
       {
         tier: 1, type: "MCQ",
         prompt: "Truy cập a.b.c an toàn khi b có thể là null dùng?",

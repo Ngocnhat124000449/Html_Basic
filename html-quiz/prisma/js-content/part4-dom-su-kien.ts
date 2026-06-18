@@ -15,6 +15,17 @@ export const PART4_DOM_SU_KIEN: JsSeedTag[] = [
     questions: [
       {
         tier: 1, type: "MCQ",
+        prompt: "Muốn lấy phần tử có class 'gio-hang' để cập nhật bằng JS. Dùng cách nào?",
+        options: [
+          "document.querySelector('.gio-hang')",
+          "document.get('.gio-hang')",
+          "find('.gio-hang')",
+          "$('gio-hang')",
+        ],
+        correctIndex: 0,
+      },
+      {
+        tier: 1, type: "MCQ",
         prompt: "Bấm nút 'Ẩn', bạn cần lấy hộp thông báo trên trang (theo CSS selector) để thao tác. Chọn phần tử ĐẦU TIÊN khớp selector dùng gì?",
         options: ["document.querySelector(sel)", "document.select(sel)", "document.find(sel)", "document.get(sel)"],
         correctIndex: 0,
@@ -68,6 +79,17 @@ export const PART4_DOM_SU_KIEN: JsSeedTag[] = [
     part: PART,
     description: "Chọn TẤT CẢ phần tử khớp selector (trả NodeList)",
     questions: [
+      {
+        tier: 1, type: "MCQ",
+        prompt: "Muốn lấy TẤT CẢ các nút có class 'them' để gắn cùng một sự kiện. Dùng cách nào?",
+        options: [
+          "document.querySelectorAll('.them')",
+          "document.querySelector('.them')",
+          "document.getElementById('them')",
+          "getAll('them')",
+        ],
+        correctIndex: 0,
+      },
       {
         tier: 1, type: "MCQ",
         prompt: "Muốn tô đậm TẤT CẢ ô .card đang có trên trang. Chọn tất cả phần tử khớp selector dùng gì?",
@@ -129,6 +151,17 @@ export const PART4_DOM_SU_KIEN: JsSeedTag[] = [
     part: PART,
     description: "Chọn nhanh phần tử theo thuộc tính id",
     questions: [
+      {
+        tier: 1, type: "MCQ",
+        prompt: "Nút thanh toán có id='checkout'. Cách lấy nhanh phần tử theo id là gì?",
+        options: [
+          "document.getElementById('checkout')",
+          "document.querySelectorAll('#checkout')",
+          "document.getClass('checkout')",
+          "byId.checkout",
+        ],
+        correctIndex: 0,
+      },
       {
         tier: 1, type: "MCQ",
         prompt: "Ô nhập họ tên có id là 'hoTen'. Muốn lấy đúng nó theo id dùng gì?",
@@ -193,6 +226,12 @@ export const PART4_DOM_SU_KIEN: JsSeedTag[] = [
     questions: [
       {
         tier: 1, type: "MCQ",
+        prompt: "Muốn đổi CHỮ thuần của thẻ tổng tiền thành '500.000đ'. Dùng thuộc tính nào?",
+        options: ["el.textContent", "el.value", "el.src", "el.class"],
+        correctIndex: 0,
+      },
+      {
+        tier: 1, type: "MCQ",
         prompt: "Muốn đổi dòng chữ trong thẻ tiêu đề thành 'Xin chào'. Đổi phần CHỮ hiển thị của phần tử dùng thuộc tính nào?",
         options: ["el.textContent = ...", "el.text = ...", "el.value = ...", "el.label = ..."],
         correctIndex: 0,
@@ -253,6 +292,12 @@ export const PART4_DOM_SU_KIEN: JsSeedTag[] = [
     questions: [
       {
         tier: 1, type: "MCQ",
+        prompt: "Muốn chèn cả một đoạn HTML (có thẻ <b>) vào bên trong một <div>. Dùng thuộc tính nào?",
+        options: ["el.innerHTML", "el.textContent", "el.value", "el.outerText"],
+        correctIndex: 0,
+      },
+      {
+        tier: 1, type: "MCQ",
         prompt: "Muốn chèn đoạn '<b>Hi</b>' để chữ in đậm THẬT bên trong phần tử. Đặt nội dung HTML bên trong phần tử dùng gì?",
         options: ['el.innerHTML = "<b>Hi</b>"', 'el.textContent = "<b>Hi</b>"', "el.html = ...", "el.setHTML = ..."],
         correctIndex: 0,
@@ -310,6 +355,12 @@ export const PART4_DOM_SU_KIEN: JsSeedTag[] = [
     part: PART,
     description: "Lấy & đặt giá trị ô <input>, <textarea>, <select>",
     questions: [
+      {
+        tier: 1, type: "MCQ",
+        prompt: "Muốn LẤY nội dung người dùng vừa gõ trong ô <input>. Dùng thuộc tính nào?",
+        options: ["input.value", "input.textContent", "input.innerHTML", "input.text"],
+        correctIndex: 0,
+      },
       {
         tier: 1, type: "MCQ",
         prompt: "Lấy chữ người dùng gõ trong ô <input> dùng gì?",
@@ -374,6 +425,17 @@ export const PART4_DOM_SU_KIEN: JsSeedTag[] = [
     questions: [
       {
         tier: 1, type: "MCQ",
+        prompt: "Muốn BẬT/TẮT class 'active' trên một tab khi người dùng bấm. Dùng phương thức nào?",
+        options: [
+          "el.classList.toggle('active')",
+          "el.class = 'active'",
+          "el.addClass('active')",
+          "el.style.active",
+        ],
+        correctIndex: 0,
+      },
+      {
+        tier: 1, type: "MCQ",
         prompt: "Bấm vào một mục để 'kích hoạt' nó — cần thêm class 'active' cho phần tử. Dùng gì?",
         options: ['el.classList.add("active")', 'el.class = "active"', 'el.addClass("active")', 'el.classList = "active"'],
         correctIndex: 0,
@@ -434,6 +496,17 @@ export const PART4_DOM_SU_KIEN: JsSeedTag[] = [
     questions: [
       {
         tier: 1, type: "MCQ",
+        prompt: "Muốn đổi nhanh màu nền một thẻ thành đỏ bằng JS. Dùng cách nào?",
+        options: [
+          "el.style.background = 'red'",
+          "el.css('red')",
+          "el.color = 'red'",
+          "el.background('red')",
+        ],
+        correctIndex: 0,
+      },
+      {
+        tier: 1, type: "MCQ",
         prompt: "Đổi màu chữ phần tử trực tiếp bằng JS dùng gì?",
         options: ['el.style.color = "red"', 'el.color = "red"', 'el.css("color", "red")', 'el.style = "red"'],
         correctIndex: 0,
@@ -492,6 +565,17 @@ export const PART4_DOM_SU_KIEN: JsSeedTag[] = [
     questions: [
       {
         tier: 1, type: "MCQ",
+        prompt: "Muốn chạy một hàm KHI người dùng bấm nút. Gắn bằng cách nào?",
+        options: [
+          "nut.addEventListener('click', xuLy)",
+          "nut.onClick = xuLy()",
+          "nut.click()",
+          "listen(nut)",
+        ],
+        correctIndex: 0,
+      },
+      {
+        tier: 1, type: "MCQ",
         prompt: "Gắn xử lý khi NGƯỜI DÙNG bấm nút dùng gì?",
         options: ['nut.addEventListener("click", handler)', "nut.onClick(handler)", "nut.click = handler", 'nut.listen("click")'],
         correctIndex: 0,
@@ -548,6 +632,12 @@ export const PART4_DOM_SU_KIEN: JsSeedTag[] = [
     questions: [
       {
         tier: 1, type: "MCQ",
+        prompt: "Trong hàm xử lý sự kiện, muốn biết thông tin về cú bấm vừa xảy ra. Lấy từ đâu?",
+        options: ["Tham số e (event) của hàm", "Biến toàn cục key", "document.key", "this.key"],
+        correctIndex: 0,
+      },
+      {
+        tier: 1, type: "MCQ",
         prompt: "Hàm xử lý sự kiện tự nhận tham số gì?",
         options: ["Đối tượng sự kiện (event), thường đặt tên e", "Không nhận gì", "Cả trang web", "Tên sự kiện"],
         correctIndex: 0,
@@ -602,6 +692,12 @@ export const PART4_DOM_SU_KIEN: JsSeedTag[] = [
     part: PART,
     description: "Chặn hành vi mặc định của trình duyệt (submit form, link)",
     questions: [
+      {
+        tier: 1, type: "MCQ",
+        prompt: "Muốn chặn form TỰ TẢI LẠI trang khi submit để xử lý bằng JS. Gọi gì trong hàm xử lý?",
+        options: ["e.preventDefault()", "e.stop()", "return true", "e.cancel = 1"],
+        correctIndex: 0,
+      },
       {
         tier: 1, type: "MCQ",
         prompt: "Ngăn form tải lại trang khi submit dùng gì?",
@@ -670,6 +766,12 @@ export const PART4_DOM_SU_KIEN: JsSeedTag[] = [
     questions: [
       {
         tier: 1, type: "MCQ",
+        prompt: "Muốn tạo MỚI một thẻ <li> bằng JS để thêm vào danh sách việc cần làm. Dùng hàm nào?",
+        options: ["document.createElement('li')", "new Element('li')", "document.add('li')", "make('li')"],
+        correctIndex: 0,
+      },
+      {
+        tier: 1, type: "MCQ",
         prompt: "Tạo một thẻ <p> mới bằng JS dùng gì?",
         options: ['document.createElement("p")', 'document.newElement("p")', 'document.create("<p>")', 'new Element("p")'],
         correctIndex: 0,
@@ -725,6 +827,12 @@ export const PART4_DOM_SU_KIEN: JsSeedTag[] = [
     questions: [
       {
         tier: 1, type: "MCQ",
+        prompt: "Đã tạo phần tử <li> mới, muốn GẮN nó vào trong <ul>. Dùng phương thức nào?",
+        options: ["ul.appendChild(li)", "ul.add(li)", "ul.push(li)", "li.into(ul)"],
+        correctIndex: 0,
+      },
+      {
+        tier: 1, type: "MCQ",
         prompt: "Gắn phần tử con vào trong phần tử cha dùng gì?",
         options: ["cha.appendChild(con)", "cha.add(con)", "cha.push(con)", "con.appendTo(cha)"],
         correctIndex: 0,
@@ -777,6 +885,12 @@ export const PART4_DOM_SU_KIEN: JsSeedTag[] = [
     part: PART,
     description: "Gỡ phần tử khỏi trang",
     questions: [
+      {
+        tier: 1, type: "MCQ",
+        prompt: "Người dùng bấm 'Xóa' một món trong giỏ. Muốn GỠ thẻ đó khỏi trang. Dùng cách nào?",
+        options: ["el.remove()", "el.delete()", "el.hide()", "el.clear()"],
+        correctIndex: 0,
+      },
       {
         tier: 1, type: "MCQ",
         prompt: "Gỡ phần tử el khỏi trang (cách hiện đại) dùng gì?",

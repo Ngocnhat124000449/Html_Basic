@@ -17,6 +17,17 @@ export const PART7_CLEAN_CODE: JsSeedTag[] = [
     questions: [
       {
         tier: 1, type: "MCQ",
+        prompt: "Đọc lại code thấy các biến tên 'd', 'x2', 'tmp'. Vấn đề chính là gì?",
+        options: [
+          "Tên không nói lên ý nghĩa — khó hiểu, khó bảo trì",
+          "Chạy sai kết quả",
+          "Tốn RAM",
+          "Lỗi cú pháp",
+        ],
+        correctIndex: 0,
+      },
+      {
+        tier: 1, type: "MCQ",
         prompt: "Tên biến nào dưới đây nói rõ nhất rằng nó lưu tổng chi tiêu?",
         options: ["tongChi", "x", "a1", "tmp"],
         correctIndex: 0,
@@ -87,6 +98,17 @@ export const PART7_CLEAN_CODE: JsSeedTag[] = [
     part: PART,
     description: "Gom code lặp vào một hàm dùng lại — Don't Repeat Yourself",
     questions: [
+      {
+        tier: 1, type: "MCQ",
+        prompt: "Thấy cùng đoạn tính giảm giá bị chép ở 3 trang. Theo nguyên tắc DRY nên làm gì?",
+        options: [
+          "Tách thành một hàm dùng chung",
+          "Chép thêm cho trang thứ 4",
+          "Xóa hết đi",
+          "Đổi tên biến ở mỗi nơi",
+        ],
+        correctIndex: 0,
+      },
       {
         tier: 1, type: "MCQ",
         prompt: "DRY trong lập trình là viết tắt của nguyên tắc nào?",
@@ -176,6 +198,17 @@ export const PART7_CLEAN_CODE: JsSeedTag[] = [
     questions: [
       {
         tier: 1, type: "MCQ",
+        prompt: "Một hàm 200 dòng vừa tải dữ liệu, vừa vẽ, vừa lưu. Hướng cải thiện theo clean code là gì?",
+        options: [
+          "Tách thành nhiều hàm nhỏ, mỗi hàm một việc",
+          "Gộp thêm việc nữa cho gọn file",
+          "Để nguyên cho nhanh",
+          "Xóa bớt tính năng",
+        ],
+        correctIndex: 0,
+      },
+      {
+        tier: 1, type: "MCQ",
         prompt: "Một hàm tốt nên làm bao nhiêu việc chính?",
         options: [
           "Một việc duy nhất, làm cho thật tốt",
@@ -261,6 +294,17 @@ export const PART7_CLEAN_CODE: JsSeedTag[] = [
     part: PART,
     description: "Chia dự án theo chức năng: storage, render, calc",
     questions: [
+      {
+        tier: 1, type: "MCQ",
+        prompt: "Dự án dồn hết vào một file app.js rối rắm. Cách tổ chức tốt hơn là gì?",
+        options: [
+          "Tách thành các module: storage, render, calc",
+          "Viết tất cả vào index.html",
+          "Đổi sang một file CSS",
+          "Xóa bớt hàm cho gọn",
+        ],
+        correctIndex: 0,
+      },
       {
         tier: 1, type: "MCQ",
         prompt: "Tách dự án thành các file storage, render, calc nhằm mục đích gì?",

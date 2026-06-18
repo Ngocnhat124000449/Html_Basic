@@ -15,6 +15,12 @@ export const PART3_DU_LIEU: JsSeedTag[] = [
     questions: [
       {
         tier: 1, type: "MCQ",
+        prompt: "Giỏ hàng có 3 món trong mảng giohang, muốn lấy món ĐẦU TIÊN. Viết thế nào?",
+        options: ["giohang[0]", "giohang[1]", "giohang.first", "giohang(0)"],
+        correctIndex: 0,
+      },
+      {
+        tier: 1, type: "MCQ",
         prompt: "Muốn chuẩn bị một giỏ hàng chưa có món nào. Tạo một mảng rỗng viết thế nào?",
         options: ["const a = []", "const a = {}", "const a = ()", "const a = new Array{}"],
         correctIndex: 0,
@@ -75,6 +81,12 @@ export const PART3_DU_LIEU: JsSeedTag[] = [
     part: PART,
     description: "push thêm cuối, pop lấy & xóa cuối",
     questions: [
+      {
+        tier: 1, type: "MCQ",
+        prompt: "Người dùng thêm một món vào CUỐI giỏ hàng. Dùng method mảng nào?",
+        options: ["push", "pop", "shift", "unshift"],
+        correctIndex: 0,
+      },
       {
         tier: 1, type: "MCQ",
         prompt: "Người dùng bấm 'Thêm vào giỏ', cần đưa món mới vào CUỐI mảng giỏ hàng. Dùng method nào?",
@@ -144,6 +156,12 @@ export const PART3_DU_LIEU: JsSeedTag[] = [
     questions: [
       {
         tier: 1, type: "MCQ",
+        prompt: "Muốn lấy ra và XÓA người ĐẦU TIÊN của hàng đợi (mảng). Dùng method nào?",
+        options: ["shift", "unshift", "pop", "push"],
+        correctIndex: 0,
+      },
+      {
+        tier: 1, type: "MCQ",
         prompt: "Muốn chèn thông báo mới nhất lên ĐẦU danh sách. Thêm một phần tử vào đầu mảng dùng method nào?",
         options: ["arr.unshift(x)", "arr.push(x)", "arr.shift(x)", "arr.first(x)"],
         correctIndex: 0,
@@ -211,6 +229,12 @@ export const PART3_DU_LIEU: JsSeedTag[] = [
     questions: [
       {
         tier: 1, type: "MCQ",
+        prompt: "Muốn kiểm tra mã giảm giá người dùng nhập CÓ nằm trong danh sách hợp lệ không (đúng/sai). Dùng method nào?",
+        options: ["includes", "push", "map", "sort"],
+        correctIndex: 0,
+      },
+      {
+        tier: 1, type: "MCQ",
         prompt: "Kiểm tra danh sách yêu thích có chứa sản phẩm x chưa (trả true/false). Dùng gì?",
         options: ["arr.includes(x)", "arr.has(x)", "arr.contains(x)", "arr.exists(x)"],
         correctIndex: 0,
@@ -274,6 +298,12 @@ export const PART3_DU_LIEU: JsSeedTag[] = [
     part: PART,
     description: "Duyệt qua từng phần tử để xử lý (không trả mảng mới)",
     questions: [
+      {
+        tier: 1, type: "MCQ",
+        prompt: "Muốn duyệt từng món trong giỏ để IN ra console (không cần tạo mảng mới). Dùng method nào?",
+        options: ["forEach", "map", "filter", "reduce"],
+        correctIndex: 0,
+      },
       {
         tier: 1, type: "MCQ",
         prompt: "Duyệt từng phần tử mảng để xử lý (vd in ra) dùng method nào?",
@@ -342,6 +372,12 @@ export const PART3_DU_LIEU: JsSeedTag[] = [
     questions: [
       {
         tier: 1, type: "MCQ",
+        prompt: "Có mảng giá [100,200], muốn tạo MẢNG MỚI gồm giá đã cộng 10% thuế. Dùng method nào?",
+        options: ["map", "forEach", "filter", "find"],
+        correctIndex: 0,
+      },
+      {
+        tier: 1, type: "MCQ",
         prompt: "Có mảng giá gốc, muốn tạo mảng MỚI giá đã giảm 10% cho từng món. Dùng method nào?",
         options: ["arr.map(x => ...)", "arr.forEach(x => ...)", "arr.change(x => ...)", "arr.transform(x => ...)"],
         correctIndex: 0,
@@ -402,6 +438,12 @@ export const PART3_DU_LIEU: JsSeedTag[] = [
     part: PART,
     description: "Lọc ra MẢNG MỚI gồm các phần tử thỏa điều kiện",
     questions: [
+      {
+        tier: 1, type: "MCQ",
+        prompt: "Muốn LỌC ra các sản phẩm CÒN HÀNG từ danh sách thành mảng mới. Dùng method nào?",
+        options: ["filter", "map", "reduce", "sort"],
+        correctIndex: 0,
+      },
       {
         tier: 1, type: "MCQ",
         prompt: "Từ danh sách sản phẩm, muốn lấy MẢNG MỚI chỉ gồm món còn hàng. Dùng method nào?",
@@ -469,6 +511,12 @@ export const PART3_DU_LIEU: JsSeedTag[] = [
     part: PART,
     description: "Gộp cả mảng về MỘT giá trị (tổng, tích, ...)",
     questions: [
+      {
+        tier: 1, type: "MCQ",
+        prompt: "Muốn tính TỔNG tiền của cả giỏ hàng về MỘT con số. Dùng method nào?",
+        options: ["reduce", "map", "filter", "forEach"],
+        correctIndex: 0,
+      },
       {
         tier: 1, type: "MCQ",
         prompt: "Cộng tổng tiền của mọi món trong giỏ về MỘT con số. Gộp cả mảng thành một giá trị dùng method nào?",
@@ -543,6 +591,12 @@ export const PART3_DU_LIEU: JsSeedTag[] = [
     questions: [
       {
         tier: 1, type: "MCQ",
+        prompt: "Muốn lấy ra sản phẩm ĐẦU TIÊN có id = 5 trong danh sách. Dùng method nào?",
+        options: ["find", "filter", "map", "includes"],
+        correctIndex: 0,
+      },
+      {
+        tier: 1, type: "MCQ",
         prompt: "Muốn lấy người dùng ĐẦU TIÊN có tuoi > 18 trong danh sách. Dùng method nào?",
         options: ["arr.find(x => điều_kiện)", "arr.filter(x => ...)", "arr.search(x => ...)", "arr.get(x => ...)"],
         correctIndex: 0,
@@ -615,6 +669,12 @@ export const PART3_DU_LIEU: JsSeedTag[] = [
     questions: [
       {
         tier: 1, type: "MCQ",
+        prompt: "Muốn SẮP XẾP danh sách sản phẩm theo giá tăng dần để hiển thị. Dùng method nào?",
+        options: ["sort", "reverse", "map", "filter"],
+        correctIndex: 0,
+      },
+      {
+        tier: 1, type: "MCQ",
         prompt: "Muốn sắp xếp danh sách điểm từ thấp đến cao để hiển thị. Sắp xếp mảng dùng method nào?",
         options: ["arr.sort()", "arr.order()", "arr.arrange()", "sort(arr)"],
         correctIndex: 0,
@@ -682,6 +742,12 @@ export const PART3_DU_LIEU: JsSeedTag[] = [
     part: PART,
     description: "Object {} gom dữ liệu theo cặp khóa: giá trị",
     questions: [
+      {
+        tier: 1, type: "MCQ",
+        prompt: "Một sản phẩm có các trường tên, giá, tồn kho — gom các trường CÓ TÊN này. Dùng cấu trúc nào?",
+        options: ["object {}", "mảng []", "chuỗi", "số"],
+        correctIndex: 0,
+      },
       {
         tier: 1, type: "MCQ",
         prompt: "Tạo một object mô tả người dùng viết thế nào?",
@@ -756,6 +822,12 @@ export const PART3_DU_LIEU: JsSeedTag[] = [
     questions: [
       {
         tier: 1, type: "MCQ",
+        prompt: "Muốn cập nhật giá một sản phẩm bằng sp.gia = 150000. Đây là thao tác gì?",
+        options: ["Sửa thuộc tính của object", "Tạo mảng mới", "Ép kiểu", "Xóa object"],
+        correctIndex: 0,
+      },
+      {
+        tier: 1, type: "MCQ",
         prompt: 'Gán u.tuoi = 21 trên object u làm gì?',
         options: [
           "Đặt/cập nhật thuộc tính tuoi thành 21",
@@ -828,6 +900,12 @@ export const PART3_DU_LIEU: JsSeedTag[] = [
     questions: [
       {
         tier: 1, type: "MCQ",
+        prompt: "Muốn lấy DANH SÁCH các khóa của object cấu hình để duyệt qua. Dùng cách nào?",
+        options: ["Object.keys(obj)", "obj.keys", "keys(obj)", "obj.getKeys"],
+        correctIndex: 0,
+      },
+      {
+        tier: 1, type: "MCQ",
         prompt: "Lấy MẢNG các khóa của object obj dùng gì?",
         options: ["Object.keys(obj)", "obj.keys()", "keys(obj)", "obj.allKeys"],
         correctIndex: 0,
@@ -898,6 +976,12 @@ export const PART3_DU_LIEU: JsSeedTag[] = [
     part: PART,
     description: "Rút thuộc tính ra biến gọn: const { ten } = nguoi",
     questions: [
+      {
+        tier: 1, type: "MCQ",
+        prompt: "Muốn rút nhanh ten và gia từ object sp ra hai biến riêng. Dùng cú pháp nào?",
+        options: ["const { ten, gia } = sp", "const ten, gia = sp", "sp -> ten, gia", "[ten, gia] = sp"],
+        correctIndex: 0,
+      },
       {
         tier: 1, type: "MCQ",
         prompt: "Rút thuộc tính ten từ object nguoi ra biến viết thế nào?",
@@ -977,6 +1061,12 @@ export const PART3_DU_LIEU: JsSeedTag[] = [
     questions: [
       {
         tier: 1, type: "MCQ",
+        prompt: "Muốn tạo bản sao object user rồi đổi một trường mà KHÔNG sửa bản gốc. Dùng cú pháp nào?",
+        options: ["{ ...user, ten: 'Mới' }", "user.copy()", "clone(user)", "user + ten"],
+        correctIndex: 0,
+      },
+      {
+        tier: 1, type: "MCQ",
         prompt: "Tạo BẢN SAO của object u dùng cú pháp nào?",
         options: ["const v = { ...u }", "const v = u.copy()", "const v = u", "const v = [...u]"],
         correctIndex: 0,
@@ -1051,6 +1141,12 @@ export const PART3_DU_LIEU: JsSeedTag[] = [
     part: PART,
     description: "Chuyển object/mảng thành CHUỖI JSON để lưu/gửi",
     questions: [
+      {
+        tier: 1, type: "MCQ",
+        prompt: "Muốn lưu giỏ hàng (object) vào localStorage dưới dạng chuỗi. Dùng hàm nào?",
+        options: ["JSON.stringify", "JSON.parse", "toString", "String() là đủ"],
+        correctIndex: 0,
+      },
       {
         tier: 1, type: "MCQ",
         prompt: "Muốn lưu object giỏ hàng vào localStorage (chỉ nhận chuỗi). Chuyển object thành chuỗi JSON dùng gì?",
@@ -1128,6 +1224,12 @@ export const PART3_DU_LIEU: JsSeedTag[] = [
     part: PART,
     description: "Chuyển chuỗi JSON trở lại object/mảng để dùng",
     questions: [
+      {
+        tier: 1, type: "MCQ",
+        prompt: "Đọc chuỗi JSON từ localStorage, muốn đổi lại thành object để dùng. Dùng hàm nào?",
+        options: ["JSON.parse", "JSON.stringify", "Number()", "eval"],
+        correctIndex: 0,
+      },
       {
         tier: 1, type: "MCQ",
         prompt: "Đọc lại chuỗi JSON từ localStorage và muốn dùng nó như object. Chuyển chuỗi JSON trở lại object dùng gì?",

@@ -16,6 +16,12 @@ export const PART2_LUONG_HAM: JsSeedTag[] = [
     questions: [
       {
         tier: 1, type: "MCQ",
+        prompt: "Muốn hiện 'Miễn phí ship' khi tổng đơn ≥ 500k, ngược lại tính phí. Dùng cấu trúc nào?",
+        options: ["if...else", "vòng for", "switch luôn", "while"],
+        correctIndex: 0,
+      },
+      {
+        tier: 1, type: "MCQ",
         prompt: "Form đăng nhập cần: nếu nhập đúng thì cho vào trang. Câu điều kiện cơ bản trong JS viết theo cú pháp nào?",
         options: ["if (điều_kiện) { ... }", "if điều_kiện then ...", "when (đk) { ... }", "if [đk] { ... }"],
         correctIndex: 0,
@@ -88,6 +94,12 @@ export const PART2_LUONG_HAM: JsSeedTag[] = [
     part: PART,
     description: "Nhiều nhánh loại trừ nhau nối tiếp bằng else if",
     questions: [
+      {
+        tier: 1, type: "MCQ",
+        prompt: "Xếp hạng thành viên theo điểm với nhiều mốc loại trừ nhau (Vàng/Bạc/Đồng). Dùng cấu trúc nào?",
+        options: ["Chuỗi if...else if", "Nhiều vòng for", "Một biến duy nhất", "Một câu if đơn"],
+        correctIndex: 0,
+      },
       {
         tier: 1, type: "MCQ",
         prompt: "Xếp loại học lực Giỏi / Khá / Trung bình theo nhiều mức điểm loại trừ nhau. Dùng cấu trúc nào?",
@@ -170,6 +182,12 @@ export const PART2_LUONG_HAM: JsSeedTag[] = [
     questions: [
       {
         tier: 1, type: "MCQ",
+        prompt: "Muốn gán nhanh: nhan = diem >= 5 ? 'Đạt' : 'Trượt' gọn trong một dòng. Đó là toán tử gì?",
+        options: ["Toán tử 3 ngôi ? :", "Toán tử && ", "Vòng for", "switch"],
+        correctIndex: 0,
+      },
+      {
+        tier: 1, type: "MCQ",
         prompt: "Muốn gán nhanh một biến theo điều kiện chỉ trong một dòng. Cú pháp toán tử 3 ngôi (ternary) là gì?",
         options: ["dk ? a : b", "dk ? a , b", "if dk a else b", "dk => a : b"],
         correctIndex: 0,
@@ -249,6 +267,12 @@ export const PART2_LUONG_HAM: JsSeedTag[] = [
     questions: [
       {
         tier: 1, type: "MCQ",
+        prompt: "Hiển thị tên thứ theo số 1..7 (nhiều giá trị cụ thể rời rạc). Cấu trúc nào gọn nhất?",
+        options: ["switch/case", "Hàng chục if lồng nhau", "vòng for", "while"],
+        correctIndex: 0,
+      },
+      {
+        tier: 1, type: "MCQ",
         prompt: "Hiển thị tên thứ theo mã 'T2', 'T3', 'T4'... So MỘT giá trị với nhiều trường hợp cụ thể — switch dùng để làm gì?",
         options: [
           "So MỘT giá trị với nhiều case cụ thể",
@@ -325,6 +349,12 @@ export const PART2_LUONG_HAM: JsSeedTag[] = [
     questions: [
       {
         tier: 1, type: "MCQ",
+        prompt: "Muốn in ra 10 dòng sản phẩm giả lập (lặp đúng 10 lần đã biết trước). Dùng vòng nào?",
+        options: ["for", "while(true)", "if", "switch"],
+        correctIndex: 0,
+      },
+      {
+        tier: 1, type: "MCQ",
         prompt: "Muốn lặp đúng 10 lần để in 10 dòng số thứ tự. Cú pháp vòng for cơ bản là gì?",
         options: [
           "for (let i = 0; i < n; i++) { ... }",
@@ -393,6 +423,12 @@ export const PART2_LUONG_HAM: JsSeedTag[] = [
     part: PART,
     description: "Lặp tới khi điều kiện thành false (chưa biết trước số lần)",
     questions: [
+      {
+        tier: 1, type: "MCQ",
+        prompt: "Muốn lặp hỏi mật khẩu TỚI KHI người dùng nhập đúng (chưa biết trước số lần). Dùng vòng nào?",
+        options: ["while", "for đúng 1 lần", "switch", "if"],
+        correctIndex: 0,
+      },
       {
         tier: 1, type: "MCQ",
         prompt: "Lặp lại tới khi người dùng nhập đúng mật khẩu (chưa biết trước mấy lần). Cú pháp vòng while là gì?",
@@ -473,6 +509,12 @@ export const PART2_LUONG_HAM: JsSeedTag[] = [
     questions: [
       {
         tier: 1, type: "MCQ",
+        prompt: "Đang duyệt danh sách, tìm thấy món cần thì muốn DỪNG vòng lặp ngay. Dùng từ khóa nào?",
+        options: ["break", "continue", "return", "stop"],
+        correctIndex: 0,
+      },
+      {
+        tier: 1, type: "MCQ",
         prompt: "Đang duyệt danh sách, vừa tìm thấy món cần nên muốn dừng tìm luôn. break trong vòng lặp làm gì?",
         options: ["Thoát khỏi vòng lặp ngay lập tức", "Bỏ qua 1 vòng", "Khởi động lại vòng lặp", "Không làm gì"],
         correctIndex: 0,
@@ -543,6 +585,12 @@ export const PART2_LUONG_HAM: JsSeedTag[] = [
     part: PART,
     description: "Lặp qua từng phần tử của mảng/chuỗi gọn gàng",
     questions: [
+      {
+        tier: 1, type: "MCQ",
+        prompt: "Muốn duyệt qua TỪNG sản phẩm trong mảng giohang để in tên, gọn nhất. Dùng cú pháp nào?",
+        options: ["for (const sp of giohang)", "for (i=0; i<n; i++) thủ công", "while", "switch"],
+        correctIndex: 0,
+      },
       {
         tier: 1, type: "MCQ",
         prompt: "Lặp qua từng phần tử của mảng arr theo cách hiện đại dùng cú pháp nào?",
@@ -625,6 +673,12 @@ export const PART2_LUONG_HAM: JsSeedTag[] = [
     questions: [
       {
         tier: 1, type: "MCQ",
+        prompt: "Đoạn tính tổng tiền được dùng lại ở nhiều nơi. Nên gói nó vào đâu để tái sử dụng?",
+        options: ["Một hàm (function)", "Một biến const", "Một vòng for", "Một file CSS"],
+        correctIndex: 0,
+      },
+      {
+        tier: 1, type: "MCQ",
         prompt: "Khai báo một hàm tên chao dùng từ khóa nào?",
         options: ["function", "def", "func", "fn"],
         correctIndex: 0,
@@ -695,6 +749,12 @@ export const PART2_LUONG_HAM: JsSeedTag[] = [
     part: PART,
     description: "Truyền dữ liệu vào hàm (tham số) và lấy kết quả ra (return)",
     questions: [
+      {
+        tier: 1, type: "MCQ",
+        prompt: "Hàm tinhTong cần NHẬN danh sách giá và TRẢ kết quả ra ngoài. Dùng cặp khái niệm nào?",
+        options: ["Tham số và return", "class và new", "import và export", "try và catch"],
+        correctIndex: 0,
+      },
       {
         tier: 1, type: "MCQ",
         prompt: "Muốn hàm cong nhận vào hai số a và b để cộng. Tham số của hàm được khai báo ở đâu?",
@@ -772,6 +832,12 @@ export const PART2_LUONG_HAM: JsSeedTag[] = [
     part: PART,
     description: "Cú pháp hàm ngắn gọn với =>",
     questions: [
+      {
+        tier: 1, type: "MCQ",
+        prompt: "Muốn viết hàm ngắn gọn để truyền vào .map() bằng cú pháp =>. Đó là loại hàm gì?",
+        options: ["Arrow function", "Generator", "Class", "Callback duy nhất"],
+        correctIndex: 0,
+      },
       {
         tier: 1, type: "MCQ",
         prompt: "Gán một arrow function vào biến viết thế nào?",
@@ -855,6 +921,12 @@ export const PART2_LUONG_HAM: JsSeedTag[] = [
     questions: [
       {
         tier: 1, type: "MCQ",
+        prompt: "Hàm chao(ten) muốn khi không truyền tên thì mặc định là 'bạn'. Dùng kỹ thuật nào?",
+        options: ["Tham số mặc định: chao(ten = 'bạn')", "try/catch", "Một câu if rất dài", "Biến toàn cục"],
+        correctIndex: 0,
+      },
+      {
+        tier: 1, type: "MCQ",
         prompt: "Đặt giá trị mặc định cho tham số x là 10 viết thế nào?",
         options: ["function f(x = 10) {}", "function f(x := 10) {}", "function f(x default 10) {}", "function f(x | 10) {}"],
         correctIndex: 0,
@@ -923,6 +995,17 @@ export const PART2_LUONG_HAM: JsSeedTag[] = [
     part: PART,
     description: "Scope: biến trong hàm/block không 'rò' ra ngoài",
     questions: [
+      {
+        tier: 1, type: "MCQ",
+        prompt: "Biến khai báo bằng let BÊN TRONG một hàm có dùng được ở ngoài hàm không?",
+        options: [
+          "Không — nó chỉ sống trong phạm vi hàm",
+          "Có, dùng được ở mọi nơi",
+          "Chỉ khi là số",
+          "Tùy trình duyệt",
+        ],
+        correctIndex: 0,
+      },
       {
         tier: 1, type: "MCQ",
         prompt: "Biến khai báo bằng let bên trong một hàm thấy được ở đâu?",
@@ -996,6 +1079,12 @@ export const PART2_LUONG_HAM: JsSeedTag[] = [
     part: PART,
     description: "Phối hợp nhiều hàm nhỏ; khái niệm hàm thuần",
     questions: [
+      {
+        tier: 1, type: "MCQ",
+        prompt: "Một hàm dựng trang gọi lần lượt layDuLieu(), tinhTong(), veBieuDo(). Cách tổ chức này gọi là gì?",
+        options: ["Phối hợp nhiều hàm nhỏ", "Đệ quy vô hạn", "Một vòng lặp", "Ép kiểu"],
+        correctIndex: 0,
+      },
       {
         tier: 1, type: "MCQ",
         prompt: "Gọi hàm b() bên trong hàm a() có được không?",
