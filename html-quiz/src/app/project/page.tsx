@@ -14,6 +14,7 @@ const STATUS_LABEL: Record<Status, { text: string; cls: string }> = {
 
 const PART_ICON: Record<string, string> = {
   "Khối giao diện": "🧩",
+  "Tô kiểu & Tương tác": "🎨",
 };
 
 export default async function ProjectRoadmapPage() {

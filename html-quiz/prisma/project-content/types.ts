@@ -4,7 +4,7 @@
 // (parse HTML, kiểm tagName + parent>child + text) → không cần hạ tầng/migration mới.
 export type ProjectSeedQuestion = {
   tier: number;
-  type: "MCQ" | "WRITE_STRUCTURE";
+  type: "MCQ" | "WRITE_STRUCTURE" | "WRITE_CSS" | "WRITE_JS";
   prompt: string;
   options?: string[];
   correctIndex?: number;
