@@ -22,7 +22,7 @@ type DbType =
   | "WRITE_JS"
   | "WRITE_CMD"
   | "WRITE_JSX";
-type Track = "html" | "css" | "js" | "dsa" | "git" | "react";
+type Track = "html" | "css" | "js" | "dsa" | "git" | "react" | "project";
 type Scope = "all" | "html" | "css" | "js";
 
 type Item =
@@ -87,7 +87,12 @@ const normAttr = (s: string) => s.toLowerCase().split("=")[0].replace(/[<>"'`/\s
 
 // Nhãn đáp án: thẻ HTML bọc <>, mục CSS/JS hiện tên trần
 const labelFor = (track: Track | undefined, name: string) =>
-  track === "css" || track === "js" || track === "dsa" || track === "git" || track === "react"
+  track === "css" ||
+  track === "js" ||
+  track === "dsa" ||
+  track === "git" ||
+  track === "react" ||
+  track === "project"
     ? name
     : `<${name}>`;
 

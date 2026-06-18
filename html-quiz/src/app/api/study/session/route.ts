@@ -39,7 +39,9 @@ function toClient(tag: TagWithQuestions, isNew: boolean): SessionTag {
               ? "git"
               : tag.track === "react"
                 ? "react"
-                : "html",
+                : tag.track === "project"
+                  ? "project"
+                  : "html",
     name: tag.name,
     topic: tag.topic,
     description: tag.description,
@@ -84,7 +86,8 @@ export async function GET(req: Request) {
     trackParam === "js" ||
     trackParam === "dsa" ||
     trackParam === "git" ||
-    trackParam === "react"
+    trackParam === "react" ||
+    trackParam === "project"
       ? trackParam
       : "html";
 

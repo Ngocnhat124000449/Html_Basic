@@ -13,7 +13,8 @@
     "seed:js": "tsx prisma/seed-js.ts",
     "seed:dsa": "tsx prisma/seed-dsa.ts",
     "seed:git": "tsx prisma/seed-git.ts",
-    "seed:react": "tsx prisma/seed-react.ts"
+    "seed:react": "tsx prisma/seed-react.ts",
+    "seed:project": "tsx prisma/seed-project.ts"
   },
   "dependencies": {
     "@prisma/adapter-pg": "^7.8.0",

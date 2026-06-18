@@ -15,8 +15,10 @@ const TIER_INFO: Record<number, { label: string; cls: string }> = {
 const MAX_WRONG = 3;
 
 // Nhãn hiển thị: thẻ HTML bọc <>, mục CSS/JS hiện tên trần
-const tagLabel = (tag: { track: "html" | "css" | "js" | "dsa" | "git" | "react"; name: string }) =>
-  tag.track === "html" ? `<${tag.name}>` : tag.name;
+const tagLabel = (tag: {
+  track: "html" | "css" | "js" | "dsa" | "git" | "react" | "project";
+  name: string;
+}) => (tag.track === "html" ? `<${tag.name}>` : tag.name);
 
 // Một câu trong hàng đợi phản xạ — kèm thẻ gốc để chấm gom theo thẻ + lộ tên sau khi trả lời.
 type QueueItem = { tag: SessionTag; q: ClientQuestion };
@@ -43,7 +45,9 @@ export default function StudyPage() {
   const [submitting, setSubmitting] = useState(false);
   const [finished, setFinished] = useState(false);
   const [summary, setSummary] = useState<{ name: string; passed: boolean }[]>([]);
-  const [track, setTrack] = useState<"html" | "css" | "js" | "dsa" | "git" | "react">("html");
+  const [track, setTrack] = useState<
+    "html" | "css" | "js" | "dsa" | "git" | "react" | "project"
+  >("html");
   const inputRef = useRef<HTMLInputElement | null>(null);
   const textareaRef = useRef<HTMLTextAreaElement | null>(null);
 
@@ -77,7 +81,12 @@ export default function StudyPage() {
     const extra = params.get("extra") === "1";
     const tp = params.get("track");
     const trk =
-      tp === "css" || tp === "js" || tp === "dsa" || tp === "git" || tp === "react"
+      tp === "css" ||
+      tp === "js" ||
+      tp === "dsa" ||
+      tp === "git" ||
+      tp === "react" ||
+      tp === "project"
         ? tp
         : "html";
     const qs = new URLSearchParams();
@@ -116,7 +125,9 @@ export default function StudyPage() {
             ? "/git"
             : track === "react"
               ? "/react"
-              : "/html";
+              : track === "project"
+                ? "/project"
+                : "/html";
 
   // Chốt phiên: gom lượt sai theo thẻ → batch lên server, dựng tổng kết.
   const finishSession = useCallback(

@@ -25,7 +25,7 @@ export type ClientQuestion = {
 
 export type SessionTag = {
   tagId: string;
-  track: "html" | "css" | "js" | "dsa" | "git" | "react";
+  track: "html" | "css" | "js" | "dsa" | "git" | "react" | "project";
   name: string;
   topic: string;
   description: string;
