@@ -6,6 +6,8 @@ import { REFLEX_QUESTIONS } from "@/lib/reflex-data";
 import { ATTRIBUTE_REFLEX_QUESTIONS } from "@/lib/attribute-reflex-data";
 import { CSS_REFLEX_QUESTIONS } from "@/lib/css-reflex-data";
 import { JS_REFLEX_QUESTIONS } from "@/lib/js-reflex-data";
+import { GIT_REFLEX_QUESTIONS } from "@/lib/git-reflex-data";
+import { REACT_REFLEX_QUESTIONS } from "@/lib/react-reflex-data";
 import { runJsSpecs } from "@/lib/js-runner";
 import type { JsRunSpec } from "@/lib/grading/js-types";
 
@@ -23,7 +25,7 @@ type DbType =
   | "WRITE_CMD"
   | "WRITE_JSX";
 type Track = "html" | "css" | "js" | "dsa" | "git" | "react" | "project";
-type Scope = "all" | "html" | "css" | "js";
+type Scope = "all" | "html" | "css" | "js" | "git" | "react";
 
 type Item =
   | {
@@ -49,7 +51,9 @@ type Item =
       explain: string;
     }
   | { kind: "cssreflex"; answer: string; accept?: string[]; prompt: string; explain: string }
-  | { kind: "jsreflex"; answer: string; accept?: string[]; prompt: string; explain: string };
+  | { kind: "jsreflex"; answer: string; accept?: string[]; prompt: string; explain: string }
+  | { kind: "gitreflex"; answer: string; accept?: string[]; prompt: string; explain: string }
+  | { kind: "reactreflex"; answer: string; accept?: string[]; prompt: string; explain: string };
 
 type Outcome = {
   correct: boolean;
@@ -79,6 +83,8 @@ const TYPE_BADGE: Record<string, { label: string; cls: string }> = {
   ATTR: { label: "Thuộc tính", cls: "bg-indigo-100 text-indigo-700" },
   CSSREFLEX: { label: "Phản xạ CSS", cls: "bg-cyan-100 text-cyan-700" },
   JSREFLEX: { label: "Phản xạ JS", cls: "bg-amber-100 text-amber-700" },
+  GITREFLEX: { label: "Phản xạ Git", cls: "bg-emerald-100 text-emerald-700" },
+  REACTREFLEX: { label: "Phản xạ React", cls: "bg-cyan-100 text-cyan-700" },
 };
 
 const norm = (s: string) => s.toLowerCase().replace(/[<>/\s]/g, "");
@@ -101,6 +107,8 @@ const SCOPE_META: Record<Scope, string> = {
   html: "Chỉ HTML",
   css: "Chỉ CSS",
   js: "Chỉ JS",
+  git: "Chỉ Git",
+  react: "Chỉ React",
 };
 
 // "css" = câu DB css + phản xạ CSS; "js" = câu DB js + phản xạ JS;
@@ -111,6 +119,10 @@ function filterScope(p: Item[], scope: Scope): Item[] {
     return p.filter((it) => it.kind === "cssreflex" || (it.kind === "db" && it.track === "css"));
   if (scope === "js")
     return p.filter((it) => it.kind === "jsreflex" || (it.kind === "db" && it.track === "js"));
+  if (scope === "git")
+    return p.filter((it) => it.kind === "gitreflex" || (it.kind === "db" && it.track === "git"));
+  if (scope === "react")
+    return p.filter((it) => it.kind === "reactreflex" || (it.kind === "db" && it.track === "react"));
   return p.filter(
     (it) => it.kind === "reflex" || it.kind === "attr" || (it.kind === "db" && it.track === "html")
   );
@@ -171,7 +183,15 @@ export default function PracticeGame() {
           kind: "jsreflex" as const,
           ...q,
         }));
-        setPool([...db, ...reflex, ...attrs, ...cssReflex, ...jsReflex]);
+        const gitReflex: Item[] = GIT_REFLEX_QUESTIONS.map((q) => ({
+          kind: "gitreflex" as const,
+          ...q,
+        }));
+        const reactReflex: Item[] = REACT_REFLEX_QUESTIONS.map((q) => ({
+          kind: "reactreflex" as const,
+          ...q,
+        }));
+        setPool([...db, ...reflex, ...attrs, ...cssReflex, ...jsReflex, ...gitReflex, ...reactReflex]);
       });
   }, []);
 
@@ -226,7 +246,12 @@ export default function PracticeGame() {
         return;
       }
 
-      if (item.kind === "cssreflex" || item.kind === "jsreflex") {
+      if (
+        item.kind === "cssreflex" ||
+        item.kind === "jsreflex" ||
+        item.kind === "gitreflex" ||
+        item.kind === "reactreflex"
+      ) {
         const ni = normAttr(input);
         const targets = [item.answer, ...(item.accept ?? [])].map(normAttr);
         const correct = !timedOut && ni !== "" && targets.includes(ni);
@@ -454,7 +479,11 @@ export default function PracticeGame() {
             ? "CSSREFLEX"
             : item.kind === "jsreflex"
               ? "JSREFLEX"
-              : "REFLEX"
+              : item.kind === "gitreflex"
+                ? "GITREFLEX"
+                : item.kind === "reactreflex"
+                  ? "REACTREFLEX"
+                  : "REFLEX"
     ];
   const isMcq = item.kind === "db" && item.type === "MCQ";
   const isMultiline =
@@ -564,7 +593,11 @@ export default function PracticeGame() {
                       ? "Gõ thuộc tính CSS rồi nhấn Enter... (vd: font-weight)"
                       : item.kind === "jsreflex"
                         ? "Gõ cú pháp/hàm JS rồi nhấn Enter... (vd: map)"
-                        : "Gõ câu trả lời rồi nhấn Enter..."
+                        : item.kind === "gitreflex"
+                          ? "Gõ lệnh Git rồi nhấn Enter... (vd: git commit)"
+                          : item.kind === "reactreflex"
+                            ? "Gõ hook/cú pháp React rồi nhấn Enter... (vd: useState)"
+                            : "Gõ câu trả lời rồi nhấn Enter..."
               }
               className="mt-5 w-full rounded-xl border-2 border-ink/10 bg-paper p-4 font-mono text-sm transition-colors focus:border-flame-400 focus:outline-none disabled:opacity-60"
               onKeyDown={(e) => {
