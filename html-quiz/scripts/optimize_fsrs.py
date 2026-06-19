@@ -8,36 +8,34 @@ Chạy (trong venv đã pip install -r scripts/requirements.txt):
     python scripts/optimize_fsrs.py
 
 LƯU Ý: script này CÔ LẬP với app Next.js (chỉ chạy thủ công khi đã có dữ liệu
->= ngưỡng). Viết cho fsrs-optimizer>=5; nếu API bản cài khác, chỉ cần chỉnh khối
-"chạy optimizer" cho khớp — HỢP ĐỒNG ĐẦU RA (params.json 21 số) giữ nguyên để
-import-fsrs-params.ts dùng. Output phải đúng 21 trọng số (FSRS-6).
+>= ngưỡng). Viết cho fsrs-optimizer==6.5.0 — bản này đọc revlog từ "./revlog.csv"
+trong THƯ MỤC HIỆN TẠI, nên với mỗi user ta chép CSV của họ thành ./revlog.csv
+rồi chạy. Sau train, trọng số nằm ở opt.w (list). HỢP ĐỒNG ĐẦU RA (params.json
+21 số) giữ nguyên để import-fsrs-params.ts dùng.
 """
 
 import json
+import os
+import shutil
 import sys
 from glob import glob
 from pathlib import Path
 
-import pandas as pd
 from fsrs_optimizer import Optimizer  # type: ignore
 
 OUT_DIR = Path(__file__).resolve().parent.parent / "tmp" / "revlog"
 EXPECTED_W = 21
 
 
-def optimize_csv(csv_path: Path) -> list[float]:
-    """Tối ưu một file revlog → trả về danh sách 21 trọng số."""
-    df = pd.read_csv(csv_path)
-    # epoch ms → datetime (fsrs-optimizer dùng cột review_time dạng thời gian).
-    df["review_time"] = pd.to_datetime(df["review_time"], unit="ms", utc=True)
-
+def optimize_one(csv_path: Path) -> list[float]:
+    # fsrs-optimizer 6.5.0 đọc cố định "./revlog.csv" ở CWD.
+    shutil.copyfile(csv_path, OUT_DIR / "revlog.csv")
     opt = Optimizer()
-    opt.df_revlog = df  # nạp trực tiếp revlog đã chuẩn hóa
     opt.create_time_series(
         timezone="UTC",
-        revlog_start_date="2000-01-01",
-        next_day_starting_hour=4,
-        filter_out_suspended_cards=False,
+        revlog_start_date="2006-01-01",
+        next_day_starts_at=4,
+        analysis=False,
     )
     opt.define_model()
     opt.pretrain(verbose=False)
@@ -46,7 +44,11 @@ def optimize_csv(csv_path: Path) -> list[float]:
 
 
 def main() -> None:
-    csvs = sorted(p for p in glob(str(OUT_DIR / "*.csv")))
+    OUT_DIR.mkdir(parents=True, exist_ok=True)
+    os.chdir(OUT_DIR)  # để create_time_series tìm thấy ./revlog.csv
+    csvs = sorted(
+        p for p in glob(str(OUT_DIR / "*.csv")) if Path(p).name != "revlog.csv"
+    )
     if not csvs:
         print("Không có CSV nào trong tmp/revlog — chạy export-revlog.ts trước.")
         return
@@ -54,16 +56,22 @@ def main() -> None:
         path = Path(csv)
         user_id = path.stem
         try:
-            w = optimize_csv(path)
+            w = optimize_one(path)
         except Exception as e:  # noqa: BLE001 — log rồi bỏ qua user lỗi
             print(f"✗ {user_id[:8]} — lỗi tối ưu: {e}", file=sys.stderr)
             continue
         if len(w) != EXPECTED_W or not all(isinstance(x, float) and x == x for x in w):
-            print(f"✗ {user_id[:8]} — tham số không hợp lệ (cần {EXPECTED_W} số hữu hạn)", file=sys.stderr)
+            print(
+                f"✗ {user_id[:8]} — tham số không hợp lệ (cần {EXPECTED_W} số hữu hạn, nhận {len(w)})",
+                file=sys.stderr,
+            )
             continue
-        out = OUT_DIR / f"{user_id}.params.json"
-        out.write_text(json.dumps({"userId": user_id, "w": w}))
-        print(f"✓ {user_id[:8]} — đã ghi {out.name}")
+        (OUT_DIR / f"{user_id}.params.json").write_text(json.dumps({"userId": user_id, "w": w}))
+        print(f"✓ {user_id[:8]} — đã ghi {user_id}.params.json")
+    # Dọn revlog.csv tạm.
+    tmp = OUT_DIR / "revlog.csv"
+    if tmp.exists():
+        tmp.unlink()
     print("\nXong. Bước kế: npx tsx scripts/import-fsrs-params.ts")
 
 

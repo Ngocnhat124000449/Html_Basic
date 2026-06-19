@@ -2,6 +2,5 @@
 # KHÔNG liên quan app Next.js. Cài trong venv riêng:
 #   python -m venv .venv && source .venv/bin/activate   (Windows: .venv\Scripts\activate)
 #   pip install -r scripts/requirements.txt
-fsrs-optimizer==5.6.0
-pandas
-torch
+fsrs-optimizer==6.5.0
+# pandas + torch là phụ thuộc của fsrs-optimizer (tự kéo về).
