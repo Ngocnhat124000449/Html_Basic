@@ -6,11 +6,13 @@ import { REFLEX_QUESTIONS } from "@/lib/reflex-data";
 import { ATTRIBUTE_REFLEX_QUESTIONS } from "@/lib/attribute-reflex-data";
 import { CSS_REFLEX_QUESTIONS } from "@/lib/css-reflex-data";
 import { JS_REFLEX_QUESTIONS } from "@/lib/js-reflex-data";
+import { GIT_REFLEX_QUESTIONS } from "@/lib/git-reflex-data";
+import { REACT_REFLEX_QUESTIONS } from "@/lib/react-reflex-data";
 
 const ROUND_SIZE = 10;
 const TIME_PER_QUESTION = 45; // giây
 
-type Mode = "tag" | "attr" | "css" | "js";
+type Mode = "tag" | "attr" | "css" | "js" | "git" | "react";
 
 // Câu hỏi đã chuẩn hóa cho cả 3 chế độ
 type RoundItem = {
@@ -42,6 +44,16 @@ const MODE_META: Record<Mode, { unit: string; ask: string; placeholder: string }
     unit: "JS",
     ask: "dùng cú pháp/hàm JS nào?",
     placeholder: "Gõ tên cú pháp/hàm rồi nhấn Enter... (vd: map)",
+  },
+  git: {
+    unit: "Git",
+    ask: "dùng lệnh/khái niệm Git nào?",
+    placeholder: "Gõ lệnh rồi nhấn Enter... (vd: git commit)",
+  },
+  react: {
+    unit: "React",
+    ask: "dùng hook/cú pháp React nào?",
+    placeholder: "Gõ tên hook/cú pháp rồi nhấn Enter... (vd: useState)",
   },
 };
 
@@ -92,8 +104,24 @@ function buildRound(mode: Mode): RoundItem[] {
       targets: [q.answer, ...(q.accept ?? [])].map(norm),
       plain: true,
     }));
-  } else {
+  } else if (mode === "js") {
     pool = JS_REFLEX_QUESTIONS.map((q) => ({
+      prompt: q.prompt,
+      explain: q.explain,
+      answer: q.answer,
+      targets: [q.answer, ...(q.accept ?? [])].map(norm),
+      plain: true,
+    }));
+  } else if (mode === "git") {
+    pool = GIT_REFLEX_QUESTIONS.map((q) => ({
+      prompt: q.prompt,
+      explain: q.explain,
+      answer: q.answer,
+      targets: [q.answer, ...(q.accept ?? [])].map(norm),
+      plain: true,
+    }));
+  } else {
+    pool = REACT_REFLEX_QUESTIONS.map((q) => ({
       prompt: q.prompt,
       explain: q.explain,
       answer: q.answer,
@@ -255,6 +283,20 @@ export default function ReflexGame() {
           >
             <span className="block font-display text-lg font-bold">🟨 Phản xạ JS</span>
             <span className="mt-0.5 block text-sm text-white/80">Nhu cầu → gõ cú pháp/hàm JS</span>
+          </button>
+          <button
+            onClick={() => start("git")}
+            className="rounded-2xl bg-emerald-600 px-5 py-4 text-white shadow-lg shadow-emerald-600/30 transition-all hover:-translate-y-0.5 hover:bg-emerald-700 hover:shadow-xl"
+          >
+            <span className="block font-display text-lg font-bold">🔀 Phản xạ Git</span>
+            <span className="mt-0.5 block text-sm text-white/80">Nhu cầu → gõ lệnh Git</span>
+          </button>
+          <button
+            onClick={() => start("react")}
+            className="rounded-2xl bg-cyan-600 px-5 py-4 text-white shadow-lg shadow-cyan-600/30 transition-all hover:-translate-y-0.5 hover:bg-cyan-700 hover:shadow-xl"
+          >
+            <span className="block font-display text-lg font-bold">⚛️ Phản xạ React</span>
+            <span className="mt-0.5 block text-sm text-white/80">Nhu cầu → gõ hook/cú pháp React</span>
           </button>
         </div>
       </div>
