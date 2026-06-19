@@ -3,15 +3,16 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 
+// Nav theo HÀNH ĐỘNG ôn tập (không liệt kê từng khóa — 7 khóa đã ở trang chủ).
 const LINKS = [
   // Trên mobile ẩn "Tổng quan" (logo đã dẫn về trang chủ) để các link còn lại vừa màn 375px
   { href: "/", label: "Tổng quan", mobileHidden: true },
   { href: "/tags", label: "Thẻ" },
-  { href: "/study", label: "Học" },
+  // "Ôn tập" gộp thẻ đến hạn của MỌI khóa (track=all), không chỉ HTML.
+  { href: "/study?track=all", label: "Ôn tập" },
   { href: "/reflex", label: "Phản xạ" },
   { href: "/practice", label: "Tổng hợp" },
-  { href: "/css", label: "CSS β" },
-  { href: "/js", label: "JS β" },
+  { href: "/settings", label: "⚙️" },
 ];
 
 export default function NavLinks() {
@@ -20,7 +21,8 @@ export default function NavLinks() {
   return (
     <div className="no-scrollbar flex items-center gap-1 overflow-x-auto">
       {LINKS.map(({ href, label, mobileHidden }) => {
-        const active = pathname === href;
+        // So khớp phần path (bỏ query) để "/study?track=all" vẫn sáng khi ở /study.
+        const active = pathname === href.split("?")[0];
         return (
           <Link
             key={href}
