@@ -115,7 +115,7 @@ export default async function HtmlDashboardPage() {
 
       {todayCount > 0 ? (
         <Link
-          href="/study"
+          href="/study?track=html&mode=learn"
           className="animate-rise stagger-4 group block rounded-2xl bg-gradient-to-br from-flame-500 to-flame-700 p-6 text-white shadow-lg shadow-flame-500/25 transition-all hover:-translate-y-0.5 hover:shadow-xl hover:shadow-flame-500/30"
         >
           <div className="flex items-center justify-between">
@@ -141,13 +141,22 @@ export default async function HtmlDashboardPage() {
           </p>
           {unseen > 0 && (
             <Link
-              href="/study?extra=1"
+              href="/study?track=html&mode=learn&extra=1"
               className="mt-4 inline-block rounded-full bg-flame-500 px-6 py-2.5 text-sm font-semibold text-white shadow-sm transition-all hover:bg-flame-600 hover:shadow-md"
             >
               ⚡ Học vượt {Math.min(5, unseen)} thẻ của ngày sau
             </Link>
           )}
         </div>
+      )}
+
+      {due > 0 && (
+        <Link
+          href="/study?track=html&mode=review"
+          className="animate-rise stagger-4 block rounded-2xl border border-amber-200 bg-amber-50 p-4 text-center text-sm font-semibold text-amber-800 transition-colors hover:border-amber-300"
+        >
+          🔁 Ôn tập {due} thẻ đến hạn
+        </Link>
       )}
 
       {studiedToday.length > 0 && (

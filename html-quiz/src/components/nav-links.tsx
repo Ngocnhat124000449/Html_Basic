@@ -9,7 +9,7 @@ const LINKS = [
   { href: "/", label: "Tổng quan", mobileHidden: true },
   { href: "/tags", label: "Thẻ" },
   // "Ôn tập" gộp thẻ đến hạn của MỌI khóa (track=all), không chỉ HTML.
-  { href: "/study?track=all", label: "Ôn tập" },
+  { href: "/study?track=all&mode=review", label: "Ôn tập" },
   { href: "/reflex", label: "Phản xạ" },
   { href: "/practice", label: "Tổng hợp" },
   { href: "/settings", label: "⚙️" },

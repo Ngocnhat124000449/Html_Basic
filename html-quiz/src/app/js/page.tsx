@@ -86,14 +86,20 @@ export default async function JsRoadmapPage() {
         </p>
         <div className="mt-4 flex flex-wrap items-center gap-3">
           <Link
-            href="/study?track=js"
+            href="/study?track=js&mode=learn"
             className="rounded-full bg-flame-500 px-6 py-2.5 font-display font-bold text-white shadow-lg shadow-flame-500/30 transition-all hover:-translate-y-0.5 hover:bg-flame-600"
           >
-            📖 Học JS hôm nay
+            📖 Học mới
+          </Link>
+          <Link
+            href="/study?track=js&mode=review"
+            className="rounded-full border border-ink/15 px-5 py-2.5 text-sm font-medium text-ink/70 transition-colors hover:border-flame-300 hover:text-flame-700"
+          >
+            🔁 Ôn tập
           </Link>
           {counts.unseen > 0 && started > 0 && (
             <Link
-              href="/study?track=js&extra=1"
+              href="/study?track=js&mode=learn&extra=1"
               className="rounded-full border border-ink/15 px-5 py-2.5 text-sm font-medium text-ink/70 transition-colors hover:border-flame-300 hover:text-flame-700"
             >
               ⚡ Học vượt
