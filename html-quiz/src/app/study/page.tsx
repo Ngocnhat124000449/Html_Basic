@@ -172,7 +172,11 @@ export default function StudyPage() {
       <div className="animate-rise py-20 text-center">
         <p className="text-4xl">🎉</p>
         <h1 className="mt-3 font-display text-2xl font-bold">
-          {track === "leech" ? "Không còn thẻ hay quên cần luyện" : `Không có ${unit} nào đến hạn`}
+          {track === "leech"
+            ? "Không còn thẻ hay quên cần luyện"
+            : reviewMode
+              ? `Không có ${unit} nào đến hạn`
+              : `Đã học đủ ${unit} mới hôm nay`}
         </h1>
         <p className="mt-2 text-ink/60">
           {reviewMode
@@ -233,7 +237,7 @@ export default function StudyPage() {
         </ul>
         <div className="flex flex-wrap justify-center gap-3">
           <button
-            onClick={() => loadSession(true)}
+            onClick={() => loadSession(!reviewMode)}
             className="rounded-full bg-flame-500 px-6 py-2.5 font-medium text-white transition-colors hover:bg-flame-600"
           >
             {reviewMode ? "🔁 Ôn tiếp lô còn lại" : `⚡ Học thêm 5 ${unit} mới`}

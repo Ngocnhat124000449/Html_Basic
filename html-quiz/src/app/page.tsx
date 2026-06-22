@@ -287,7 +287,7 @@ export default async function HomePage() {
             )}
             {leeches > 0 && (
               <Link
-                href="/study?track=leech"
+                href="/study?track=leech&mode=review"
                 className="rounded-full bg-red-100 px-2.5 py-1 font-semibold text-red-700 transition-colors hover:bg-red-200"
               >
                 {leeches} thẻ hay quên →
@@ -313,7 +313,7 @@ export default async function HomePage() {
 
         {dueToday > 0 ? (
           <Link
-            href="/study?track=all"
+            href="/study?track=all&mode=review"
             className="mt-5 inline-block font-medium text-flame-600 transition-transform hover:translate-x-1"
           >
             Ôn ngay {dueToday} thẻ đến hạn (mọi khóa) →
