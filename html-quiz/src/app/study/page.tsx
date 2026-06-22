@@ -36,8 +36,8 @@ export default function StudyPage() {
     "html" | "css" | "js" | "dsa" | "git" | "react" | "project" | "all" | "leech"
   >("html");
   const [mode, setMode] = useState<"learn" | "review">("review");
-  // Màn làm quen ở chế độ học mới — bật khi bắt đầu một thẻ mới.
-  const [intro, setIntro] = useState(false);
+  // tagId của thẻ đang ở màn làm quen (null = không hiện) — tránh nhập nhằng khi chuyển thẻ.
+  const [introFor, setIntroFor] = useState<string | null>(null);
   const inputRef = useRef<HTMLInputElement | null>(null);
   const textareaRef = useRef<HTMLTextAreaElement | null>(null);
 
@@ -66,7 +66,7 @@ export default function StudyPage() {
         .then((r) => r.json())
         .then((d) => {
           setTags(d.tags ?? []);
-          setIntro(mode === "learn");
+          setIntroFor(mode === "learn" ? (d.tags?.[0]?.tagId ?? null) : null);
         });
     },
     [track, mode]
@@ -100,8 +100,8 @@ export default function StudyPage() {
         if (cancelled) return;
         setTrack(trk);
         setMode(md);
-        setIntro(md === "learn");
         setTags(d.tags ?? []);
+        setIntroFor(md === "learn" ? (d.tags?.[0]?.tagId ?? null) : null);
       });
     return () => {
       cancelled = true;
@@ -116,7 +116,7 @@ export default function StudyPage() {
     }
   }, [feedback, pos]);
 
-  // Mode ôn tổng hợp (all) / thẻ hay quên (leech) — review-only, không bốc thẻ mới.
+  // review = chỉ ôn thẻ đã học (mọi track, gồm all/leech); learn = học mới tuần tự.
   const reviewMode = mode === "review";
   const unit = track === "html" ? "thẻ" : "mục";
   const homeHref =
@@ -253,8 +253,7 @@ export default function StudyPage() {
   const tag = item.tag;
   const q = item.q;
 
-  const atCardStart = pos === 0 || queue[pos - 1]?.tag.tagId !== tag.tagId;
-  const showIntro = mode === "learn" && intro && atCardStart;
+  const showIntro = mode === "learn" && introFor === tag.tagId;
   const cardNo = queue
     .slice(0, pos + 1)
     .filter((it, i, arr) => i === 0 || arr[i - 1].tag.tagId !== it.tag.tagId).length;
@@ -273,7 +272,7 @@ export default function StudyPage() {
         </code>
         <p className="mx-auto max-w-md leading-relaxed text-ink/70">{tag.description}</p>
         <button
-          onClick={() => setIntro(false)}
+          onClick={() => setIntroFor(null)}
           className="rounded-full bg-flame-500 px-8 py-3 font-semibold text-white shadow-sm transition-colors hover:bg-flame-600"
         >
           Bắt đầu →
@@ -327,9 +326,12 @@ export default function StudyPage() {
       await finishSession(wrongByTag);
       return;
     }
-    setPos((p) => p + 1);
-    const nextNewCard = queue[pos + 1]?.tag.tagId !== queue[pos]?.tag.tagId;
-    if (mode === "learn" && nextNewCard) setIntro(true);
+    const nextPos = pos + 1;
+    setPos(nextPos);
+    const nextItem = queue[nextPos];
+    if (mode === "learn" && nextItem && nextItem.tag.tagId !== queue[pos]?.tag.tagId) {
+      setIntroFor(nextItem.tag.tagId);
+    }
     setSelected(null);
     setAnswer("");
     setFeedback(null);
