@@ -61,7 +61,8 @@ export default function StudyPage() {
       const qs = new URLSearchParams();
       if (extra) qs.set("extra", "1");
       if (track !== "html") qs.set("track", track);
-      if (mode === "learn") qs.set("mode", "learn");
+      // Forward CẢ learn lẫn review để API trả đúng tập (review = chỉ thẻ đã học đến hạn).
+      qs.set("mode", mode);
       fetch(`/api/study/session${qs.size > 0 ? `?${qs}` : ""}`)
         .then((r) => r.json())
         .then((d) => {
@@ -92,7 +93,7 @@ export default function StudyPage() {
     const qs = new URLSearchParams();
     if (extra) qs.set("extra", "1");
     if (trk !== "html") qs.set("track", trk);
-    if (md === "learn") qs.set("mode", "learn");
+    qs.set("mode", md);
     let cancelled = false;
     fetch(`/api/study/session${qs.size > 0 ? `?${qs}` : ""}`)
       .then((r) => r.json())
