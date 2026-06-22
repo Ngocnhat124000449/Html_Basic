@@ -2,9 +2,10 @@
 
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import Link from "next/link";
-import type { AnswerResult, ClientQuestion, SessionTag } from "@/lib/study-types";
+import type { AnswerResult, SessionTag } from "@/lib/study-types";
 import { runJsSpecs } from "@/lib/js-runner";
 import { runReactSpecs } from "@/lib/react-runner";
+import { buildLearnSequence, buildReviewQueue, type QueueItem } from "@/lib/study-queue";
 
 const TIER_INFO: Record<number, { label: string; cls: string }> = {
   1: { label: "Bậc 1 · Nhận biết", cls: "bg-sky-100 text-sky-700" },
@@ -20,20 +21,6 @@ const tagLabel = (tag: {
   name: string;
 }) => (tag.track === "html" ? `<${tag.name}>` : tag.name);
 
-// Một câu trong hàng đợi phản xạ — kèm thẻ gốc để chấm gom theo thẻ + lộ tên sau khi trả lời.
-type QueueItem = { tag: SessionTag; q: ClientQuestion };
-
-// Gom phẳng mọi câu của mọi thẻ rồi xáo trộn (Fisher–Yates) — không ôn theo thẻ.
-function buildQueue(tags: SessionTag[]): QueueItem[] {
-  const items: QueueItem[] = [];
-  for (const tag of tags) for (const q of tag.questions) items.push({ tag, q });
-  for (let i = items.length - 1; i > 0; i--) {
-    const j = Math.floor(Math.random() * (i + 1));
-    [items[i], items[j]] = [items[j], items[i]];
-  }
-  return items;
-}
-
 export default function StudyPage() {
   const [tags, setTags] = useState<SessionTag[] | null>(null);
   const [pos, setPos] = useState(0);
@@ -48,11 +35,17 @@ export default function StudyPage() {
   const [track, setTrack] = useState<
     "html" | "css" | "js" | "dsa" | "git" | "react" | "project" | "all" | "leech"
   >("html");
+  const [mode, setMode] = useState<"learn" | "review">("review");
+  // Màn làm quen ở chế độ học mới — bật khi bắt đầu một thẻ mới.
+  const [intro, setIntro] = useState(false);
   const inputRef = useRef<HTMLInputElement | null>(null);
   const textareaRef = useRef<HTMLTextAreaElement | null>(null);
 
   // Xáo trộn 1 lần mỗi khi tải phiên mới (tags là mảng mới sau mỗi fetch).
-  const queue = useMemo(() => (tags ? buildQueue(tags) : []), [tags]);
+  const queue = useMemo<QueueItem[]>(
+    () => (tags ? (mode === "learn" ? buildLearnSequence(tags) : buildReviewQueue(tags)) : []),
+    [tags, mode]
+  );
 
   // Tải phiên học; extra=true bỏ giới hạn ngày để học vượt
   const loadSession = useCallback(
@@ -68,11 +61,15 @@ export default function StudyPage() {
       const qs = new URLSearchParams();
       if (extra) qs.set("extra", "1");
       if (track !== "html") qs.set("track", track);
+      if (mode === "learn") qs.set("mode", "learn");
       fetch(`/api/study/session${qs.size > 0 ? `?${qs}` : ""}`)
         .then((r) => r.json())
-        .then((d) => setTags(d.tags ?? []));
+        .then((d) => {
+          setTags(d.tags ?? []);
+          setIntro(mode === "learn");
+        });
     },
-    [track]
+    [track, mode]
   );
 
   // Phiên đầu tiên: đọc ?extra & ?track từ URL
@@ -91,15 +88,19 @@ export default function StudyPage() {
       tp === "leech"
         ? tp
         : "html";
+    const md = params.get("mode") === "learn" ? "learn" : "review";
     const qs = new URLSearchParams();
     if (extra) qs.set("extra", "1");
     if (trk !== "html") qs.set("track", trk);
+    if (md === "learn") qs.set("mode", "learn");
     let cancelled = false;
     fetch(`/api/study/session${qs.size > 0 ? `?${qs}` : ""}`)
       .then((r) => r.json())
       .then((d) => {
         if (cancelled) return;
         setTrack(trk);
+        setMode(md);
+        setIntro(md === "learn");
         setTags(d.tags ?? []);
       });
     return () => {
@@ -116,7 +117,7 @@ export default function StudyPage() {
   }, [feedback, pos]);
 
   // Mode ôn tổng hợp (all) / thẻ hay quên (leech) — review-only, không bốc thẻ mới.
-  const reviewMode = track === "all" || track === "leech";
+  const reviewMode = mode === "review";
   const unit = track === "html" ? "thẻ" : "mục";
   const homeHref =
     track === "css"
@@ -251,6 +252,36 @@ export default function StudyPage() {
   const item = queue[pos];
   const tag = item.tag;
   const q = item.q;
+
+  const atCardStart = pos === 0 || queue[pos - 1]?.tag.tagId !== tag.tagId;
+  const showIntro = mode === "learn" && intro && atCardStart;
+  const cardNo = queue
+    .slice(0, pos + 1)
+    .filter((it, i, arr) => i === 0 || arr[i - 1].tag.tagId !== it.tag.tagId).length;
+  const cardTotal = queue.filter(
+    (it, i, arr) => i === 0 || arr[i - 1].tag.tagId !== it.tag.tagId
+  ).length;
+
+  if (showIntro) {
+    return (
+      <div className="animate-rise space-y-6 py-12 text-center">
+        <p className="text-sm font-medium text-ink/50">
+          Thẻ {cardNo}/{cardTotal} · 📖 Học mới
+        </p>
+        <code className="inline-block rounded-xl bg-ink px-4 py-2 font-mono text-2xl font-bold text-flame-300">
+          {tagLabel(tag)}
+        </code>
+        <p className="mx-auto max-w-md leading-relaxed text-ink/70">{tag.description}</p>
+        <button
+          onClick={() => setIntro(false)}
+          className="rounded-full bg-flame-500 px-8 py-3 font-semibold text-white shadow-sm transition-colors hover:bg-flame-600"
+        >
+          Bắt đầu →
+        </button>
+      </div>
+    );
+  }
+
   const isCode = q.type !== "MCQ";
   const isMultiline =
     q.type === "WRITE_STRUCTURE" ||
@@ -297,6 +328,8 @@ export default function StudyPage() {
       return;
     }
     setPos((p) => p + 1);
+    const nextNewCard = queue[pos + 1]?.tag.tagId !== queue[pos]?.tag.tagId;
+    if (mode === "learn" && nextNewCard) setIntro(true);
     setSelected(null);
     setAnswer("");
     setFeedback(null);
@@ -324,9 +357,15 @@ export default function StudyPage() {
 
       {/* Hàng trạng thái: chế độ + lượt sai (KHÔNG lộ thẻ trước khi trả lời) */}
       <div className="flex items-center justify-between text-xs">
-        <span className="rounded-full bg-violet-100 px-2.5 py-1 font-semibold text-violet-700">
-          🔀 Ôn trộn · thẻ nào đây?
-        </span>
+        {mode === "learn" ? (
+          <span className="rounded-full bg-sky-100 px-2.5 py-1 font-semibold text-sky-700">
+            📖 Học mới · {tagLabel(tag)}
+          </span>
+        ) : (
+          <span className="rounded-full bg-violet-100 px-2.5 py-1 font-semibold text-violet-700">
+            🔀 Ôn trộn · thẻ nào đây?
+          </span>
+        )}
         {totalWrong > 0 && (
           <span className="text-ink/50">
             {totalWrong} lượt sai · {summary.length || tags.length} {unit}
