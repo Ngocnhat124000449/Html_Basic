@@ -82,6 +82,7 @@ export async function GET(req: Request) {
   // extra=1: học vượt — bỏ giới hạn thẻ mới/ngày, lấy tiếp thẻ chưa học kế tiếp
   const extra = params.get("extra") === "1";
   const trackParam = params.get("track");
+  const mode = params.get("mode"); // "learn" | "review" | null(legacy)
   const SPECIFIC = ["html", "css", "js", "dsa", "git", "react", "project"];
   const withQuestions = { tag: { include: { questions: { orderBy: { tier: "asc" as const } } } } };
 
@@ -110,6 +111,39 @@ export async function GET(req: Request) {
 
   // CHẾ ĐỘ theo từng khóa (mặc định html): hàng đợi đến hạn + quota thẻ mới/ngày.
   const track = SPECIFIC.includes(trackParam ?? "") ? trackParam! : "html";
+
+  // mode=review: chỉ thẻ ĐÃ HỌC đến hạn của khóa này (không bốc thẻ mới).
+  if (mode === "review") {
+    const dueOnly = await prisma.userTagProgress.findMany({
+      where: { userId, dueAt: { lte: now }, tag: { track } },
+      orderBy: { dueAt: "asc" },
+      take: settings.reviewCap,
+      include: withQuestions,
+    });
+    return NextResponse.json({ tags: dueOnly.map((d) => toClient(d.tag, false)) });
+  }
+
+  // mode=learn: chỉ thẻ MỚI theo lộ trình (order asc), giữ quota dailyNew + extra.
+  if (mode === "learn") {
+    const sod = new Date(now);
+    sod.setHours(0, 0, 0, 0);
+    const newCount = await prisma.userTagProgress.count({
+      where: { userId, createdAt: { gte: sod }, tag: { track } },
+    });
+    const allowed = extra ? settings.dailyNew : Math.max(0, settings.dailyNew - newCount);
+    if (allowed <= 0) return NextResponse.json({ tags: [] });
+    const seenIds = await prisma.userTagProgress.findMany({
+      where: { userId, tag: { track } },
+      select: { tagId: true },
+    });
+    const fresh = await prisma.tag.findMany({
+      where: { track, id: { notIn: seenIds.map((s) => s.tagId) } },
+      orderBy: { order: "asc" },
+      take: allowed,
+      include: { questions: { orderBy: { tier: "asc" } } },
+    });
+    return NextResponse.json({ tags: fresh.map((t) => toClient(t, true)) });
+  }
 
   const due = await prisma.userTagProgress.findMany({
     where: { userId, dueAt: { lte: now }, tag: { track } },
