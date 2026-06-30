@@ -24,3 +24,11 @@ export function buildReviewQueue(tags: SessionTag[]): QueueItem[] {
   }
   return items;
 }
+
+// HỌC KÈM ÔN NỀN: pha ôn (thẻ đã học, isNew=false) xáo trộn đặt TRƯỚC, pha học mới
+// (isNew=true) tuần tự đặt SAU. Route chịu trách nhiệm chọn & cap thẻ ôn nền.
+export function buildLearnWithWarmup(tags: SessionTag[]): QueueItem[] {
+  const warmup = tags.filter((t) => !t.isNew);
+  const fresh = tags.filter((t) => t.isNew);
+  return [...buildReviewQueue(warmup), ...buildLearnSequence(fresh)];
+}
