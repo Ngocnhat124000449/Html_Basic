@@ -263,16 +263,17 @@ export default function StudyPage() {
   const q = item.q;
 
   const showIntro = mode === "learn" && introFor === tag.tagId;
-  // Màn làm quen chỉ cho PHA HỌC MỚI → đánh số trong số thẻ mới.
-  const isNewBoundary = (it: QueueItem, i: number, arr: QueueItem[]) =>
-    it.tag.isNew && (i === 0 || arr[i - 1].tag.tagId !== it.tag.tagId);
-  const cardNo = queue.slice(0, pos + 1).filter(isNewBoundary).length;
-  const cardTotal = queue.filter(isNewBoundary).length;
-  // Có pha ôn nền nếu thẻ đầu hàng đợi là thẻ ôn (isNew=false).
-  const hadWarmup = queue.length > 0 && !queue[0].tag.isNew;
-  const firstNewPos = queue.findIndex((it) => it.tag.isNew);
 
   if (showIntro) {
+    // Màn làm quen chỉ cho PHA HỌC MỚI → đánh số trong số thẻ mới. Tính trong nhánh
+    // này để không chạy O(n) mỗi lần render (vd mỗi keystroke ở ô trả lời).
+    const isNewBoundary = (it: QueueItem, i: number, arr: QueueItem[]) =>
+      it.tag.isNew && (i === 0 || arr[i - 1].tag.tagId !== it.tag.tagId);
+    const cardNo = queue.slice(0, pos + 1).filter(isNewBoundary).length;
+    const cardTotal = queue.filter(isNewBoundary).length;
+    // Có pha ôn nền nếu thẻ đầu hàng đợi là thẻ ôn (isNew=false).
+    const hadWarmup = queue.length > 0 && !queue[0].tag.isNew;
+    const firstNewPos = queue.findIndex((it) => it.tag.isNew);
     return (
       <div className="animate-rise space-y-6 py-12 text-center">
         {hadWarmup && pos === firstNewPos && (
