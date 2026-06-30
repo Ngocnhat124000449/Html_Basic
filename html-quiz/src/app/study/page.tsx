@@ -5,7 +5,7 @@ import Link from "next/link";
 import type { AnswerResult, SessionTag } from "@/lib/study-types";
 import { runJsSpecs } from "@/lib/js-runner";
 import { runReactSpecs } from "@/lib/react-runner";
-import { buildLearnSequence, buildReviewQueue, type QueueItem } from "@/lib/study-queue";
+import { buildLearnWithWarmup, buildReviewQueue, type QueueItem } from "@/lib/study-queue";
 
 const TIER_INFO: Record<number, { label: string; cls: string }> = {
   1: { label: "Bậc 1 · Nhận biết", cls: "bg-sky-100 text-sky-700" },
@@ -43,7 +43,7 @@ export default function StudyPage() {
 
   // Xáo trộn 1 lần mỗi khi tải phiên mới (tags là mảng mới sau mỗi fetch).
   const queue = useMemo<QueueItem[]>(
-    () => (tags ? (mode === "learn" ? buildLearnSequence(tags) : buildReviewQueue(tags)) : []),
+    () => (tags ? (mode === "learn" ? buildLearnWithWarmup(tags) : buildReviewQueue(tags)) : []),
     [tags, mode]
   );
 
@@ -67,7 +67,9 @@ export default function StudyPage() {
         .then((r) => r.json())
         .then((d) => {
           setTags(d.tags ?? []);
-          setIntroFor(mode === "learn" ? (d.tags?.[0]?.tagId ?? null) : null);
+          setIntroFor(
+            mode === "learn" ? (d.tags?.find((t: SessionTag) => t.isNew)?.tagId ?? null) : null
+          );
         });
     },
     [track, mode]
@@ -102,7 +104,9 @@ export default function StudyPage() {
         setTrack(trk);
         setMode(md);
         setTags(d.tags ?? []);
-        setIntroFor(md === "learn" ? (d.tags?.[0]?.tagId ?? null) : null);
+        setIntroFor(
+          md === "learn" ? (d.tags?.find((t: SessionTag) => t.isNew)?.tagId ?? null) : null
+        );
       });
     return () => {
       cancelled = true;
@@ -259,16 +263,21 @@ export default function StudyPage() {
   const q = item.q;
 
   const showIntro = mode === "learn" && introFor === tag.tagId;
-  const cardNo = queue
-    .slice(0, pos + 1)
-    .filter((it, i, arr) => i === 0 || arr[i - 1].tag.tagId !== it.tag.tagId).length;
-  const cardTotal = queue.filter(
-    (it, i, arr) => i === 0 || arr[i - 1].tag.tagId !== it.tag.tagId
-  ).length;
+  // Màn làm quen chỉ cho PHA HỌC MỚI → đánh số trong số thẻ mới.
+  const isNewBoundary = (it: QueueItem, i: number, arr: QueueItem[]) =>
+    it.tag.isNew && (i === 0 || arr[i - 1].tag.tagId !== it.tag.tagId);
+  const cardNo = queue.slice(0, pos + 1).filter(isNewBoundary).length;
+  const cardTotal = queue.filter(isNewBoundary).length;
+  // Có pha ôn nền nếu thẻ đầu hàng đợi là thẻ ôn (isNew=false).
+  const hadWarmup = queue.length > 0 && !queue[0].tag.isNew;
+  const firstNewPos = queue.findIndex((it) => it.tag.isNew);
 
   if (showIntro) {
     return (
       <div className="animate-rise space-y-6 py-12 text-center">
+        {hadWarmup && pos === firstNewPos && (
+          <p className="text-sm font-semibold text-emerald-600">✅ Xong phần ôn nền</p>
+        )}
         <p className="text-sm font-medium text-ink/50">
           Thẻ {cardNo}/{cardTotal} · 📖 Học mới
         </p>
@@ -334,7 +343,12 @@ export default function StudyPage() {
     const nextPos = pos + 1;
     setPos(nextPos);
     const nextItem = queue[nextPos];
-    if (mode === "learn" && nextItem && nextItem.tag.tagId !== queue[pos]?.tag.tagId) {
+    if (
+      mode === "learn" &&
+      nextItem &&
+      nextItem.tag.isNew &&
+      nextItem.tag.tagId !== queue[pos]?.tag.tagId
+    ) {
       setIntroFor(nextItem.tag.tagId);
     }
     setSelected(null);
@@ -364,9 +378,13 @@ export default function StudyPage() {
 
       {/* Hàng trạng thái: chế độ + lượt sai (KHÔNG lộ thẻ trước khi trả lời) */}
       <div className="flex items-center justify-between text-xs">
-        {mode === "learn" ? (
+        {mode === "learn" && tag.isNew ? (
           <span className="rounded-full bg-sky-100 px-2.5 py-1 font-semibold text-sky-700">
             📖 Học mới · {tagLabel(tag)}
+          </span>
+        ) : mode === "learn" ? (
+          <span className="rounded-full bg-violet-100 px-2.5 py-1 font-semibold text-violet-700">
+            🔁 Ôn nền · thẻ nào đây?
           </span>
         ) : (
           <span className="rounded-full bg-violet-100 px-2.5 py-1 font-semibold text-violet-700">
