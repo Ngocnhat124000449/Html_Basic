@@ -7,6 +7,7 @@ import { toRunSpecs, type JsRequirement } from "@/lib/grading/js-types";
 import { toReactSpecs, type ReactRequirement } from "@/lib/grading/react-types";
 import { LEECH_LAPSES } from "@/lib/fsrs";
 import { getUserSettings } from "@/lib/user-settings";
+import { foundationTracks, WARMUP_CAP, TRACK_ORDER } from "@/lib/tracks";
 
 const SESSION_CAP = 10;
 
@@ -142,7 +143,29 @@ export async function GET(req: Request) {
       take: allowed,
       include: { questions: { orderBy: { tier: "asc" } } },
     });
-    return NextResponse.json({ tags: fresh.map((t) => toClient(t, true)) });
+    // Pha ôn nền: thẻ ĐẾN HẠN của khóa hiện tại + mọi khóa nền. Lấy hết rồi sắp theo
+    // (thứ tự khóa nền, đến hạn lâu nhất) và cap WARMUP_CAP để chọn thẻ ưu tiên.
+    const foundation = foundationTracks(track);
+    const dueWarm = await prisma.userTagProgress.findMany({
+      where: { userId, dueAt: { lte: now }, tag: { track: { in: foundation } } },
+      include: withQuestions,
+    });
+    const trackRank = (t: string) => {
+      const i = TRACK_ORDER.indexOf(t as (typeof TRACK_ORDER)[number]);
+      return i < 0 ? 999 : i;
+    };
+    dueWarm.sort(
+      (a, b) =>
+        trackRank(a.tag.track) - trackRank(b.tag.track) ||
+        a.dueAt.getTime() - b.dueAt.getTime()
+    );
+    const warmup = dueWarm.slice(0, WARMUP_CAP);
+    return NextResponse.json({
+      tags: [
+        ...warmup.map((d) => toClient(d.tag, false)),
+        ...fresh.map((t) => toClient(t, true)),
+      ],
+    });
   }
 
   const due = await prisma.userTagProgress.findMany({
