@@ -143,11 +143,13 @@ export async function GET(req: Request) {
       take: allowed,
       include: { questions: { orderBy: { tier: "asc" } } },
     });
-    // Pha ôn nền: thẻ ĐẾN HẠN của khóa hiện tại + mọi khóa nền. Lấy hết rồi sắp theo
-    // (thứ tự khóa nền, đến hạn lâu nhất) và cap WARMUP_CAP để chọn thẻ ưu tiên.
+    // Pha ôn nền: thẻ ĐẾN HẠN của khóa hiện tại + mọi khóa nền. Lấy (có cận an toàn)
+    // rồi sắp theo (thứ tự khóa nền, đến hạn lâu nhất) và cap WARMUP_CAP để chọn thẻ ưu tiên.
     const foundation = foundationTracks(track);
     const dueWarm = await prisma.userTagProgress.findMany({
       where: { userId, dueAt: { lte: now }, tag: { track: { in: foundation } } },
+      orderBy: { dueAt: "asc" },
+      take: WARMUP_CAP * 10,
       include: withQuestions,
     });
     const trackRank = (t: string) => {
