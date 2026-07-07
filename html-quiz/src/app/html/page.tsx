@@ -50,7 +50,6 @@ export default async function HtmlDashboardPage() {
   const shortDate = new Intl.DateTimeFormat("vi-VN", { day: "numeric", month: "numeric" });
   const unseen = totalTags - progress.length;
   const newAvailable = Math.min(Math.max(0, 5 - newToday), unseen);
-  const todayCount = due + newAvailable;
   const masteredPct = totalTags > 0 ? Math.round((mastered / totalTags) * 100) : 0;
   const startedPct = totalTags > 0 ? Math.round((started / totalTags) * 100) : 0;
 
@@ -113,51 +112,69 @@ export default async function HtmlDashboardPage() {
         </div>
       </div>
 
-      {todayCount > 0 ? (
-        <Link
-          href="/study?track=html&mode=learn"
-          className="animate-rise stagger-4 group block rounded-2xl bg-gradient-to-br from-flame-500 to-flame-700 p-6 text-white shadow-lg shadow-flame-500/25 transition-all hover:-translate-y-0.5 hover:shadow-xl hover:shadow-flame-500/30"
-        >
-          <div className="flex items-center justify-between">
-            <div>
-              <p className="font-display text-xl font-bold sm:text-2xl">Bắt đầu học hôm nay</p>
-              <p className="mt-1 text-sm text-white/80">
-                {due > 0 && `${due} thẻ cần ôn lại`}
-                {due > 0 && newAvailable > 0 && " · "}
-                {newAvailable > 0 && `${newAvailable} thẻ mới`}
-              </p>
-            </div>
-            <span className="shrink-0 whitespace-nowrap rounded-full bg-white/15 px-4 py-2 font-mono text-sm font-bold transition-transform group-hover:translate-x-1">
-              {todayCount} thẻ →
-            </span>
-          </div>
-        </Link>
-      ) : (
-        <div className="animate-rise stagger-4 rounded-2xl border border-emerald-200 bg-emerald-50 p-8 text-center">
-          <p className="text-3xl">🎉</p>
-          <p className="mt-2 font-display text-xl font-bold text-emerald-800">Hôm nay xong rồi!</p>
-          <p className="mt-1 text-sm text-emerald-700/70">
-            Bộ nhớ cần thời gian — quay lại ôn vào ngày mai nhé.
-          </p>
-          {unseen > 0 && (
-            <Link
-              href="/study?track=html&mode=learn&extra=1"
-              className="mt-4 inline-block rounded-full bg-flame-500 px-6 py-2.5 text-sm font-semibold text-white shadow-sm transition-all hover:bg-flame-600 hover:shadow-md"
-            >
-              ⚡ Học vượt {Math.min(5, unseen)} thẻ của ngày sau
-            </Link>
-          )}
-        </div>
+      {due === 0 && newAvailable === 0 && (
+        <p className="animate-rise stagger-4 text-center text-sm font-medium text-emerald-700">
+          🎉 Hôm nay xong rồi — bộ nhớ cần thời gian, quay lại ngày mai nhé.
+        </p>
       )}
 
-      {due > 0 && (
-        <Link
-          href="/study?track=html&mode=review"
-          className="animate-rise stagger-4 block rounded-2xl border border-amber-200 bg-amber-50 p-4 text-center text-sm font-semibold text-amber-800 transition-colors hover:border-amber-300"
-        >
-          🔁 Ôn tập {due} thẻ đến hạn
-        </Link>
-      )}
+      <div className="animate-rise stagger-4 grid gap-4 sm:grid-cols-2">
+        {/* Tầng HỌC MỚI — thẻ mới theo lộ trình (kèm pha ôn nền G2 khi có thẻ đến hạn) */}
+        {newAvailable > 0 ? (
+          <Link
+            href="/study?track=html&mode=learn"
+            className="group rounded-2xl bg-gradient-to-br from-flame-500 to-flame-700 p-6 text-white shadow-lg shadow-flame-500/25 transition-all hover:-translate-y-0.5 hover:shadow-xl hover:shadow-flame-500/30"
+          >
+            <p className="font-display text-lg font-bold">📖 Học mới</p>
+            <p className="mt-3 font-display text-4xl font-bold">{newAvailable} thẻ</p>
+            <p className="mt-1 text-sm text-white/80">
+              {due > 0 ? "kèm ôn nền trước khi vào bài" : "tuần tự theo lộ trình"}
+            </p>
+            <span className="mt-4 inline-block rounded-full bg-white/15 px-4 py-2 text-sm font-bold transition-transform group-hover:translate-x-1">
+              Bắt đầu →
+            </span>
+          </Link>
+        ) : (
+          <div className="rounded-2xl border border-ink/10 bg-surface p-6">
+            <p className="font-display text-lg font-bold text-ink/60">📖 Học mới</p>
+            {unseen > 0 ? (
+              <>
+                <p className="mt-3 text-sm text-ink/50">đạt mục tiêu 5/ngày 🎯</p>
+                <Link
+                  href="/study?track=html&mode=learn&extra=1"
+                  className="mt-4 inline-block rounded-full bg-flame-500 px-5 py-2 text-sm font-semibold text-white transition-colors hover:bg-flame-600"
+                >
+                  ⚡ Học vượt {Math.min(5, unseen)} thẻ
+                </Link>
+              </>
+            ) : (
+              <p className="mt-3 text-sm text-ink/50">đã học hết {totalTags} thẻ 🏁</p>
+            )}
+          </div>
+        )}
+
+        {/* Tầng ÔN TẬP — chỉ thẻ đã học đến hạn (FSRS) */}
+        {due > 0 ? (
+          <Link
+            href="/study?track=html&mode=review"
+            className="group rounded-2xl border border-amber-200 bg-amber-50 p-6 transition-all hover:-translate-y-0.5 hover:border-amber-300 hover:shadow-md"
+          >
+            <p className="font-display text-lg font-bold text-amber-800">🔁 Ôn tập</p>
+            <p className="mt-3 font-display text-4xl font-bold text-amber-600">{due} thẻ</p>
+            <p className="mt-1 text-sm text-amber-800/70">đến hạn theo lịch ghi nhớ</p>
+            <span className="mt-4 inline-block rounded-full bg-amber-500/15 px-4 py-2 text-sm font-bold text-amber-800 transition-transform group-hover:translate-x-1">
+              Ôn ngay →
+            </span>
+          </Link>
+        ) : (
+          <div className="rounded-2xl border border-ink/10 bg-surface p-6">
+            <p className="font-display text-lg font-bold text-ink/60">🔁 Ôn tập</p>
+            <p className="mt-3 text-sm text-ink/50">
+              0 thẻ đến hạn{nextDue ? ` — sớm nhất ${shortDate.format(nextDue)}` : ""}
+            </p>
+          </div>
+        )}
+      </div>
 
       {studiedToday.length > 0 && (
         <div className="animate-rise stagger-4 rounded-2xl border border-ink/10 bg-surface p-5">
