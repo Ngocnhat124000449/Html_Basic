@@ -35,6 +35,15 @@ Thay khối CTA lớn + dải ôn tập bằng lưới `grid gap-4 sm:grid-cols-
 
 - Chỉ `src/app/html/page.tsx`. Không đụng API, không migration, không đổi trang track khác.
 
+## Mở rộng (cùng ngày, người dùng yêu cầu sau khi duyệt /html)
+
+Nhân rộng bố cục 2 card ra 6 trang track còn lại (`css|js|dsa|git|react|project/page.tsx`),
+thay hàng nút Học mới/Ôn tập/Học vượt. Khác biệt so với /html:
+- Đơn vị "mục" thay "thẻ"; quota 5 mục mới/ngày (đồng bộ /html, thêm query `newToday`).
+- **Gate G3**: khi khóa chưa mở, card Học mới thành card mờ "🔒 Mở khi X đạt 80% (a/b)"
+  (thay span khóa cũ); card Ôn tập không bị ảnh hưởng.
+- Dòng 🎉 chỉ hiện khi KHÔNG bị gate và cả hai tầng đều cạn.
+
 ## Kiểm thử
 
 - `npm run build` + lint sạch (trang là server component thuần, không unit test).

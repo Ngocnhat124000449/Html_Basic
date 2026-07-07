@@ -24,10 +24,15 @@ export default async function GitRoadmapPage() {
   if (!session?.user?.id) redirect("/login");
   const userId = session.user.id;
   const now = new Date();
+  const startOfDay = new Date(now);
+  startOfDay.setHours(0, 0, 0, 0);
 
-  const [tags, progress] = await Promise.all([
+  const [tags, progress, newToday] = await Promise.all([
     prisma.tag.findMany({ where: { track: "git" }, orderBy: { order: "asc" } }),
     prisma.userTagProgress.findMany({ where: { userId, tag: { track: "git" } } }),
+    prisma.userTagProgress.count({
+      where: { userId, createdAt: { gte: startOfDay }, tag: { track: "git" } },
+    }),
   ]);
   const progressByTag = new Map(progress.map((p) => [p.tagId, p]));
 
@@ -42,7 +47,12 @@ export default async function GitRoadmapPage() {
   const statuses = new Map(tags.map((t) => [t.id, statusOf(t.id)]));
   const counts = { unseen: 0, learning: 0, due: 0, mastered: 0 };
   for (const st of statuses.values()) counts[st]++;
-  const started = tags.length - counts.unseen;
+  // Số liệu cho 2 card Học mới / Ôn tập (quota 5 mục mới/ngày như trang /html)
+  const newAvailable = Math.min(Math.max(0, 5 - newToday), counts.unseen);
+  const nextDue = progress
+    .filter((p) => p.dueAt > now)
+    .reduce<Date | null>((min, p) => (!min || p.dueAt < min ? p.dueAt : min), null);
+  const shortDate = new Intl.DateTimeFormat("vi-VN", { day: "numeric", month: "numeric" });
   // G3 — khóa chưa mở thì thay nút Học mới bằng thông báo (Ôn tập giữ nguyên).
   const gate = await getGate(userId, "git");
 
@@ -82,32 +92,73 @@ export default async function GitRoadmapPage() {
           (.gitignore, .env, npm). Câu bậc 3 yêu cầu gõ đúng chuỗi lệnh. Mỗi ngày 5 mục mới + ôn lại
           theo lịch.
         </p>
-        <div className="mt-4 flex flex-wrap items-center gap-3">
+        {!gate && counts.due === 0 && newAvailable === 0 && (
+          <p className="mt-4 text-sm font-medium text-emerald-700">
+            🎉 Hôm nay xong rồi — bộ nhớ cần thời gian, quay lại ngày mai nhé.
+          </p>
+        )}
+        <div className="mt-4 grid gap-4 sm:grid-cols-2">
+          {/* Tầng HỌC MỚI — mục mới theo lộ trình (kèm ôn nền khi có mục đến hạn); gate G3 khóa cả card */}
           {gate ? (
-            <span className="rounded-full bg-ink/10 px-6 py-2.5 font-display font-bold text-ink/40">
-              🔒 Mở khi {TRACK_LABEL[gate.blockedBy] ?? gate.blockedBy} đạt 80% ({gate.learned}/{gate.need})
-            </span>
-          ) : (
+            <div className="rounded-2xl border border-ink/10 bg-surface p-6">
+              <p className="font-display text-lg font-bold text-ink/60">📖 Học mới</p>
+              <p className="mt-3 text-sm text-ink/50">
+                🔒 Mở khi {TRACK_LABEL[gate.blockedBy] ?? gate.blockedBy} đạt 80% ({gate.learned}/{gate.need})
+              </p>
+            </div>
+          ) : newAvailable > 0 ? (
             <Link
               href="/study?track=git&mode=learn"
-              className="rounded-full bg-flame-500 px-6 py-2.5 font-display font-bold text-white shadow-lg shadow-flame-500/30 transition-all hover:-translate-y-0.5 hover:bg-flame-600"
+              className="group rounded-2xl bg-gradient-to-br from-flame-500 to-flame-700 p-6 text-white shadow-lg shadow-flame-500/25 transition-all hover:-translate-y-0.5 hover:shadow-xl hover:shadow-flame-500/30"
             >
-              📖 Học mới
+              <p className="font-display text-lg font-bold">📖 Học mới</p>
+              <p className="mt-3 font-display text-4xl font-bold">{newAvailable} mục</p>
+              <p className="mt-1 text-sm text-white/80">
+                {counts.due > 0 ? "kèm ôn nền trước khi vào bài" : "tuần tự theo lộ trình"}
+              </p>
+              <span className="mt-4 inline-block rounded-full bg-white/15 px-4 py-2 text-sm font-bold transition-transform group-hover:translate-x-1">
+                Bắt đầu →
+              </span>
             </Link>
+          ) : (
+            <div className="rounded-2xl border border-ink/10 bg-surface p-6">
+              <p className="font-display text-lg font-bold text-ink/60">📖 Học mới</p>
+              {counts.unseen > 0 ? (
+                <>
+                  <p className="mt-3 text-sm text-ink/50">đạt mục tiêu 5/ngày 🎯</p>
+                  <Link
+                    href="/study?track=git&mode=learn&extra=1"
+                    className="mt-4 inline-block rounded-full bg-flame-500 px-5 py-2 text-sm font-semibold text-white transition-colors hover:bg-flame-600"
+                  >
+                    ⚡ Học vượt {Math.min(5, counts.unseen)} mục
+                  </Link>
+                </>
+              ) : (
+                <p className="mt-3 text-sm text-ink/50">đã học hết {tags.length} mục 🏁</p>
+              )}
+            </div>
           )}
-          <Link
-            href="/study?track=git&mode=review"
-            className="rounded-full border border-ink/15 px-5 py-2.5 text-sm font-medium text-ink/70 transition-colors hover:border-flame-300 hover:text-flame-700"
-          >
-            🔁 Ôn tập
-          </Link>
-          {!gate && counts.unseen > 0 && started > 0 && (
+
+          {/* Tầng ÔN TẬP — chỉ mục đã học đến hạn (FSRS) */}
+          {counts.due > 0 ? (
             <Link
-              href="/study?track=git&mode=learn&extra=1"
-              className="rounded-full border border-ink/15 px-5 py-2.5 text-sm font-medium text-ink/70 transition-colors hover:border-flame-300 hover:text-flame-700"
+              href="/study?track=git&mode=review"
+              className="group rounded-2xl border border-amber-200 bg-amber-50 p-6 transition-all hover:-translate-y-0.5 hover:border-amber-300 hover:shadow-md"
             >
-              ⚡ Học vượt
+              <p className="font-display text-lg font-bold text-amber-800">🔁 Ôn tập</p>
+              <p className="mt-3 font-display text-4xl font-bold text-amber-600">{counts.due} mục</p>
+              <p className="mt-1 text-sm text-amber-800/70">đến hạn theo lịch ghi nhớ</p>
+              <span className="mt-4 inline-block rounded-full bg-amber-500/15 px-4 py-2 text-sm font-bold text-amber-800 transition-transform group-hover:translate-x-1">
+                Ôn ngay →
+              </span>
             </Link>
+          ) : (
+            <div className="rounded-2xl border border-ink/10 bg-surface p-6">
+              <p className="font-display text-lg font-bold text-ink/60">🔁 Ôn tập</p>
+              <p className="mt-3 text-sm text-ink/50">
+                0 mục đến hạn{nextDue ? ` — sớm nhất ${shortDate.format(nextDue)}` : ""}
+              </p>
+            </div>
           )}
         </div>
       </div>
