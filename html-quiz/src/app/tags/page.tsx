@@ -2,6 +2,7 @@ import Link from "next/link";
 import { redirect } from "next/navigation";
 import { auth } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
+import { htmlTagLabel } from "@/lib/tracks";
 
 type Status = "unseen" | "learning" | "due" | "mastered";
 
@@ -112,7 +113,7 @@ export default async function TagsPage() {
                   >
                     <div className="flex items-center justify-between gap-2">
                       <code className="font-mono text-sm font-bold text-flame-600 group-hover:underline">
-                        &lt;{tag.name}&gt;
+                        {htmlTagLabel(tag.name)}
                       </code>
                       <span
                         className={`shrink-0 rounded-full px-2 py-0.5 text-[11px] font-semibold ${st.cls}`}

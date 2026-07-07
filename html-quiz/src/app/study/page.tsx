@@ -6,7 +6,7 @@ import type { AnswerResult, SessionTag } from "@/lib/study-types";
 import { runJsSpecs } from "@/lib/js-runner";
 import { runReactSpecs } from "@/lib/react-runner";
 import { buildLearnWithWarmup, buildReviewQueue, type QueueItem } from "@/lib/study-queue";
-import { TRACK_LABEL, type GateInfo } from "@/lib/tracks";
+import { TRACK_LABEL, htmlTagLabel, type GateInfo } from "@/lib/tracks";
 
 const TIER_INFO: Record<number, { label: string; cls: string }> = {
   1: { label: "Bậc 1 · Nhận biết", cls: "bg-sky-100 text-sky-700" },
@@ -20,7 +20,7 @@ const MAX_WRONG = 3;
 const tagLabel = (tag: {
   track: "html" | "css" | "js" | "dsa" | "git" | "react" | "project" | "all" | "leech";
   name: string;
-}) => (tag.track === "html" ? `<${tag.name}>` : tag.name);
+}) => (tag.track === "html" ? htmlTagLabel(tag.name) : tag.name);
 
 export default function StudyPage() {
   const [tags, setTags] = useState<SessionTag[] | null>(null);

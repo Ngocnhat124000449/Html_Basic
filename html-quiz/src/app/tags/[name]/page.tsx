@@ -2,6 +2,7 @@ import Link from "next/link";
 import { notFound, redirect } from "next/navigation";
 import { auth } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
+import { htmlTagLabel } from "@/lib/tracks";
 import {
   GLOBAL_ATTRIBUTES,
   TAG_ATTRIBUTES,
@@ -119,7 +120,7 @@ export default async function TagDetailPage({
         </Link>
         <div className="mt-3 flex flex-wrap items-center gap-3">
           <code className="rounded-xl bg-ink px-3 py-1.5 font-mono text-2xl font-bold text-flame-300">
-            &lt;{tag.name}&gt;
+            {htmlTagLabel(tag.name)}
           </code>
           <span className={`rounded-full px-3 py-1 text-sm font-medium ${status.cls}`}>
             {status.text}

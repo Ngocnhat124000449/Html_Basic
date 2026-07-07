@@ -6,7 +6,20 @@ import {
   GATE_THRESHOLD,
   gateFor,
   TRACK_LABEL,
+  htmlTagLabel,
 } from "./tracks";
+
+describe("htmlTagLabel", () => {
+  it("tên thẻ thật bọc <>", () => {
+    expect(htmlTagLabel("h1")).toBe("<h1>");
+    expect(htmlTagLabel("figcaption")).toBe("<figcaption>");
+  });
+  it("tên khái niệm (có khoảng trắng/ký tự ngoài a-z0-9) hiện trần", () => {
+    expect(htmlTagLabel("trang web & trình duyệt")).toBe("trang web & trình duyệt");
+    expect(htmlTagLabel("file .html")).toBe("file .html");
+    expect(htmlTagLabel("khung trang tối thiểu")).toBe("khung trang tối thiểu");
+  });
+});
 
 describe("foundationTracks", () => {
   it("css gồm html + css", () => {

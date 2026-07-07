@@ -2,6 +2,7 @@ import Link from "next/link";
 import { redirect } from "next/navigation";
 import { auth } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
+import { htmlTagLabel } from "@/lib/tracks";
 
 export default async function HtmlDashboardPage() {
   const session = await auth();
@@ -194,7 +195,7 @@ export default async function HtmlDashboardPage() {
                       : "border-amber-200 bg-amber-50"
                 }`}
               >
-                <code className="font-mono font-bold text-flame-600">&lt;{t.name}&gt;</code>
+                <code className="font-mono font-bold text-flame-600">{htmlTagLabel(t.name)}</code>
                 <span className="text-xs text-ink/60">
                   {!t.inSrs
                     ? "luyện tự do"

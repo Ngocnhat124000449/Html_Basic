@@ -9,6 +9,7 @@ import { JS_REFLEX_QUESTIONS } from "@/lib/js-reflex-data";
 import { GIT_REFLEX_QUESTIONS } from "@/lib/git-reflex-data";
 import { REACT_REFLEX_QUESTIONS } from "@/lib/react-reflex-data";
 import { runJsSpecs } from "@/lib/js-runner";
+import { htmlTagLabel } from "@/lib/tracks";
 import type { JsRunSpec } from "@/lib/grading/js-types";
 
 const TIME_FAST = 45; // giây — trắc nghiệm, điền thẻ, phản xạ
@@ -100,7 +101,7 @@ const labelFor = (track: Track | undefined, name: string) =>
   track === "react" ||
   track === "project"
     ? name
-    : `<${name}>`;
+    : htmlTagLabel(name);
 
 const SCOPE_META: Record<Scope, string> = {
   all: "Tất cả",

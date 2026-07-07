@@ -32,6 +32,12 @@ export const TRACK_LABEL: Record<string, string> = {
   project: "Dự án — ghép cả trang",
 };
 
+// Tên thẻ HTML thật (h1, p, figcaption...) bọc <>; thẻ KHÁI NIỆM của phần Nhập môn
+// ("trang web & trình duyệt"...) hiện trần.
+export function htmlTagLabel(name: string): string {
+  return /^[a-z][a-z0-9]*$/.test(name) ? `<${name}>` : name;
+}
+
 // Khóa track có được HỌC MỚI không: mọi khóa đứng trước trong TRACK_ORDER phải
 // đã học ≥ GATE_THRESHOLD. Đạt hết → null; khóa đầu/track lạ → null (an toàn);
 // khóa nền 0 thẻ hoặc thiếu stats → coi như đạt.
