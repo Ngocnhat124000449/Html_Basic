@@ -4,6 +4,8 @@ import { auth } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
 import { retrievability, LEECH_LAPSES } from "@/lib/fsrs";
 import { getUserSettings, fsrsOptsOf } from "@/lib/user-settings";
+import { getAllGates } from "@/lib/track-gate";
+import { TRACK_LABEL } from "@/lib/tracks";
 
 const DAY_MS = 24 * 60 * 60 * 1000;
 
@@ -64,6 +66,8 @@ export default async function HomePage() {
     else if (off < 7) forecast[off]++;
   }
   const fsrsOpts = fsrsOptsOf(await getUserSettings(userId));
+  // G3 — gate từng khóa (null = được học mới); card khóa chưa mở hiện 🔒 + điều kiện.
+  const gates = await getAllGates(userId);
   const reviewed = allProgress.filter((p) => p.stability > 0);
   const avgRetention = reviewed.length
     ? Math.round(
@@ -83,6 +87,7 @@ export default async function HomePage() {
   const courses = [
     {
       href: "/html",
+      track: "html",
       name: "HTML",
       icon: "📄",
       desc: "Cấu trúc trang web qua thẻ ngữ nghĩa",
@@ -101,6 +106,7 @@ export default async function HomePage() {
     },
     {
       href: "/css",
+      track: "css",
       name: "CSS",
       icon: "🎨",
       desc: "Tạo giao diện, bố cục và hiệu ứng",
@@ -119,6 +125,7 @@ export default async function HomePage() {
     },
     {
       href: "/js",
+      track: "js",
       name: "JavaScript",
       icon: "⚡",
       desc: "Lập trình tương tác cho trang web",
@@ -137,6 +144,7 @@ export default async function HomePage() {
     },
     {
       href: "/dsa",
+      track: "dsa",
       name: "Cấu trúc DL & Giải thuật",
       icon: "🧮",
       desc: "Mảng, stack, queue, tìm kiếm, sắp xếp, Big-O",
@@ -155,6 +163,7 @@ export default async function HomePage() {
     },
     {
       href: "/git",
+      track: "git",
       name: "Git & Công cụ",
       icon: "🔀",
       desc: "Quản lý mã nguồn, GitHub, npm, .env",
@@ -173,6 +182,7 @@ export default async function HomePage() {
     },
     {
       href: "/react",
+      track: "react",
       name: "React",
       icon: "⚛️",
       desc: "Component, JSX, props — dựng UI hiện đại",
@@ -191,6 +201,7 @@ export default async function HomePage() {
     },
     {
       href: "/project",
+      track: "project",
       name: "Dự án — ghép cả trang",
       icon: "🧩",
       desc: "Lắp nhiều thẻ thành card, header, form, cả trang",
@@ -228,6 +239,7 @@ export default async function HomePage() {
         {courses.map((c, i) => {
           const pct = c.total > 0 ? Math.round((c.mastered / c.total) * 100) : 0;
           const startedPct = c.total > 0 ? Math.round((c.started / c.total) * 100) : 0;
+          const gate = gates[c.track] ?? null;
           return (
             <Link
               key={c.href}
@@ -247,13 +259,28 @@ export default async function HomePage() {
               <p className="mt-1 text-sm text-ink/60">{c.desc}</p>
 
               <div className="mt-4 flex items-center gap-2 text-xs">
-                <span className={`rounded-full px-2.5 py-0.5 font-semibold ${c.accent.chip}`}>
-                  {c.due > 0 ? `${c.due} đến hạn ôn` : c.started > 0 ? "đang học" : "chưa bắt đầu"}
+                <span
+                  className={`rounded-full px-2.5 py-0.5 font-semibold ${gate ? "bg-ink/10 text-ink/50" : c.accent.chip}`}
+                >
+                  {gate
+                    ? "🔒 chưa mở"
+                    : c.due > 0
+                      ? `${c.due} đến hạn ôn`
+                      : c.started > 0
+                        ? "đang học"
+                        : "chưa bắt đầu"}
                 </span>
                 <span className="text-ink/50">
                   nắm vững {c.mastered}/{c.total} {c.unit}
                 </span>
               </div>
+
+              {gate && (
+                <p className="mt-2 text-xs text-ink/50">
+                  Mở khi {TRACK_LABEL[gate.blockedBy] ?? gate.blockedBy} đạt 80% ({gate.learned}/
+                  {gate.need})
+                </p>
+              )}
 
               <div className="mt-3 h-2 overflow-hidden rounded-full bg-ink/10">
                 <div
@@ -263,9 +290,9 @@ export default async function HomePage() {
               </div>
 
               <span
-                className={`mt-4 inline-block font-medium transition-transform group-hover:translate-x-1 ${c.accent.cta}`}
+                className={`mt-4 inline-block font-medium transition-transform group-hover:translate-x-1 ${gate ? "text-ink/40" : c.accent.cta}`}
               >
-                {c.started > 0 ? "Tiếp tục học →" : "Bắt đầu →"}
+                {gate ? "🔒 Xem lộ trình →" : c.started > 0 ? "Tiếp tục học →" : "Bắt đầu →"}
               </span>
             </Link>
           );
