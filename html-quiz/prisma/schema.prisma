@@ -28,6 +28,8 @@ model UserSettings {
   reviewCap       Int      @default(20)
   targetRetention Float    @default(0.9)
   hiddenTracks    String[] @default([])
+  // G3 — khóa đã mở học mới VĨNH VIỄN (ratchet): đạt 80% mọi khóa nền lần đầu thì ghi vào.
+  unlockedTracks  String[] @default([])
   fsrsParams      Json?
   fsrsOptimizedAt DateTime?
   updatedAt       DateTime @updatedAt
