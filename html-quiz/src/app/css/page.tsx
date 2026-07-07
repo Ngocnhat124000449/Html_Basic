@@ -2,6 +2,8 @@ import Link from "next/link";
 import { redirect } from "next/navigation";
 import { auth } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
+import { getGate } from "@/lib/track-gate";
+import { TRACK_LABEL } from "@/lib/tracks";
 
 type Status = "unseen" | "learning" | "due" | "mastered";
 
@@ -43,6 +45,8 @@ export default async function CssRoadmapPage() {
   const counts = { unseen: 0, learning: 0, due: 0, mastered: 0 };
   for (const st of statuses.values()) counts[st]++;
   const started = tags.length - counts.unseen;
+  // G3 — khóa chưa mở thì thay nút Học mới bằng thông báo (Ôn tập giữ nguyên).
+  const gate = await getGate(userId, "css");
 
   // Giữ thứ tự lộ trình: Phần → Chương (topic) theo order của mục
   const parts: { part: string; topics: { topic: string; tags: typeof tags }[] }[] = [];
@@ -77,19 +81,25 @@ export default async function CssRoadmapPage() {
           bố cục và hiệu ứng. Mỗi ngày 5 mục mới + ôn lại theo lịch, giống cách bạn học HTML.
         </p>
         <div className="mt-4 flex flex-wrap items-center gap-3">
-          <Link
-            href="/study?track=css&mode=learn"
-            className="rounded-full bg-flame-500 px-6 py-2.5 font-display font-bold text-white shadow-lg shadow-flame-500/30 transition-all hover:-translate-y-0.5 hover:bg-flame-600"
-          >
-            📖 Học mới
-          </Link>
+          {gate ? (
+            <span className="rounded-full bg-ink/10 px-6 py-2.5 font-display font-bold text-ink/40">
+              🔒 Mở khi {TRACK_LABEL[gate.blockedBy] ?? gate.blockedBy} đạt 80% ({gate.learned}/{gate.need})
+            </span>
+          ) : (
+            <Link
+              href="/study?track=css&mode=learn"
+              className="rounded-full bg-flame-500 px-6 py-2.5 font-display font-bold text-white shadow-lg shadow-flame-500/30 transition-all hover:-translate-y-0.5 hover:bg-flame-600"
+            >
+              📖 Học mới
+            </Link>
+          )}
           <Link
             href="/study?track=css&mode=review"
             className="rounded-full border border-ink/15 px-5 py-2.5 text-sm font-medium text-ink/70 transition-colors hover:border-flame-300 hover:text-flame-700"
           >
             🔁 Ôn tập
           </Link>
-          {counts.unseen > 0 && started > 0 && (
+          {!gate && counts.unseen > 0 && started > 0 && (
             <Link
               href="/study?track=css&mode=learn&extra=1"
               className="rounded-full border border-ink/15 px-5 py-2.5 text-sm font-medium text-ink/70 transition-colors hover:border-flame-300 hover:text-flame-700"
