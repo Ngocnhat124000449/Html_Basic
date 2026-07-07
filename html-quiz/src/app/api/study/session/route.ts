@@ -8,6 +8,7 @@ import { toReactSpecs, type ReactRequirement } from "@/lib/grading/react-types";
 import { LEECH_LAPSES } from "@/lib/fsrs";
 import { getUserSettings } from "@/lib/user-settings";
 import { foundationTracks, WARMUP_CAP, TRACK_ORDER } from "@/lib/tracks";
+import { getGate } from "@/lib/track-gate";
 
 const SESSION_CAP = 10;
 
@@ -126,6 +127,9 @@ export async function GET(req: Request) {
 
   // mode=learn: chỉ thẻ MỚI theo lộ trình (order asc), giữ quota dailyNew + extra.
   if (mode === "learn") {
+    // G3 — khóa chưa mở (khóa nền <80%) thì không có phiên học mới (kể cả ôn nền).
+    const gate = await getGate(userId, track);
+    if (gate) return NextResponse.json({ tags: [], gate });
     const sod = new Date(now);
     sod.setHours(0, 0, 0, 0);
     const newCount = await prisma.userTagProgress.count({
@@ -182,7 +186,13 @@ export async function GET(req: Request) {
   const newToday = await prisma.userTagProgress.count({
     where: { userId, createdAt: { gte: startOfDay }, tag: { track } },
   });
-  const allowedNew = extra ? settings.dailyNew : Math.max(0, settings.dailyNew - newToday);
+  // G3 — bị gate thì legacy không bốc thẻ mới (thẻ đến hạn vẫn trả bình thường).
+  const legacyGate = await getGate(userId, track);
+  const allowedNew = legacyGate
+    ? 0
+    : extra
+      ? settings.dailyNew
+      : Math.max(0, settings.dailyNew - newToday);
 
   let newTags: TagWithQuestions[] = [];
   if (allowedNew > 0) {
