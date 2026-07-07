@@ -1,5 +1,12 @@
 import { describe, expect, it } from "vitest";
-import { TRACK_ORDER, foundationTracks, WARMUP_CAP } from "./tracks";
+import {
+  TRACK_ORDER,
+  foundationTracks,
+  WARMUP_CAP,
+  GATE_THRESHOLD,
+  gateFor,
+  TRACK_LABEL,
+} from "./tracks";
 
 describe("foundationTracks", () => {
   it("css gồm html + css", () => {
@@ -13,6 +20,42 @@ describe("foundationTracks", () => {
   });
   it("track lạ trả về chính nó", () => {
     expect(foundationTracks("khac")).toEqual(["khac"]);
+  });
+});
+
+describe("gateFor", () => {
+  it("html (khóa đầu) không bao giờ bị chặn", () => {
+    expect(gateFor("html", {})).toBeNull();
+  });
+  it("css bị chặn khi html chưa đạt 80%", () => {
+    expect(gateFor("css", { html: { learned: 47, total: 60 } })).toEqual({
+      blockedBy: "html",
+      learned: 47,
+      need: 48,
+      total: 60,
+    });
+  });
+  it("đạt đúng biên 80% thì qua (need dùng ceil)", () => {
+    expect(gateFor("css", { html: { learned: 48, total: 60 } })).toBeNull();
+    // 89 * 0.8 = 71.2 → cần 72
+    expect(
+      gateFor("js", { html: { learned: 60, total: 60 }, css: { learned: 71, total: 89 } })
+    ).toEqual({ blockedBy: "css", learned: 71, need: 72, total: 89 });
+  });
+  it("trả khóa nền SỚM NHẤT chưa đạt", () => {
+    const stats = { html: { learned: 0, total: 60 }, css: { learned: 0, total: 89 } };
+    expect(gateFor("react", stats)?.blockedBy).toBe("html");
+  });
+  it("khóa nền 0 thẻ hoặc thiếu stats coi như đạt", () => {
+    expect(gateFor("css", { html: { learned: 0, total: 0 } })).toBeNull();
+    expect(gateFor("css", {})).toBeNull();
+  });
+  it("track lạ không bị chặn", () => {
+    expect(gateFor("khac", { html: { learned: 0, total: 60 } })).toBeNull();
+  });
+  it("GATE_THRESHOLD = 0.8 và TRACK_LABEL đủ 7 khóa", () => {
+    expect(GATE_THRESHOLD).toBe(0.8);
+    for (const t of TRACK_ORDER) expect(TRACK_LABEL[t]).toBeTruthy();
   });
 });
 
