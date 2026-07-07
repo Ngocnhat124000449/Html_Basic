@@ -6,6 +6,7 @@ import type { AnswerResult, SessionTag } from "@/lib/study-types";
 import { runJsSpecs } from "@/lib/js-runner";
 import { runReactSpecs } from "@/lib/react-runner";
 import { buildLearnWithWarmup, buildReviewQueue, type QueueItem } from "@/lib/study-queue";
+import { TRACK_LABEL, type GateInfo } from "@/lib/tracks";
 
 const TIER_INFO: Record<number, { label: string; cls: string }> = {
   1: { label: "Bậc 1 · Nhận biết", cls: "bg-sky-100 text-sky-700" },
@@ -38,6 +39,8 @@ export default function StudyPage() {
   const [mode, setMode] = useState<"learn" | "review">("review");
   // tagId của thẻ đang ở màn làm quen (null = không hiện) — tránh nhập nhằng khi chuyển thẻ.
   const [introFor, setIntroFor] = useState<string | null>(null);
+  // G3 — thông tin gate khi API chặn học mới (khóa nền chưa đạt 80%).
+  const [gate, setGate] = useState<GateInfo | null>(null);
   const inputRef = useRef<HTMLInputElement | null>(null);
   const textareaRef = useRef<HTMLTextAreaElement | null>(null);
 
@@ -58,6 +61,7 @@ export default function StudyPage() {
       setWrongByTag({});
       setFinished(false);
       setSummary([]);
+      setGate(null);
       const qs = new URLSearchParams();
       if (extra) qs.set("extra", "1");
       if (track !== "html") qs.set("track", track);
@@ -67,6 +71,7 @@ export default function StudyPage() {
         .then((r) => r.json())
         .then((d) => {
           setTags(d.tags ?? []);
+          setGate(d.gate ?? null);
           setIntroFor(
             mode === "learn" ? (d.tags?.find((t: SessionTag) => t.isNew)?.tagId ?? null) : null
           );
@@ -104,6 +109,7 @@ export default function StudyPage() {
         setTrack(trk);
         setMode(md);
         setTags(d.tags ?? []);
+        setGate(d.gate ?? null);
         setIntroFor(
           md === "learn" ? (d.tags?.find((t: SessionTag) => t.isNew)?.tagId ?? null) : null
         );
@@ -168,6 +174,36 @@ export default function StudyPage() {
         <div className="h-4 w-48 animate-pulse rounded-full bg-ink/10" />
         <div className="h-64 animate-pulse rounded-2xl bg-ink/10" />
         <p className="text-center text-sm text-ink/50">Đang chuẩn bị phiên học...</p>
+      </div>
+    );
+  }
+
+  // G3 — khóa chưa mở: hiện điều kiện + lối đi học khóa nền. Chỉ xảy ra với mode=learn.
+  if (tags.length === 0 && gate) {
+    return (
+      <div className="animate-rise py-20 text-center">
+        <p className="text-4xl">🔒</p>
+        <h1 className="mt-3 font-display text-2xl font-bold">Khóa này chưa mở</h1>
+        <p className="mt-2 text-ink/60">
+          Cần học ≥80% mỗi khóa nền —{" "}
+          <strong>{TRACK_LABEL[gate.blockedBy] ?? gate.blockedBy}</strong> mới học {gate.learned}/
+          {gate.need} thẻ cần thiết (tổng {gate.total}).
+        </p>
+        <div className="mt-6 flex flex-wrap justify-center gap-3">
+          {/* Thẻ <a> thường (full reload): /study đọc query 1 lần trong useEffect đầu. */}
+          <a
+            href={`/study?track=${gate.blockedBy}&mode=learn`}
+            className="rounded-full bg-flame-500 px-6 py-2.5 font-medium text-white transition-colors hover:bg-flame-600"
+          >
+            📖 Học tiếp {TRACK_LABEL[gate.blockedBy] ?? gate.blockedBy} →
+          </a>
+          <Link
+            href={homeHref}
+            className="rounded-full border border-ink/15 px-6 py-2.5 font-medium text-ink/70 transition-colors hover:border-flame-300 hover:text-flame-700"
+          >
+            ← Về trang chủ
+          </Link>
+        </div>
       </div>
     );
   }
