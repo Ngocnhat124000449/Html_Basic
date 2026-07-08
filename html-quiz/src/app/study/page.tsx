@@ -127,6 +127,10 @@ export default function StudyPage() {
     }
   }, [feedback, pos]);
 
+  // Tự chuyển câu sau khi xem kết quả — đúng 3s, sai 5s (MCQ) / 7s (câu gõ code).
+  // Bấm "Câu tiếp theo"/Enter thì qua ngay không phải chờ.
+  const [autoNext, setAutoNext] = useState<{ left: number; total: number } | null>(null);
+
   // review = chỉ ôn thẻ đã học (mọi track, gồm all/leech); learn = học mới tuần tự.
   const reviewMode = mode === "review";
   const unit = track === "html" ? "thẻ" : "mục";
@@ -167,6 +171,53 @@ export default function StudyPage() {
     },
     [tags]
   );
+
+  // Sang câu kế (hoặc chốt phiên ở câu cuối) — dùng chung cho nút bấm và tự chuyển câu.
+  const next = useCallback(async () => {
+    if (pos + 1 >= queue.length) {
+      // wrongByTag đã cập nhật ở submit (render trước) nên dùng trực tiếp.
+      await finishSession(wrongByTag);
+      return;
+    }
+    const nextPos = pos + 1;
+    setPos(nextPos);
+    const nextItem = queue[nextPos];
+    if (
+      mode === "learn" &&
+      nextItem &&
+      nextItem.tag.isNew &&
+      nextItem.tag.tagId !== queue[pos]?.tag.tagId
+    ) {
+      setIntroFor(nextItem.tag.tagId);
+    }
+    setSelected(null);
+    setAnswer("");
+    setFeedback(null);
+  }, [pos, queue, mode, wrongByTag, finishSession]);
+
+  // Đồng hồ tự chuyển câu: kick qua setTimeout để không setState đồng bộ trong effect.
+  useEffect(() => {
+    if (!feedback) return;
+    const cur = queue[pos];
+    const total = feedback.correct ? 3 : cur && cur.q.type !== "MCQ" ? 7 : 5;
+    const startedAt = Date.now();
+    const tick = () => {
+      const remaining = total - (Date.now() - startedAt) / 1000;
+      if (remaining <= 0) {
+        clearInterval(timer);
+        next();
+      } else {
+        setAutoNext({ left: Math.ceil(remaining), total });
+      }
+    };
+    const kick = setTimeout(tick, 0);
+    const timer = setInterval(tick, 100);
+    return () => {
+      clearTimeout(kick);
+      clearInterval(timer);
+      setAutoNext(null);
+    };
+  }, [feedback, pos, queue, next]);
 
   if (tags === null) {
     return (
@@ -343,8 +394,9 @@ export default function StudyPage() {
   const sessionPct = (pos / queue.length) * 100;
   const totalWrong = Object.values(wrongByTag).reduce((s, n) => s + n, 0);
 
-  async function submit() {
-    const ans = q.type === "MCQ" ? selected : answer.trim();
+  // pick: chỉ số MCQ vừa bấm — truyền thẳng vì setSelected chưa kịp cập nhật state.
+  async function submit(pick?: number) {
+    const ans = q.type === "MCQ" ? (pick ?? selected) : answer.trim();
     if (ans === null || ans === "") return;
     setSubmitting(true);
     // Câu JS cần chạy thử: chạy code trong Web Worker (client) rồi gửi output thô lên server
@@ -368,29 +420,6 @@ export default function StudyPage() {
     if (!data.correct) {
       setWrongByTag((prev) => ({ ...prev, [tag.tagId]: (prev[tag.tagId] ?? 0) + 1 }));
     }
-  }
-
-  // Chế độ phản xạ: mỗi câu một lượt, đúng/sai đều sang câu kế.
-  async function next() {
-    if (pos + 1 >= queue.length) {
-      // wrongByTag đã cập nhật ở submit (render trước) nên dùng trực tiếp.
-      await finishSession(wrongByTag);
-      return;
-    }
-    const nextPos = pos + 1;
-    setPos(nextPos);
-    const nextItem = queue[nextPos];
-    if (
-      mode === "learn" &&
-      nextItem &&
-      nextItem.tag.isNew &&
-      nextItem.tag.tagId !== queue[pos]?.tag.tagId
-    ) {
-      setIntroFor(nextItem.tag.tagId);
-    }
-    setSelected(null);
-    setAnswer("");
-    setFeedback(null);
   }
 
   return (
@@ -455,8 +484,13 @@ export default function StudyPage() {
               return (
                 <button
                   key={i}
-                  onClick={() => !feedback && setSelected(i)}
-                  disabled={!!feedback}
+                  onClick={() => {
+                    // Một chạm: bấm đáp án là nộp luôn, không cần nút xác nhận.
+                    if (feedback || submitting) return;
+                    setSelected(i);
+                    submit(i);
+                  }}
+                  disabled={!!feedback || submitting}
                   className={`group flex w-full items-center gap-3 rounded-xl border-2 px-4 py-3 text-left transition-all ${
                     isAnswer
                       ? "border-emerald-500 bg-emerald-50"
@@ -512,14 +546,18 @@ export default function StudyPage() {
             />
           ))}
 
-        {!feedback && (
+        {/* MCQ nộp ngay khi bấm đáp án — nút Trả lời chỉ còn cho câu gõ code */}
+        {!feedback && q.type !== "MCQ" && (
           <button
-            onClick={submit}
-            disabled={submitting || (q.type === "MCQ" ? selected === null : answer.trim() === "")}
+            onClick={() => submit()}
+            disabled={submitting || answer.trim() === ""}
             className="mt-5 w-full rounded-xl bg-flame-500 px-6 py-3 font-semibold text-white shadow-sm transition-all hover:bg-flame-600 hover:shadow-md disabled:opacity-40 disabled:shadow-none sm:w-auto"
           >
             {submitting ? "Đang chấm..." : "Trả lời"}
           </button>
+        )}
+        {!feedback && q.type === "MCQ" && submitting && (
+          <p className="mt-4 text-sm font-medium text-ink/50">Đang chấm...</p>
         )}
       </div>
 
@@ -568,9 +606,23 @@ export default function StudyPage() {
               feedback.correct ? "bg-emerald-600 hover:bg-emerald-700" : "bg-ink hover:bg-ink/80"
             }`}
           >
-            {pos + 1 >= queue.length ? "Xem kết quả 🏁" : "Câu tiếp theo →"}
+            {pos + 1 >= queue.length
+              ? `Xem kết quả 🏁${autoNext ? ` (${autoNext.left}s)` : ""}`
+              : `Câu tiếp theo${autoNext ? ` (${autoNext.left}s)` : ""} →`}
           </button>
           <span className="ml-3 text-xs text-ink/40">hoặc nhấn Enter</span>
+          {/* Thanh thời gian tự chuyển câu — thu ngắn dần */}
+          {autoNext && (
+            <div className="mt-3 h-1 overflow-hidden rounded-full bg-ink/10">
+              <div
+                className={`h-full rounded-full ${feedback.correct ? "bg-emerald-500" : "bg-red-400"}`}
+                style={{
+                  width: `${(autoNext.left / autoNext.total) * 100}%`,
+                  transition: "width 0.9s linear",
+                }}
+              />
+            </div>
+          )}
         </div>
       )}
     </div>

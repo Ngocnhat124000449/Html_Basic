@@ -221,7 +221,8 @@ export default function PracticeGame() {
   );
 
   const submit = useCallback(
-    async (timedOut: boolean) => {
+    // pick: chỉ số MCQ vừa bấm — truyền thẳng vì setSelected chưa kịp cập nhật state.
+    async (timedOut: boolean, pick?: number) => {
       if (!item || feedback || submitting) return;
 
       if (item.kind === "reflex") {
@@ -265,7 +266,7 @@ export default function PracticeGame() {
 
       // Câu DB: chấm server-side, kể cả khi hết giờ (để lưu Attempt và lấy đáp án)
       const answer =
-        item.type === "MCQ" ? (timedOut ? -1 : (selected ?? -1)) : timedOut ? "" : input;
+        item.type === "MCQ" ? (timedOut ? -1 : (pick ?? selected ?? -1)) : timedOut ? "" : input;
       setSubmitting(true);
       try {
         // Câu JS cần chạy thử: chạy code trong Web Worker (client) rồi gửi output thô lên server
@@ -322,6 +323,46 @@ export default function PracticeGame() {
     }
   }, [phase, ptr, feedback]);
 
+  // Sang câu kế (pool vô tận: hết thì xáo lại) — dùng chung cho nút bấm và tự chuyển câu.
+  const next = useCallback(() => {
+    setInput("");
+    setSelected(null);
+    setFeedback(null);
+    if (ptr + 1 >= items.length) {
+      // Hết pool — xáo lại và chơi tiếp (vô tận)
+      setItems(shuffle(items));
+      setPtr(0);
+    } else {
+      setPtr(ptr + 1);
+    }
+  }, [ptr, items]);
+
+  // Tự chuyển câu sau khi xem kết quả — đúng 3s, sai 5s (MCQ/gõ nhanh) / 7s (câu gõ code).
+  // Bấm "Câu tiếp theo"/Enter thì qua ngay. Kick qua setTimeout để không setState đồng bộ.
+  const [autoNext, setAutoNext] = useState<{ left: number; total: number } | null>(null);
+  useEffect(() => {
+    if (phase !== "playing" || !feedback || !item) return;
+    const isCodeQ = item.kind === "db" && item.type !== "MCQ";
+    const total = feedback.correct ? 3 : isCodeQ ? 7 : 5;
+    const startedAt = Date.now();
+    const tick = () => {
+      const remaining = total - (Date.now() - startedAt) / 1000;
+      if (remaining <= 0) {
+        clearInterval(timer);
+        next();
+      } else {
+        setAutoNext({ left: Math.ceil(remaining), total });
+      }
+    };
+    const kick = setTimeout(tick, 0);
+    const timer = setInterval(tick, 100);
+    return () => {
+      clearTimeout(kick);
+      clearInterval(timer);
+      setAutoNext(null);
+    };
+  }, [phase, feedback, item, next]);
+
   function start() {
     if (!pool) return;
     setItems(shuffle(filterScope(pool, scope)));
@@ -338,18 +379,6 @@ export default function PracticeGame() {
     setPhase("playing");
   }
 
-  function next() {
-    setInput("");
-    setSelected(null);
-    setFeedback(null);
-    if (ptr + 1 >= items.length) {
-      // Hết pool — xáo lại và chơi tiếp (vô tận)
-      setItems(shuffle(items));
-      setPtr(0);
-    } else {
-      setPtr(ptr + 1);
-    }
-  }
 
   // ===== Màn giới thiệu =====
   if (phase === "intro") {
@@ -536,8 +565,13 @@ export default function PracticeGame() {
             {item.options.map((opt, i) => (
               <button
                 key={i}
-                onClick={() => !feedback && setSelected(i)}
-                disabled={!!feedback}
+                onClick={() => {
+                  // Một chạm: bấm đáp án là nộp luôn, không cần nút xác nhận.
+                  if (feedback || submitting) return;
+                  setSelected(i);
+                  submit(false, i);
+                }}
+                disabled={!!feedback || submitting}
                 className={`group flex w-full items-center gap-3 rounded-xl border-2 px-4 py-3 text-left transition-all ${
                   selected === i
                     ? "border-flame-500 bg-flame-50 shadow-sm"
@@ -610,7 +644,8 @@ export default function PracticeGame() {
             />
           ))}
 
-        {!feedback && (
+        {/* MCQ nộp ngay khi bấm đáp án — nút Trả lời chỉ còn cho câu gõ chữ/code */}
+        {!feedback && !isMcq && (
           <button
             onClick={() => submit(false)}
             disabled={submitting || !canSubmit}
@@ -618,6 +653,9 @@ export default function PracticeGame() {
           >
             {submitting ? "Đang chấm..." : "Trả lời"}
           </button>
+        )}
+        {!feedback && isMcq && submitting && (
+          <p className="mt-4 text-sm font-medium text-ink/50">Đang chấm...</p>
         )}
       </div>
 
@@ -685,9 +723,21 @@ export default function PracticeGame() {
                 : "bg-ink hover:bg-ink/80"
             }`}
           >
-            Câu tiếp theo →
+            Câu tiếp theo{autoNext ? ` (${autoNext.left}s)` : ""} →
           </button>
           <span className="ml-3 text-xs text-ink/40">hoặc nhấn Enter</span>
+          {/* Thanh thời gian tự chuyển câu — thu ngắn dần */}
+          {autoNext && (
+            <div className="mt-3 h-1 overflow-hidden rounded-full bg-ink/10">
+              <div
+                className={`h-full rounded-full ${feedback.correct ? "bg-emerald-500" : "bg-red-400"}`}
+                style={{
+                  width: `${(autoNext.left / autoNext.total) * 100}%`,
+                  transition: "width 0.9s linear",
+                }}
+              />
+            </div>
+          )}
         </div>
       )}
     </div>
