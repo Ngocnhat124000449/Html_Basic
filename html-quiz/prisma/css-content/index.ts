@@ -1,4 +1,5 @@
 import type { CssSeedTag } from "./types";
+import { PART0_NHAP_MON } from "./part0-nhap-mon";
 import { PART1_CHUONG_1_2 } from "./part1-cu-phap-selector";
 import { PART1_CHUONG_3_5 } from "./part1-cascade-don-vi-box";
 import { PART2_CHUONG_6_7 } from "./part2-mau-nen-chu";
@@ -9,6 +10,7 @@ import { PART4_CHUONG_16_20 } from "./part4-hieu-ung";
 
 // Toàn bộ mục CSS theo thứ tự lộ trình: 4 Phần × 20 chương
 export const CSS_TAGS: CssSeedTag[] = [
+  ...PART0_NHAP_MON,
   ...PART1_CHUONG_1_2,
   ...PART1_CHUONG_3_5,
   ...PART2_CHUONG_6_7,

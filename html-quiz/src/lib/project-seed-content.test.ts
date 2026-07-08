@@ -6,7 +6,7 @@ const WRITE_T3 = new Set(["WRITE_STRUCTURE", "WRITE_CSS", "WRITE_JS"]);
 
 describe("Nội dung seed Dự án", () => {
   it("có đúng 9 mục", () => {
-    expect(PROJECT_TAGS.length).toBe(9);
+    expect(PROJECT_TAGS.length).toBe(10);
   });
 
   it("tên mục không trùng", () => {

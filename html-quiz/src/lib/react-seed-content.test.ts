@@ -56,7 +56,7 @@ function leafValues(v: unknown): (string | number)[] {
 
 describe("Nội dung seed React", () => {
   it("có đúng 12 mục", () => {
-    expect(REACT_TAGS.length).toBe(12);
+    expect(REACT_TAGS.length).toBe(13);
   });
 
   it("tên mục không trùng", () => {

@@ -16,7 +16,7 @@ const textOf = (q: { prompt: string; starterCode?: string }) =>
 
 describe("Nội dung seed Git & Công cụ", () => {
   it("có đúng 5 mục", () => {
-    expect(GIT_TAGS.length).toBe(5);
+    expect(GIT_TAGS.length).toBe(6);
   });
 
   it("tên mục không trùng", () => {

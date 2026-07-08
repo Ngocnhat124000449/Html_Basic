@@ -43,7 +43,7 @@ const textOf = (q: { prompt: string; starterCode?: string }) =>
 
 describe("Nội dung seed DSA", () => {
   it("có đúng 12 mục", () => {
-    expect(DSA_TAGS.length).toBe(12);
+    expect(DSA_TAGS.length).toBe(14);
   });
 
   it("tên mục không trùng", () => {
