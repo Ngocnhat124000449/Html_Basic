@@ -108,7 +108,7 @@ export default async function TagsPage() {
                 return (
                   <Link
                     key={tag.id}
-                    href={`/tags/${tag.name}`}
+                    href={`/tags/${encodeURIComponent(tag.name)}`}
                     className={`group rounded-xl border p-3.5 transition-all hover:-translate-y-0.5 hover:shadow-md ${st.card}`}
                   >
                     <div className="flex items-center justify-between gap-2">

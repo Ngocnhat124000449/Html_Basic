@@ -91,7 +91,9 @@ export default async function TagDetailPage({
   const session = await auth();
   if (!session?.user?.id) redirect("/login");
 
-  const { name } = await params;
+  const { name: rawName } = await params;
+  // Tên thẻ khái niệm (Nhập môn) có khoảng trắng/ký tự đặc biệt → URL bị encode, decode lại.
+  const name = decodeURIComponent(rawName);
   const tag = await prisma.tag.findUnique({
     where: { track_name: { track: "html", name } },
   });
